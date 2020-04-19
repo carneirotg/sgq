@@ -1,4 +1,4 @@
-package net.sgq.incidentes.conformidades.controller;
+package net.sgq.incidentes.conformidades.controller.impl;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -7,14 +7,11 @@ import static org.springframework.http.HttpStatus.OK;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.sgq.incidentes.conformidades.modelos.Norma;
+import net.sgq.incidentes.conformidades.controller.NCController;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
@@ -32,7 +29,7 @@ import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
 
 @RestController
 @RequestMapping("/ncs/")
-public class NaoConformidadeControllerImpl implements NaoConformidadeController {
+public class NCControllerImpl implements NCController {
 
 	@Autowired
 	private NaoConformidadeService service;
@@ -101,55 +98,6 @@ public class NaoConformidadeControllerImpl implements NaoConformidadeController 
 		this.service.salvarNC(naoConformidadeTo, id);		
 	}
 
-	@Override
-	@PatchMapping("/{id}/estado/aberta")
-	@ResponseStatus(code = NO_CONTENT)
-	public void nCMudarParaAberta(@PathVariable Long id) {
-		this.service.naoConformidadeMudaEstado(id, Estado.ABERTA);
-		
-	}
-
-	@Override
-	@PatchMapping("/{id}/estado/em_analise")
-	@ResponseStatus(code = NO_CONTENT)
-	public void nCMudarParaEmAnalise(@PathVariable Long id) {
-		this.service.naoConformidadeMudaEstado(id, Estado.EM_ANALISE);
-		
-	}
-
-	@Override
-	@PatchMapping("/{id}/estado/concluida")
-	@ResponseStatus(code = NO_CONTENT)
-	public void nCMudarParaConcluida(@PathVariable Long id) {
-		this.service.naoConformidadeMudaEstado(id, Estado.CONCLUIDA);
-	}
-
-	@Override
-	@PatchMapping("/{ncId}/norma/{normaId}")
-	@ResponseStatus(code = NO_CONTENT)
-	public void associarNorma(@PathVariable Long ncId, @PathVariable Long normaId) {
-		this.service.associaNCANorma(ncId, normaId);
-	}
-	
-	@Override
-	@GetMapping("/{ncId}/norma/{normaId}")
-	public ResponseEntity<Norma> buscaNormaNC(@PathVariable Long ncId) {
-		Norma norma = this.service.consultaNC(ncId).getNorma();
-		
-		if(norma == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		return new ResponseEntity<>(norma, HttpStatus.OK);
-	}
-	
-	@Override
-	@PatchMapping("/{ncId}/norma/checklist")
-	@ResponseStatus(code = NO_CONTENT)
-	public void ncAtualizaChecklist(@PathVariable Long ncId, @RequestBody Map<String, Boolean> checklist) {
-		this.service.atualizaChecklist(ncId, checklist);
-	}
-	
 	private ResponseEntity<List<NaoConformidadeIdTO>> listaPorEstado(Estado estado) {
 		List<NaoConformidadeIdTO> ncs = this.service.listaNCs(estado);
 		

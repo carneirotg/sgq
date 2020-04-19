@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -22,7 +23,8 @@ public class GestaoNormaClient {
 	@Value("${sgq.integracao.gestao-normas.credencial}")
 	private String credencial;
 
-	private RestTemplate restTemplate = new RestTemplate();
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public List<Norma> consultaListaNormas() {
 		ResponseEntity<List<Map<String, Object>>> responseEntity = restTemplate.exchange(this.urlGN + "/normas/",
