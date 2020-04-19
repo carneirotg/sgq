@@ -1,6 +1,7 @@
 package net.sgq.incidentes.conformidades.servicos;
 
 import java.util.List;
+import java.util.Map;
 
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
@@ -21,5 +22,7 @@ public interface NaoConformidadeService {
 	void naoConformidadeMudaEstado(Long id, Estado estado);
 
 	void associaNCANorma(Long ncId, Long normaId);
+
+	void atualizaChecklist(Long ncId, Map<String, Boolean> checklist);
 
 }

@@ -1,8 +1,8 @@
 package net.sgq.incidentes.conformidades.servicos;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -84,7 +84,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	public void naoConformidadeMudaEstado(Long id, Estado estado) {
 		Optional<NaoConformidade> oNC = this.repository.findById(id);
 		
-		validaNormaRetornada(id, oNC);
+		validaNCRetornada(id, oNC);
 		
 		NaoConformidade nc = oNC.get();
 		
@@ -104,14 +104,31 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		Norma norma = this.normaService.consultaNorma(normaId);
 		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
 		
-		validaNormaRetornada(ncId, oNC);
+		validaNCRetornada(ncId, oNC);
 		
 		NaoConformidade nc = oNC.get();
 		nc.setNormaNaoConformidade(norma);
 		
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void atualizaChecklist(Long ncId, Map<String, Boolean> checklist) {
+		
+		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
+		
+		validaNCRetornada(ncId, oNC);
+		
+		NaoConformidade nc = oNC.get();
+		
+		if(nc.getNormaNaoConformidade().getNormaId() == null) {
+			throw new IllegalStateException("NC não possui norma associada");
+		}
+		
+		nc.getNormaNaoConformidade().setCheckList(checklist);
+	}
 
-	private void validaNormaRetornada(Long ncId, Optional<NaoConformidade> oNC) {
+	private void validaNCRetornada(Long ncId, Optional<NaoConformidade> oNC) {
 		if(oNC.isEmpty()) {
 			throw new EntityNotFoundException("Artefato", ncId);
 		}

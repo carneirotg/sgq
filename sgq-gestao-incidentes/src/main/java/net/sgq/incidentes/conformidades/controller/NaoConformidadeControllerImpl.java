@@ -126,6 +126,7 @@ public class NaoConformidadeControllerImpl implements NaoConformidadeController 
 
 	@Override
 	@PatchMapping("/{ncId}/norma/{normaId}")
+	@ResponseStatus(code = NO_CONTENT)
 	public void associarNorma(@PathVariable Long ncId, @PathVariable Long normaId) {
 		this.service.associaNCANorma(ncId, normaId);
 	}
@@ -144,8 +145,9 @@ public class NaoConformidadeControllerImpl implements NaoConformidadeController 
 	
 	@Override
 	@PatchMapping("/{ncId}/norma/checklist")
-	public ResponseEntity<Map<String, Boolean>> ncChecklist(@PathVariable Long ncId) {
-		return null;
+	@ResponseStatus(code = NO_CONTENT)
+	public void ncAtualizaChecklist(@PathVariable Long ncId, @RequestBody Map<String, Boolean> checklist) {
+		this.service.atualizaChecklist(ncId, checklist);
 	}
 	
 	private ResponseEntity<List<NaoConformidadeIdTO>> listaPorEstado(Estado estado) {

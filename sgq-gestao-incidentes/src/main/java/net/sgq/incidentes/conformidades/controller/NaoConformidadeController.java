@@ -25,7 +25,7 @@ public interface NaoConformidadeController {
 	ResponseEntity<List<NaoConformidadeIdTO>> nCsEmAnalise();
 	ResponseEntity<List<NaoConformidadeIdTO>> nCsConcluidas();
 	
-	ResponseEntity<Map<String, Boolean>> ncChecklist(Long id);
+	void ncAtualizaChecklist(Long id, Map<String, Boolean> ncAtualizaChecklist);
 	
 	void associarNorma(Long ncId, Long normaId);
 	
