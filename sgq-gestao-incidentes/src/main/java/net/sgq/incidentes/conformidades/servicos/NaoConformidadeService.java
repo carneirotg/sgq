@@ -3,6 +3,7 @@ package net.sgq.incidentes.conformidades.servicos;
 import java.util.List;
 import java.util.Map;
 
+import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
@@ -14,6 +15,8 @@ public interface NaoConformidadeService {
 	List<NaoConformidadeIdTO>listaNCs(String nome);
 
 	NaoConformidadeIdTO consultaNC(Long id);
+	
+	NaoConformidade consultaEntidadeNC(Long nCId);
 
 	Long salvarNC(NaoConformidadeTO naoConformidadeTo, Long l);
 

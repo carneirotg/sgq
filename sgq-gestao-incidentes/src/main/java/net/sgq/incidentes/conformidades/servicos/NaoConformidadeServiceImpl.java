@@ -61,6 +61,17 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		
 		return oNC.get().toTOId();
 	}
+	
+	@Override
+	public NaoConformidade consultaEntidadeNC(Long nCId) {
+		Optional<NaoConformidade> oNC = this.repository.findById(nCId);
+		
+		if (oNC.isEmpty()) {
+			return null;
+		}
+
+		return oNC.get();
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)

@@ -17,5 +17,9 @@ public interface IncidenteService {
 	List<IncidenteIdTO> listaIncidentes(Estado estado);
 
 	Long salvarIncidente(IncidenteTO incidente, Long id);
+	
+	void adicionaNaoConformidade(Long iId, Long nCId);
+	void removeNaoConformidade(Long iId, Long nCId);
+	void removeTodasNaoConformidades(Long id);
 
 }

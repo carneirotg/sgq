@@ -27,7 +27,7 @@ public class IncidenteIdTO extends IncidenteTO {
 			List<NaoConformidade> naoConformidades, Date criadoEm, Date concluidoEm) {
 		super(titulo, descricao, conclusao, setor, classificacao, tipoIncidente);
 		setId(id);
-		setNaoConformidades(naoConformidades);
+		setNcsEnvolvidas(naoConformidades);
 		setCriadoEm(criadoEm);
 		setConcluidoEm(concluidoEm);
 	}
@@ -38,14 +38,6 @@ public class IncidenteIdTO extends IncidenteTO {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public List<NaoConformidade> getNaoConformidades() {
-		return ncsEnvolvidas;
-	}
-
-	public void setNaoConformidades(List<NaoConformidade> naoConformidades) {
-		this.ncsEnvolvidas = naoConformidades;
 	}
 
 	public List<NaoConformidade> getNcsEnvolvidas() {
