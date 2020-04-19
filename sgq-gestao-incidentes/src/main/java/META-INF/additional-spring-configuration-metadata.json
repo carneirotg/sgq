@@ -1,0 +1,9 @@
+{
+	"properties": [
+		{
+			"name": "sgq",
+			"type": "Mapping",
+			"description": "Configurações personalizadas para o SGQ"
+		}
+	]
+}

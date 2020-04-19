@@ -1,0 +1,9 @@
+server:
+  port: 18080
+  
+spring:
+  datasource:
+    url: jdbc:h2:mem:gestao_norma
+  h2:
+    console:
+      enabled: true
