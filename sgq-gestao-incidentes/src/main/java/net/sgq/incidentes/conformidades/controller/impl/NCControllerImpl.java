@@ -92,9 +92,9 @@ public class NCControllerImpl implements NCController {
 	}
 
 	@Override
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = NO_CONTENT)
-	public void atualizaNC(Long id, NaoConformidadeTO naoConformidadeTo) {
+	public void atualizaNC(@PathVariable Long id, @RequestBody NaoConformidadeTO naoConformidadeTo) {
 		this.service.salvarNC(naoConformidadeTo, id);		
 	}
 

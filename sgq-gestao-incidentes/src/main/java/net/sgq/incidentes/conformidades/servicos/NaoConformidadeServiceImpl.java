@@ -157,6 +157,8 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 			throw new IllegalArgumentException("NC já foi concluída e não pode mais ser alterada.");
 		}
 		
+		nc.fromTO(naoConformidadeTo);
+		
 		return nc;
 	}
 
