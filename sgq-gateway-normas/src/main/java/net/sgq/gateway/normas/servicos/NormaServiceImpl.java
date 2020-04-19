@@ -1,4 +1,4 @@
-package net.sgq.incidentes.normas.servicos;
+package net.sgq.gateway.normas.servicos;
 
 import java.util.List;
 
@@ -7,9 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.sgq.incidentes.conformidades.modelos.Norma;
-import net.sgq.incidentes.integracoes.clientes.GestaoNormaClient;
-import net.sgq.incidentes.utils.EntityNotFoundException;
+import net.sgq.gateway.normas.cliente.GestaoNormaClient;
+import net.sgq.gateway.normas.modelos.Norma;
 
 @Service
 public class NormaServiceImpl implements NormaService {
@@ -26,7 +25,7 @@ public class NormaServiceImpl implements NormaService {
 			return client.consultaListaNormas();
 		} catch(Exception e) {
 			logger.error("Erro integração GN: {}", e.getMessage());
-			throw new EntityNotFoundException("[GN]Norma", 0L);
+			return null;
 		}
 		
 	}
@@ -38,7 +37,7 @@ public class NormaServiceImpl implements NormaService {
 			return client.consultaNorma(id);
 		} catch(Exception e) {
 			logger.error("Erro integração GN: {}", e.getMessage());
-			throw new EntityNotFoundException("[GN]Norma", id);
+			return null;
 		}
 	}
 

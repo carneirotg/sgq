@@ -1,10 +1,10 @@
-package net.sgq.incidentes.normas.controller;
+package net.sgq.gateway.normas.controller;
 
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import net.sgq.incidentes.conformidades.modelos.Norma;
+import net.sgq.gateway.normas.modelos.Norma;
 
 public interface NormaController {
 

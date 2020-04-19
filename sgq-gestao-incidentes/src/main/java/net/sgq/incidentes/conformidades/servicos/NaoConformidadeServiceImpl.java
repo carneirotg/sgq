@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
+import net.sgq.incidentes.conformidades.GestaoNormasClient;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidadeRepository;
 import net.sgq.incidentes.conformidades.modelos.Norma;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
-import net.sgq.incidentes.normas.servicos.NormaService;
 import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @Service
@@ -33,7 +33,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	private ArtefatoService artefatoService;
 	
 	@Autowired
-	private NormaService normaService;
+	private GestaoNormasClient normaService;
 	
 	@Autowired
 	private NaoConformidadeValidator validator;

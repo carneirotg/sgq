@@ -1,8 +1,8 @@
-package net.sgq.incidentes.normas.servicos;
+package net.sgq.gateway.normas.servicos;
 
 import java.util.List;
 
-import net.sgq.incidentes.conformidades.modelos.Norma;
+import net.sgq.gateway.normas.modelos.Norma;
 
 public interface NormaService {
 

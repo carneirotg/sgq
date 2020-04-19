@@ -1,4 +1,4 @@
-package net.sgq.incidentes.integracoes.clientes;
+package net.sgq.gateway.normas.cliente;
 
 import java.util.List;
 import java.util.Map;
@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import net.sgq.incidentes.conformidades.modelos.Norma;
+import net.sgq.gateway.normas.modelos.Norma;
 
 @Component
 public class GestaoNormaClient {
