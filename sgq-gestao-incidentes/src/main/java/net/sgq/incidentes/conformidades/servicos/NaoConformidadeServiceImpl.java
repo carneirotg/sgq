@@ -2,8 +2,11 @@ package net.sgq.incidentes.conformidades.servicos;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,9 +16,11 @@ import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidadeRepository;
+import net.sgq.incidentes.conformidades.modelos.Norma;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
+import net.sgq.incidentes.normas.servicos.NormaService;
 import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @Service
@@ -26,6 +31,11 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	
 	@Autowired
 	private ArtefatoService artefatoService;
+	
+	@Autowired
+	private NormaService normaService;
+	
+	private Logger logger = LoggerFactory.getLogger(NaoConformidadeServiceImpl.class);
 	
 	@Override
 	public List<NaoConformidadeIdTO> listaNCs() {
@@ -64,6 +74,58 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		return nc.getId();
 	}
 
+	@Override
+	public List<NaoConformidadeIdTO> listaNCs(Estado estado) {
+		return this.repository.findByEstado(estado).stream().map(nc -> nc.toTOId()).collect(Collectors.toList());
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void naoConformidadeMudaEstado(Long id, Estado estado) {
+		Optional<NaoConformidade> oNC = this.repository.findById(id);
+		
+		validaNormaRetornada(id, oNC);
+		
+		NaoConformidade nc = oNC.get();
+		
+		if(trasicaoValida(nc, estado)) {
+			logger.info("NC({}) transicionou de {} para {}", id, nc.getEstado(), estado);
+			nc.setEstado(estado);
+		} else {
+			throw new IllegalStateException(String.format("Transica de uma NC de %s para %s não é pemitida", nc.getEstado(), estado));
+		}
+		
+	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void associaNCANorma(Long ncId, Long normaId) {
+
+		Norma norma = this.normaService.consultaNorma(normaId);
+		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
+		
+		validaNormaRetornada(ncId, oNC);
+		
+		NaoConformidade nc = oNC.get();
+		nc.setNormaNaoConformidade(norma);
+		
+	}
+
+	private void validaNormaRetornada(Long ncId, Optional<NaoConformidade> oNC) {
+		if(oNC.isEmpty()) {
+			throw new EntityNotFoundException("Artefato", ncId);
+		}
+	}
+	
+	private boolean trasicaoValida(NaoConformidade nc, Estado estado) {
+
+		if(nc.getEstado() == estado || nc.getEstado() == Estado.CONCLUIDA) {
+			return false;
+		}
+
+		return true;
+	}
+	
 	private NaoConformidade novaNaoConformidade(NaoConformidadeTO naoConformidadeTo) {
 		
 		Artefato artefato = this.artefatoService.buscaEntidadeArtefatoPor(naoConformidadeTo.getArtefato());
@@ -99,47 +161,8 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		}
 		
 		if(artefato.getDepreciado()) {
-			throw new IllegalStateException("Não conformidade não pode ser criado com artefato depreciado");
+			throw new IllegalStateException("Não conformidade não pode ser criada com artefato depreciado");
 		}
-	}
-
-	@Override
-	public List<NaoConformidadeIdTO> listaNCs(Estado estado) {
-		return this.repository.findByEstado(estado);
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public void naoConformidadeMudaEstado(Long id, Estado estado) {
-		Optional<NaoConformidade> oNC = this.repository.findById(id);
-		
-		if(oNC.isEmpty()) {
-			throw new EntityNotFoundException("Artefato", id);
-		}
-		
-		NaoConformidade nc = oNC.get();
-		
-		if(trasicaoValida(nc, estado)) {
-			nc.setEstado(estado);
-		} else {
-			throw new IllegalStateException(String.format("Transica de uma NC de %s para %s não é pemitida", nc.getEstado(), estado));
-		}
-		
-	}
-
-	@Override
-	public void associaNCANorma(Long ncId, Long normaId) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private boolean trasicaoValida(NaoConformidade nc, Estado estado) {
-
-		if(nc.getEstado() == estado || nc.getEstado() == Estado.CONCLUIDA) {
-			return false;
-		}
-
-		return true;
 	}
 
 }

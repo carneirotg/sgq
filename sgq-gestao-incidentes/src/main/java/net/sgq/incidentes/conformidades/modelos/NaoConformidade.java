@@ -174,7 +174,7 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	public NaoConformidadeIdTO toTOId() {
 		return new NaoConformidadeIdTO(getTitulo(), getTipoNaoConformidade(), getResumo(),
 				getDetalhamentoNaoConformidade(), getSetor(), getArtefato().getId(), getDetalhamentoArtefato(),
-				getPrejuizoApurado(), getId(), getEstado());
+				getPrejuizoApurado(), getId(), getEstado(), getNormaNaoConformidade());
 	}
 
 	@Override

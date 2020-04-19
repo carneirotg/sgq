@@ -30,7 +30,7 @@ public class GestaoNormaClient {
 				});
 
 		if (responseEntity == null) {
-			throw new IllegalStateException("Client retornou vazio");
+			throw new IllegalStateException("Client retornou vazio para lista de normas");
 		}
 
 		return responseEntity.getBody().stream().map(resp -> new Norma(resp)).collect(Collectors.toList());
@@ -42,7 +42,7 @@ public class GestaoNormaClient {
 				Long.toString(id));
 
 		if (responseEntity == null) {
-			throw new IllegalStateException("Client retornou vazio");
+			throw new IllegalStateException("Client retornou vazio para norma");
 		}
 
 		return new Norma(responseEntity);
