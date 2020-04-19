@@ -22,4 +22,6 @@ public interface IncidenteService {
 	void removeNaoConformidade(Long iId, Long nCId);
 	void removeTodasNaoConformidades(Long id);
 
+	void incidenteMudaEstado(Long iId, Estado aberta);
+
 }

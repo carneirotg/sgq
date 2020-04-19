@@ -106,7 +106,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 			logger.info("NC({}) transicionou de {} para {}", id, nc.getEstado(), estado);
 			nc.setEstado(estado);
 		} else {
-			throw new IllegalStateException(String.format("Transica de uma NC de %s para %s não é pemitida", nc.getEstado(), estado));
+			throw new IllegalStateException(String.format("Transica de uma NC de %s para %s não é permitida", nc.getEstado(), estado));
 		}
 		
 	}

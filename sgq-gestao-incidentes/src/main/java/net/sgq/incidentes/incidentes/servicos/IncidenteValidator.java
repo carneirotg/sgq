@@ -31,5 +31,16 @@ public class IncidenteValidator {
 	public Boolean validaDuplicidadeNC(Incidente ic, Long ncId) {
 		return ic.getNcEnvolvidas().stream().anyMatch(nc -> nc.getId() == ncId);
 	}
+	
+	public boolean trasicaoValida(Incidente ic, Estado estado) {
+
+		if (ic.getSituacao() == estado || ic.getSituacao() == Estado.CONCLUIDA) {
+			return false;
+		} else if(estado == Estado.CONCLUIDA && "".equalsIgnoreCase(ic.getConclusao())) {
+			throw new IllegalStateException("Não é possível fechar um Incidente sem fornecer a conclusão do mesmo");
+		}
+
+		return true;
+	}
 
 }
