@@ -35,6 +35,9 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	@Autowired
 	private NormaService normaService;
 	
+	@Autowired
+	private NaoConformidadeValidator validator;
+
 	private Logger logger = LoggerFactory.getLogger(NaoConformidadeServiceImpl.class);
 	
 	@Override
@@ -84,11 +87,11 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	public void naoConformidadeMudaEstado(Long id, Estado estado) {
 		Optional<NaoConformidade> oNC = this.repository.findById(id);
 		
-		validaNCRetornada(id, oNC);
+		validator.validaNCRetornada(id, oNC);
 		
 		NaoConformidade nc = oNC.get();
 		
-		if(trasicaoValida(nc, estado)) {
+		if(validator.trasicaoValida(nc, estado)) {
 			logger.info("NC({}) transicionou de {} para {}", id, nc.getEstado(), estado);
 			nc.setEstado(estado);
 		} else {
@@ -104,7 +107,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		Norma norma = this.normaService.consultaNorma(normaId);
 		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
 		
-		validaNCRetornada(ncId, oNC);
+		validator.validaNCRetornada(ncId, oNC);
 		
 		NaoConformidade nc = oNC.get();
 		nc.setNormaNaoConformidade(norma);
@@ -117,7 +120,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		
 		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
 		
-		validaNCRetornada(ncId, oNC);
+		validator.validaNCRetornada(ncId, oNC);
 		
 		NaoConformidade nc = oNC.get();
 		
@@ -128,26 +131,11 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		nc.getNormaNaoConformidade().setCheckList(checklist);
 	}
 
-	private void validaNCRetornada(Long ncId, Optional<NaoConformidade> oNC) {
-		if(oNC.isEmpty()) {
-			throw new EntityNotFoundException("Artefato", ncId);
-		}
-	}
-	
-	private boolean trasicaoValida(NaoConformidade nc, Estado estado) {
-
-		if(nc.getEstado() == estado || nc.getEstado() == Estado.CONCLUIDA) {
-			return false;
-		}
-
-		return true;
-	}
-	
 	private NaoConformidade novaNaoConformidade(NaoConformidadeTO naoConformidadeTo) {
 		
 		Artefato artefato = this.artefatoService.buscaEntidadeArtefatoPor(naoConformidadeTo.getArtefato());
 		
-		validaArtefato(naoConformidadeTo, artefato);
+		validator.validaArtefato(naoConformidadeTo, artefato);
 		
 		NaoConformidade nc = new NaoConformidade().fromTO(naoConformidadeTo);
 		nc.setArtefato(artefato);
@@ -170,16 +158,6 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		}
 		
 		return nc;
-	}
-
-	private void validaArtefato(NaoConformidadeTO naoConformidadeTo, Artefato artefato) {
-		if(artefato == null) {
-			throw new EntityNotFoundException("Artefato", naoConformidadeTo.getArtefato());
-		}
-		
-		if(artefato.getDepreciado()) {
-			throw new IllegalStateException("Não conformidade não pode ser criada com artefato depreciado");
-		}
 	}
 
 }
