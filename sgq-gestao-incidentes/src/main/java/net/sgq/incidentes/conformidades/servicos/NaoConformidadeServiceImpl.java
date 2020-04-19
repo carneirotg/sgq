@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
-import net.sgq.incidentes.conformidades.GestaoNormasClient;
+import net.sgq.incidentes.clientes.GestaoNormasClient;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidadeRepository;
 import net.sgq.incidentes.conformidades.modelos.Norma;

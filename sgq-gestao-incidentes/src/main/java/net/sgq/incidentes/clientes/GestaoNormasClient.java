@@ -1,4 +1,4 @@
-package net.sgq.incidentes.conformidades;
+package net.sgq.incidentes.clientes;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
