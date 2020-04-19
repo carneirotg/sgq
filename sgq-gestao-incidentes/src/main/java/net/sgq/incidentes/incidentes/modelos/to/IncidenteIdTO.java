@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
+import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
 import net.sgq.incidentes.incidentes.modelos.enums.ClassificacaoIncidente;
 import net.sgq.incidentes.incidentes.modelos.enums.TipoIncidente;
@@ -21,15 +22,18 @@ public class IncidenteIdTO extends IncidenteTO {
 	
 	private Date criadoEm;
 	private Date concluidoEm;
+	
+	private Estado situacao;
 
 	public IncidenteIdTO(String titulo, String descricao, String conclusao, Setor setor,
 			ClassificacaoIncidente classificacao, TipoIncidente tipoIncidente, Long id,
-			List<NaoConformidade> naoConformidades, Date criadoEm, Date concluidoEm) {
+			List<NaoConformidade> naoConformidades, Date criadoEm, Date concluidoEm, Estado situacao) {
 		super(titulo, descricao, conclusao, setor, classificacao, tipoIncidente);
 		setId(id);
 		setNcsEnvolvidas(naoConformidades);
 		setCriadoEm(criadoEm);
 		setConcluidoEm(concluidoEm);
+		setSituacao(situacao);
 	}
 
 	public Long getId() {
@@ -62,6 +66,14 @@ public class IncidenteIdTO extends IncidenteTO {
 
 	public void setConcluidoEm(Date concluidoEm) {
 		this.concluidoEm = concluidoEm;
+	}
+
+	public Estado getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(Estado situacao) {
+		this.situacao = situacao;
 	}
 	
 }

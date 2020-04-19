@@ -183,7 +183,7 @@ public class Incidente implements TOAble<Incidente, IncidenteTO, IncidenteIdTO> 
 	@Override
 	public IncidenteIdTO toTOId() {
 		return new IncidenteIdTO(getTitulo(), getDescricao(), getConclusao(), getSetor(), getClassificao(),
-				getTipoIncidente(), getId(), getNcEnvolvidas(), getCriadoEm(), getConcluidoEm());
+				getTipoIncidente(), getId(), getNcEnvolvidas(), getCriadoEm(), getConcluidoEm(), getSituacao());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package net.sgq.incidentes.incidentes.servicos;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -117,6 +118,30 @@ public class IncidenteServiceImpl implements IncidenteService {
 		logger.info("Removida todas as NCs incluidas no incidente {}", id);
 		
 	}
+	
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void incidenteMudaEstado(Long iId, Estado estado) {
+
+		Optional<Incidente> oIc = this.repository.findById(iId);
+		
+		validator.validaIncidenteRetornado(iId, oIc);
+		
+		Incidente nc = oIc.get();
+		
+		if(validator.trasicaoValida(nc, estado)) {
+			logger.info("NC({}) transicionou de {} para {}", iId, nc.getSituacao(), estado);
+			nc.setSituacao(estado);
+			
+			if(estado == Estado.CONCLUIDA) {
+				nc.setConcluidoEm(new Date());
+			}
+			
+		} else {
+			throw new IllegalStateException(String.format("Transica de um Incidente de %s para %s não é permitida", nc.getSituacao(), estado));
+		}
+		
+	}
 
 	private Incidente retornaIncidenteValidado(Long id) {
 		Optional<Incidente> oIc = this.repository.findById(id);
@@ -134,7 +159,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 		Incidente incidente = oIC.get();
 
 		if (incidente.getSituacao() == Estado.CONCLUIDA) {
-			throw new IllegalArgumentException("Incidente já foi concluído e não pode mais ser alterada.");
+			throw new IllegalStateException("Incidente já foi concluído e não pode mais ser alterado.");
 		}
 
 		incidente.fromTO(incidenteTo);
