@@ -5,18 +5,43 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import net.sgq.incidentes.artefatos.modelos.to.ArtefatoIdTO;
 import net.sgq.incidentes.artefatos.modelos.to.ArtefatoTO;
 
 public interface ArtefatoController {
 
+	@ApiOperation(value = "Listagem dos artefatos existente no sistema", response = ArtefatoIdTO.class, responseContainer = "List")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Lista de artefatos retornada") })
 	ResponseEntity<List<ArtefatoIdTO>> todos(Integer pagina, Integer registros); 
 	
+	@ApiOperation(value = "Busca um artefato existente no sistema por consulta de identificador", response = ArtefatoIdTO.class, responseContainer = "List")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Lista de artefatos retornada") })
 	ResponseEntity<ArtefatoIdTO> buscaArtefatoPor(Long id);
+	
+	@ApiOperation(value = "Listagem dos artefatos existente no sistema por consulta de nome", response = ArtefatoIdTO.class, responseContainer = "List")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Lista de artefatos retornada") })
 	ResponseEntity<List<ArtefatoIdTO>> buscaArtefatosPor(String nome, Integer pagina, Integer registros);
 	
+	
+	@ApiOperation(value = "Listagem dos artefatos existente no sistema", response = Void.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 201, message = "Artefato criado com sucesso") })
 	ResponseEntity<Void> criaArtefato(ArtefatoTO artefatoTO) throws URISyntaxException;
+	
+	@ApiOperation(value = "Atualiza um artefato existente no sistema que não esteja depreciado", response = Void.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Artefato atualizado com sucesso") })
 	void atualizaArtefato(Long id, ArtefatoTO artefatoIdTO);
+	
+	@ApiOperation(value = "Deprecia um artefato existente no sistema para que não seja mais utilizado", response = Void.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 204, message = "Artefato depreciado com sucesso") })
 	void depreciaArtefato(Long id);
 	
 }

@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import net.sgq.integracao.mock.model.Norma;
 
-@Api(value = "API Gestão de Normas")
 public interface ConsultaNormasController {
 
 	@ApiOperation(value = "Listagem das normas disponíveis no acervo para consulta", response = Norma.class, responseContainer = "List")
