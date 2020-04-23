@@ -44,11 +44,7 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 	}
 
 	private Destinatario atualizaDestinatario(DestinatarioTO destinatarioTO, Long id) {
-		Optional<Destinatario> oDestinatario = this.repository.findById(id);
-
-		if (oDestinatario.isEmpty()) {
-			throw new EntityNotFoundException(String.format("Entidade do tipo '%s' não encontrada para Id %d", Destinatario.class.getSimpleName(), id));
-		}
+		Optional<Destinatario> oDestinatario = consultaDestinatario(id);
 
 		Destinatario destinatario = oDestinatario.get();
 
@@ -56,8 +52,22 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 	}
 
 	@Override
-	public void removeDestinatario(DestinatarioTO destinatarioTO) {
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void removeDestinatario(DestinatarioTO destinatarioTO, Long id) {
+		Optional<Destinatario> oDestinatario = consultaDestinatario(id);
 
+		Destinatario destinatario = oDestinatario.get();
+		this.repository.delete(destinatario);
+	}
+	
+	private Optional<Destinatario> consultaDestinatario(Long id) {
+		Optional<Destinatario> oDestinatario = this.repository.findById(id);
+
+		if (oDestinatario.isEmpty()) {
+			throw new EntityNotFoundException(String.format("Entidade do tipo '%s' não encontrada para Id %d",
+					Destinatario.class.getSimpleName(), id));
+		}
+		return oDestinatario;
 	}
 
 }
