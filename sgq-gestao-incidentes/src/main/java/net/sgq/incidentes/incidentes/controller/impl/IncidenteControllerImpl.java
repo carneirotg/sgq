@@ -69,19 +69,19 @@ public class IncidenteControllerImpl implements IncidenteController {
 	@Override
 	@GetMapping(params = "estado=abertos")
 	public ResponseEntity<List<IncidenteIdTO>> incidentesAbertos() {
-		return listaPorEstado(Estado.ABERTA);
+		return listaPorEstado(Estado.ABERTA, null);
 	}
 
 	@Override
 	@GetMapping(params = "estado=em_analise")
 	public ResponseEntity<List<IncidenteIdTO>> incidentesEmAnalise() {
-		return listaPorEstado(Estado.EM_ANALISE);
+		return listaPorEstado(Estado.EM_ANALISE, null);
 	}
 
 	@Override
 	@GetMapping(params = "estado=concluidos")
-	public ResponseEntity<List<IncidenteIdTO>> incidentesConcluidos() {
-		return listaPorEstado(Estado.CONCLUIDA);
+	public ResponseEntity<List<IncidenteIdTO>> incidentesConcluidos(@RequestParam(defaultValue = "30") Integer janelaMinutos) {
+		return listaPorEstado(Estado.CONCLUIDA, janelaMinutos);
 	}
 
 	@Override
@@ -98,8 +98,8 @@ public class IncidenteControllerImpl implements IncidenteController {
 		this.service.salvarIncidente(incidente, id);
 	}
 	
-	private ResponseEntity<List<IncidenteIdTO>> listaPorEstado(Estado estado) {
-		List<IncidenteIdTO> incidentes = this.service.listaIncidentes(estado);
+	private ResponseEntity<List<IncidenteIdTO>> listaPorEstado(Estado estado, Integer janelaMinutos) {
+		List<IncidenteIdTO> incidentes = this.service.listaIncidentes(estado, janelaMinutos);
 		
 		if(incidentes.isEmpty()) {
 			return new ResponseEntity<>(NOT_FOUND);
@@ -107,5 +107,5 @@ public class IncidenteControllerImpl implements IncidenteController {
 		
 		return new ResponseEntity<>(incidentes, OK);
 	}
-
+	
 }

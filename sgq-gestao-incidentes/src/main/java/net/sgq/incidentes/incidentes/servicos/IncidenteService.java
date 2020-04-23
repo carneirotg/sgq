@@ -14,7 +14,7 @@ public interface IncidenteService {
 
 	List<IncidenteIdTO> listaIncidentes(String nome);
 
-	List<IncidenteIdTO> listaIncidentes(Estado estado);
+	List<IncidenteIdTO> listaIncidentes(Estado estado, Integer janelaMinutos);
 
 	Long salvarIncidente(IncidenteTO incidente, Long id);
 	

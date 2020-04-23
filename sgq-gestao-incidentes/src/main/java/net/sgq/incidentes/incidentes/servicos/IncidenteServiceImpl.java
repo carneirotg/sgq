@@ -1,5 +1,7 @@
 package net.sgq.incidentes.incidentes.servicos;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -25,13 +27,13 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Autowired
 	private IncidenteRepository repository;
-	
+
 	@Autowired
 	private NaoConformidadeService ncService;
-	
+
 	@Autowired
 	private IncidenteValidator validator;
-	
+
 	private Logger logger = LoggerFactory.getLogger(IncidenteServiceImpl.class);
 
 	@Override
@@ -58,8 +60,17 @@ public class IncidenteServiceImpl implements IncidenteService {
 	}
 
 	@Override
-	public List<IncidenteIdTO> listaIncidentes(Estado estado) {
-		return this.repository.findBySituacao(estado).stream().map(i -> i.toTOId()).collect(Collectors.toList());
+	public List<IncidenteIdTO> listaIncidentes(Estado estado, Integer janelaMinutos) {
+		List<Incidente> incidentes;
+
+		if (janelaMinutos == null) {
+			incidentes = this.repository.findBySituacao(estado);
+		} else {
+			incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, Date
+					.from(LocalDateTime.now().minusMinutes(janelaMinutos).atZone(ZoneId.systemDefault()).toInstant()));
+		}
+
+		return incidentes.stream().map(i -> i.toTOId()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -75,83 +86,84 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 		return ic.getId();
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void adicionaNaoConformidade(Long iId, Long nCId) {
 		NaoConformidade nc = this.ncService.consultaEntidadeNC(nCId);
-		
+
 		validator.validaNC(nc, nCId);
-		
+
 		Optional<Incidente> oIc = this.repository.findById(iId);
 		validator.validaIncidenteRetornado(iId, oIc);
-		
+
 		Incidente incidente = oIc.get();
-		
-		if(!validator.validaDuplicidadeNC(incidente, nCId)) {
+
+		if (!validator.validaDuplicidadeNC(incidente, nCId)) {
 			incidente.getNcEnvolvidas().add(nc);
 		}
-		
+
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void removeNaoConformidade(Long iId, Long nCId) {
-		
+
 		Optional<Incidente> oIc = this.repository.findById(nCId);
 		validator.validaIncidenteRetornado(iId, oIc);
-		
+
 		Incidente incidente = oIc.get();
-		
-		if(incidente.getNcEnvolvidas().removeIf(nc -> nc.getId() == nCId)) {
+
+		if (incidente.getNcEnvolvidas().removeIf(nc -> nc.getId() == nCId)) {
 			logger.info("NC #{} removida de Incidente #{}", nCId, iId);
 		}
-		
+
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void removeTodasNaoConformidades(Long id) {
 		Incidente incidente = retornaIncidenteValidado(id);
-		
+
 		incidente.getNcEnvolvidas().clear();
 		logger.info("Removida todas as NCs incluidas no incidente {}", id);
-		
+
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void incidenteMudaEstado(Long iId, Estado estado) {
 
 		Optional<Incidente> oIc = this.repository.findById(iId);
-		
+
 		validator.validaIncidenteRetornado(iId, oIc);
-		
+
 		Incidente nc = oIc.get();
-		
-		if(validator.trasicaoValida(nc, estado)) {
+
+		if (validator.trasicaoValida(nc, estado)) {
 			logger.info("NC({}) transicionou de {} para {}", iId, nc.getSituacao(), estado);
 			nc.setSituacao(estado);
-			
-			if(estado == Estado.CONCLUIDA) {
+
+			if (estado == Estado.CONCLUIDA) {
 				nc.setConcluidoEm(new Date());
 			}
-			
+
 		} else {
-			throw new IllegalStateException(String.format("Transica de um Incidente de %s para %s não é permitida", nc.getSituacao(), estado));
+			throw new IllegalStateException(
+					String.format("Transica de um Incidente de %s para %s não é permitida", nc.getSituacao(), estado));
 		}
-		
+
 	}
 
 	private Incidente retornaIncidenteValidado(Long id) {
 		Optional<Incidente> oIc = this.repository.findById(id);
 		validator.validaIncidenteRetornado(id, oIc);
-		
+
 		return oIc.get();
 	}
-	
+
 	private Incidente atualizaIncidente(IncidenteTO incidenteTo, Long id) {
-		
+
 		Optional<Incidente> oIC = this.repository.findById(id);
 
 		validator.validaIncidenteRetornado(id, oIC);
