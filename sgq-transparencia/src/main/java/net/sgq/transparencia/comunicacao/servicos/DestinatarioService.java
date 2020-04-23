@@ -9,6 +9,6 @@ public interface DestinatarioService {
 	List<DestinatarioTO> todos();
 
 	Long salvarDestinatario(DestinatarioTO destinatarioTO, Long id);
-	void removeDestinatario(DestinatarioTO destinatarioTO, Long id);
+	void removeDestinatario(Long id);
 	
 }

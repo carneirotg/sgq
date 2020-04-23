@@ -5,8 +5,10 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+import net.sgq.transparencia.comunicacao.modelos.Comunicado;
+
 @JacksonXmlRootElement(localName = "Incidente")
-public class IncidenteTO {
+public class IncidenteTO implements Comunicado {
 
 	private Long id;
 	private String titulo;
@@ -19,8 +21,8 @@ public class IncidenteTO {
 	@JsonProperty("criadoEm")
 	private Date dataCriacao;
 	@JsonProperty("concluidoEm")
-	private Date dataConclusao;	
-	
+	private Date dataConclusao;
+
 	public IncidenteTO() {
 		super();
 	}
@@ -121,5 +123,11 @@ public class IncidenteTO {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "IncidenteTO [id=" + id + ", titulo=" + titulo + ", descricao=" + descricao + ", setor=" + setor
+				+ ", classificacao=" + classificacao + ", tipo=" + tipo + "]";
+	}
+
 }

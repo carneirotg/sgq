@@ -9,7 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import net.sgq.transparencia.comunicacao.modelos.enums.TipoDestinatatio;
+import net.sgq.transparencia.comunicacao.modelos.enums.TipoDestinatario;
 import net.sgq.transparencia.comunicacao.modelos.to.DestinatarioTO;
 
 @Entity
@@ -28,13 +28,13 @@ public class Destinatario {
 	
 	@Column
 	@Enumerated(EnumType.STRING)
-	private TipoDestinatatio tipoDestinatario;
+	private TipoDestinatario tipoDestinatario;
 	
 	@Column(nullable = false)
-	private Boolean assinanteRecall;
+	private Boolean assinanteRecall = Boolean.FALSE;
 	
 	@Column(nullable = false)
-	private Boolean assinanteEventos;
+	private Boolean assinanteEventos = Boolean.FALSE;
 
 	public Destinatario() {
 		super();
@@ -64,11 +64,11 @@ public class Destinatario {
 		this.endpoint = endpoint;
 	}
 
-	public TipoDestinatatio getTipoDestinatario() {
+	public TipoDestinatario getTipoDestinatario() {
 		return tipoDestinatario;
 	}
 
-	public void setTipoDestinatario(TipoDestinatatio tipoDestinatario) {
+	public void setTipoDestinatario(TipoDestinatario tipoDestinatario) {
 		this.tipoDestinatario = tipoDestinatario;
 	}
 
@@ -94,7 +94,7 @@ public class Destinatario {
 	
 	public Destinatario fromTO(DestinatarioTO to) {
 		setAssinanteEventos(to.getAssinanteEventos());
-		setAssinanteRecall(to.getAssinanteEventos());
+		setAssinanteRecall(to.getAssinanteRecall());
 		setDescricao(to.getDescricao());
 		setEndpoint(to.getEndpoint());
 		setTipoDestinatario(to.getTipoDestinatario());

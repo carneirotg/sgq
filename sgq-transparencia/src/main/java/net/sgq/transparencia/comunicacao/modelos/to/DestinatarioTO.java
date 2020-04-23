@@ -1,20 +1,30 @@
 package net.sgq.transparencia.comunicacao.modelos.to;
 
-import net.sgq.transparencia.comunicacao.modelos.Destinatario;
-import net.sgq.transparencia.comunicacao.modelos.enums.TipoDestinatatio;
+import javax.validation.constraints.NotBlank;
 
-public class DestinatarioTO {
+import com.sun.istack.NotNull;
+
+import net.sgq.transparencia.comunicacao.modelos.Comunicado;
+import net.sgq.transparencia.comunicacao.modelos.Destinatario;
+import net.sgq.transparencia.comunicacao.modelos.enums.TipoDestinatario;
+
+public class DestinatarioTO  implements Comunicado {
 
 	private Long id;
 
+	@NotBlank
 	private String descricao;
 	
+	@NotBlank
 	private String endpoint;
 	
-	private TipoDestinatatio tipoDestinatario;
+	@NotNull
+	private TipoDestinatario tipoDestinatario;
 	
+	@NotNull
 	private Boolean assinanteRecall;
 	
+	@NotNull
 	private Boolean assinanteEventos;
 
 	public DestinatarioTO() {
@@ -55,11 +65,11 @@ public class DestinatarioTO {
 		this.endpoint = endpoint;
 	}
 
-	public TipoDestinatatio getTipoDestinatario() {
+	public TipoDestinatario getTipoDestinatario() {
 		return tipoDestinatario;
 	}
 
-	public void setTipoDestinatario(TipoDestinatatio tipoDestinatario) {
+	public void setTipoDestinatario(TipoDestinatario tipoDestinatario) {
 		this.tipoDestinatario = tipoDestinatario;
 	}
 
