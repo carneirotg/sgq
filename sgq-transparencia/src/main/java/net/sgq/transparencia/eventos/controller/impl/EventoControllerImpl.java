@@ -1,4 +1,4 @@
-package net.sgq.transparencia.eventos.controller;
+package net.sgq.transparencia.eventos.controller.impl;
 
 import java.util.List;
 
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.sgq.transparencia.clientes.GestaoIncidentesClient;
 import net.sgq.transparencia.clientes.to.IncidenteTO;
 import net.sgq.transparencia.clientes.to.Incidentes;
+import net.sgq.transparencia.eventos.controller.EventoController;
 
 @RestController
 @RequestMapping("/eventos")
