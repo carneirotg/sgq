@@ -14,3 +14,7 @@ eureka:
   instance:
     instanceId: ${spring.application.name}:${random.value} 
     preferIpAddress: true
+    
+sgq:
+  relatorios:
+    diretorio: /tmp/relatorios

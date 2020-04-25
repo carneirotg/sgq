@@ -9,7 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
@@ -30,8 +35,24 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 	@Autowired
 	private GestaoIncidentesClient incidentesClient;
 
+	@Value("${sgq.relatorios.diretorio}")
+	private String diretorioRelatorios;
+
+	private Logger logger = LoggerFactory.getLogger(RelIncidentesServiceImpl.class);
+
+	@PostConstruct
+	public void postConstruct() {
+		File dirRelatorios = new File(diretorioRelatorios);
+		
+		if(dirRelatorios.exists() || dirRelatorios.mkdirs()) {
+			logger.debug("Diretório para relatorios alocado em: {}", diretorioRelatorios);
+		} else {
+			logger.error("Não foi possível criar/acessar diretório para relatórios: {}", diretorioRelatorios);
+		}
+	}
+	
 	@Override
-	public Object geraRelatorioPor(Periodo periodo) {
+	public File geraRelatorioPor(Periodo periodo) {
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("PeriodoReportado", formataPeriodo(periodo));
@@ -42,7 +63,7 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 	}
 
 	@Override
-	public Object geraRelatorioPor(Date inicio, Date fim) {
+	public File geraRelatorioPor(Date inicio, Date fim) {
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("PeriodoReportado", formataPeriodoQualquer(inicio, fim));
@@ -52,7 +73,7 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 		return geraRelatorio(incidentes, params);
 	}
 
-	private Object geraRelatorio(List<IncidenteTO> incidentes, Map<String, Object> params) {
+	private File geraRelatorio(List<IncidenteTO> incidentes, Map<String, Object> params) {
 
 		try {
 
@@ -62,21 +83,20 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 			JRBeanCollectionDataSource beanDS = new JRBeanCollectionDataSource(incidentes);
 			JasperPrint jasperPrint = JasperFillManager.fillReport(compiledReport, params, beanDS);
 
-			JasperExportManager.exportReportToPdfFile(jasperPrint,
-					String.format("/home/diogo/Estudos/Puc Minas/relatorios/%d.pdf", System.currentTimeMillis()));
+			final String arqRelatorio = String.format("%s/rel_incidente_%d.pdf", diretorioRelatorios, System.currentTimeMillis());
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JRException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JasperExportManager.exportReportToPdfFile(jasperPrint, arqRelatorio);
+			
+			return new File(arqRelatorio);
+
+		} catch (FileNotFoundException | JRException e) {
+			logger.info("Erro ao gerar relatório: {}", e.getMessage(), e);
 		}
 
 		return null;
 
 	}
-	
+
 	private Object formataPeriodo(Periodo periodo) {
 
 		Calendar cal = Calendar.getInstance();
@@ -106,7 +126,7 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 
 	private String formataPeriodoQualquer(Date inicioPeriodo, Date fimPeriodo) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		return String.format("%s a %s", sdf.format(inicioPeriodo), sdf.format(fimPeriodo));
 	}
 

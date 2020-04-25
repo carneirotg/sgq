@@ -2,16 +2,18 @@ package net.sgq.relatorios.controller;
 
 import java.util.Date;
 
+import org.springframework.http.ResponseEntity;
+
 public interface RelIncidentesController {
 
-	Object incidentesMesAtual();
+	ResponseEntity<byte[]> incidentesMesAtual();
 	
-	Object incidentesSemestre();
+	ResponseEntity<byte[]> incidentesSemestre();
 	
-	Object incidentesAnoCorrente();
+	ResponseEntity<byte[]> incidentesAnoCorrente();
 	
-	Object incidentesUltimosDozeMeses();
+	ResponseEntity<byte[]> incidentesUltimosDozeMeses();
 	
-	Object incidentesPorPeriodo(Date inicio, Date fim);
+	ResponseEntity<byte[]> incidentesPorPeriodo(Date inicio, Date fim);
 	
 }
