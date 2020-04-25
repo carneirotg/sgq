@@ -150,7 +150,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 		} else {
 			throw new IllegalStateException(
-					String.format("Transica de um Incidente de %s para %s não é permitida", nc.getSituacao(), estado));
+					String.format("Transição de um Incidente de %s para %s não é permitida", nc.getSituacao(), estado));
 		}
 
 	}
