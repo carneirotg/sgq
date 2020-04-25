@@ -14,7 +14,7 @@ import net.sgq.transparencia.clientes.to.IncidenteTO;
 @FeignClient("gestao-incidentes")
 public interface GestaoIncidentesClient {
 
-	@RequestMapping(method = RequestMethod.GET, path = "/v1/incidentes/?estado=concluidos")
+	@RequestMapping(method = RequestMethod.GET, path = "/v1/incidentes/?estado=concluidos&janelaMinutos")
 	@JacksonXmlElementWrapper(useWrapping = true)
 	@JacksonXmlProperty(localName = "Incidente")
 	List<IncidenteTO> consultaIncidentesConcluidos();
