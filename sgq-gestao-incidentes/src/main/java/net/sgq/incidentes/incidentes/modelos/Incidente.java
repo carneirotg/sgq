@@ -42,7 +42,7 @@ public class Incidente implements TOAble<Incidente, IncidenteTO, IncidenteIdTO> 
 	private String titulo;
 
 	@NotBlank
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false, length = 500)
 	private String descricao;
 
 	@Temporal(TemporalType.TIMESTAMP)
