@@ -4,7 +4,8 @@ public enum Estado {
 
 	ABERTA("Aberta"),
 	EM_ANALISE("Em Análise"),
-	CONCLUIDA("Concluída");
+	CONCLUIDA("Concluída"),
+	NAO_CONCLUIDA("Não Concluida");
 
 	private String nome;
 
@@ -23,6 +24,8 @@ public enum Estado {
 		case "em análise":
 			return EM_ANALISE;
 		case "concluída":
+			return CONCLUIDA;
+		case "não concluída":
 			return CONCLUIDA;
 		default:
 			throw new IllegalArgumentException("Enumeração invalida: " + nome);

@@ -90,7 +90,16 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 
 	@Override
 	public List<NaoConformidadeIdTO> listaNCs(Estado estado) {
-		return this.repository.findByEstado(estado).stream().map(nc -> nc.toTOId()).collect(Collectors.toList());
+		
+		List<NaoConformidade> resultado = null;
+		
+		if(estado == Estado.NAO_CONCLUIDA) {
+			resultado = this.repository.findByEstadoNot(Estado.CONCLUIDA);
+		} else {
+			resultado = this.repository.findByEstado(estado);
+		}
+		
+		return resultado.stream().map(nc -> nc.toTOId()).collect(Collectors.toList());
 	}
 
 	@Override

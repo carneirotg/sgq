@@ -15,5 +15,6 @@ public interface IncidenteRepository extends JpaRepository<Incidente, Long> {
 
 	List<Incidente> findBySituacao(Estado estado);
 	List<Incidente> findBySituacaoAndConcluidoEmAfter(Estado estado, Date criadoEm);
+	List<Incidente> findBySituacaoNot(Estado concluida);
 
 }

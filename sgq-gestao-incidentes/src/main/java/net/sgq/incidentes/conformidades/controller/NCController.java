@@ -48,5 +48,10 @@ public interface NCController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
 			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
 	ResponseEntity<List<NaoConformidadeIdTO>> nCsConcluidas();
+	
+	@ApiOperation(value = "Lista NCs não concluídas")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
+			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
+	ResponseEntity<List<NaoConformidadeIdTO>> nCsNaoConcluidas();
 
 }

@@ -77,11 +77,23 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<IncidenteIdTO>> incidentesEmAnalise() {
 		return listaPorEstado(Estado.EM_ANALISE, null);
 	}
-
+	
 	@Override
 	@GetMapping(params = "estado=concluidos")
-	public ResponseEntity<List<IncidenteIdTO>> incidentesConcluidos(@RequestParam(defaultValue = "30") Integer janelaMinutos) {
+	public ResponseEntity<List<IncidenteIdTO>> incidentesConcluidos() {
+		return listaPorEstado(Estado.CONCLUIDA, null);
+	}
+
+	@Override
+	@GetMapping(params = {"estado=concluidos", "janelaMinutos"})
+	public ResponseEntity<List<IncidenteIdTO>> incidentesConcluidosJanela(@RequestParam(defaultValue = "30") Integer janelaMinutos) {
 		return listaPorEstado(Estado.CONCLUIDA, janelaMinutos);
+	}
+	
+	@Override
+	@GetMapping(params = "estado=nao_concluidos")
+	public ResponseEntity<List<IncidenteIdTO>> incidentesNaoConcluidos() {
+		return listaPorEstado(Estado.NAO_CONCLUIDA, null);
 	}
 
 	@Override

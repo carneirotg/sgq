@@ -82,6 +82,12 @@ public class NCControllerImpl implements NCController {
 	public ResponseEntity<List<NaoConformidadeIdTO>> nCsConcluidas() {
 		return listaPorEstado(Estado.CONCLUIDA);
 	}
+	
+	@Override
+	@GetMapping(params = "estado=nao_concluidas")
+	public ResponseEntity<List<NaoConformidadeIdTO>> nCsNaoConcluidas() {
+		return listaPorEstado(Estado.NAO_CONCLUIDA);
+	}
 
 	@Override
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -64,10 +64,15 @@ public class IncidenteServiceImpl implements IncidenteService {
 		List<Incidente> incidentes;
 
 		if (janelaMinutos == null) {
-			incidentes = this.repository.findBySituacao(estado);
+			if(estado == Estado.NAO_CONCLUIDA) {
+				incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA);
+			} else {
+				incidentes = this.repository.findBySituacao(estado);
+			}
 		} else {
-			incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, Date
-					.from(LocalDateTime.now().minusMinutes(janelaMinutos).atZone(ZoneId.systemDefault()).toInstant()));
+			
+				incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, Date
+						.from(LocalDateTime.now().minusMinutes(janelaMinutos).atZone(ZoneId.systemDefault()).toInstant()));
 		}
 
 		return incidentes.stream().map(i -> i.toTOId()).collect(Collectors.toList());

@@ -13,5 +13,7 @@ public interface NaoConformidadeRepository extends JpaRepository<NaoConformidade
 	List<NaoConformidade> findByTituloContaining(String titulo);
 
 	List<NaoConformidade> findByEstado(Estado estado);
+	
+	List<NaoConformidade> findByEstadoNot(Estado estado);
 
 }
