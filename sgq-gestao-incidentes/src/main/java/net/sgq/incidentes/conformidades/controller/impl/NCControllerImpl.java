@@ -28,7 +28,7 @@ import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
 
 @RestController
-@RequestMapping("/ncs/")
+@RequestMapping("/ncs")
 public class NCControllerImpl implements NCController {
 
 	@Autowired
