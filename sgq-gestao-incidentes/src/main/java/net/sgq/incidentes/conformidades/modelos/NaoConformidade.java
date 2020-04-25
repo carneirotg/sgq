@@ -49,7 +49,7 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	@Column(nullable = false)
 	private String detalhamentoNaoConformidade;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(nullable = false)
 	private Setor setor;
@@ -64,7 +64,7 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	@Column(nullable = false)
 	private Boolean prejuizoApurado = Boolean.FALSE;
 
-	@Enumerated
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Estado estado = Estado.ABERTA;
 
