@@ -1,4 +1,4 @@
-package net.sgq.integra.o.mock;
+package net.sgq.integracao.mock;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
