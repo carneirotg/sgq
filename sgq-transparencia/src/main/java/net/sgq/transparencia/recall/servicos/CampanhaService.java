@@ -11,6 +11,7 @@ public interface CampanhaService {
 	Long salvar(CampanhaRecallTO campanha);
 	
 	List<CampanhaRecallTO> buscar(Estado estado);
+	List<CampanhaRecallTO> buscar(Estado estado, Integer janelaMinutos);
 	
 	void atualizaDataTermino(Long id, Date novaDataTermino);
 	void concluiCampanha(Long id);

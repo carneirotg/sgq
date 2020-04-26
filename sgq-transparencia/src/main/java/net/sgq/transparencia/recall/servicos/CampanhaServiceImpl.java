@@ -1,5 +1,7 @@
 package net.sgq.transparencia.recall.servicos;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,6 +78,26 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		return campanhas.stream().map(c -> c.toTO()).collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<CampanhaRecallTO> buscar(Estado estado, Integer janelaMinutos) {
+		
+		List<CampanhaRecall> campanhas;
+
+		if (estado == null) {
+			campanhas = this.repository.findAll();
+		} else {
+			
+			if(janelaMinutos == null) {
+				campanhas = this.repository.findByEstadoCampanha(estado);
+			} else {
+				campanhas = this.repository.findByEstadoCampanhaAndInicioAfter(estado, trataData(janelaMinutos));
+			}
+		}
+
+		return campanhas.stream().map(c -> c.toTO()).collect(Collectors.toList());
+		
+	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
@@ -105,6 +127,10 @@ public class CampanhaServiceImpl implements CampanhaService {
 			logger.info("Campanha {} concluída", id);
 		}
 
+	}
+	
+	private Date trataData(Integer janelaMinutos) {
+		return Date.from(LocalDateTime.now().minusMinutes(janelaMinutos).atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	private void validaEstadoCampanha(CampanhaRecall campanha) {

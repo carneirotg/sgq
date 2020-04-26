@@ -7,6 +7,8 @@ import net.sgq.transparencia.comunicacao.modelos.to.DestinatarioTO;
 public interface DestinatarioService {
 
 	List<DestinatarioTO> todos();
+	List<DestinatarioTO> interessadosRecall();
+	List<DestinatarioTO> interessadosIncidentes();
 
 	Long salvarDestinatario(DestinatarioTO destinatarioTO, Long id);
 	void removeDestinatario(Long id);

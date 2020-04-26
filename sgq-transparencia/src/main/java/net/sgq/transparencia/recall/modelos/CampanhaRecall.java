@@ -9,6 +9,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,7 +59,7 @@ public class CampanhaRecall {
 	@Embedded
 	private InformacaoTecnica informacaoTecnica;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@Size(min = 1)
 	private List<NaoConformidade> ncsEnvolvidas = new ArrayList<>();
 

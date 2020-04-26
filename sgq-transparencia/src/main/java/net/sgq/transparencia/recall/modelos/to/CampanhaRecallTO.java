@@ -11,11 +11,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
+import net.sgq.transparencia.comunicacao.modelos.Comunicado;
 import net.sgq.transparencia.recall.modelos.NaoConformidade;
 import net.sgq.transparencia.recall.modelos.enums.Estado;
 import net.sgq.transparencia.recall.modelos.enums.TipoRisco;
 
-public class CampanhaRecallTO {
+public class CampanhaRecallTO implements Comunicado {
 
 	private Long id;
 
@@ -192,6 +193,13 @@ public class CampanhaRecallTO {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "CampanhaRecallTO [id=" + id + ", titulo=" + titulo + ", inicio=" + inicio + ", fim=" + fim
+				+ ", dataConstatacao=" + dataConstatacao + ", defeito=" + defeito + ", tipoRisco=" + tipoRisco
+				+ ", ncsEnvolvidas=" + ncsEnvolvidas + "]";
 	}
 	
 }

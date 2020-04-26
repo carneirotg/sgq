@@ -2,7 +2,6 @@ package net.sgq.transparencia.comunicacao.servicos.agendador;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -16,6 +15,9 @@ import net.sgq.transparencia.clientes.GestaoIncidentesClient;
 import net.sgq.transparencia.clientes.to.IncidenteTO;
 import net.sgq.transparencia.comunicacao.servicos.ComunicacaoService;
 import net.sgq.transparencia.comunicacao.servicos.DestinatarioService;
+import net.sgq.transparencia.recall.modelos.enums.Estado;
+import net.sgq.transparencia.recall.modelos.to.CampanhaRecallTO;
+import net.sgq.transparencia.recall.servicos.CampanhaService;
 
 @Component
 public class ComunicacaoScheduler {
@@ -27,6 +29,9 @@ public class ComunicacaoScheduler {
 	private DestinatarioService destinatarioService;
 
 	@Autowired
+	private CampanhaService campanhaService;
+
+	@Autowired
 	private ComunicacaoService comunicacaoService;
 
 	private Logger logger = LoggerFactory.getLogger(ComunicacaoScheduler.class);
@@ -35,18 +40,34 @@ public class ComunicacaoScheduler {
 	public void enviaComunicacaoIncidentes() {
 
 		List<IncidenteTO> incidentes = new ArrayList<>();
-		
+
 		try {
 			incidentes = incidentesClient.consultaIncidentesConcluidos();
-		} catch(EntityNotFoundException e) {
+		} catch (EntityNotFoundException e) {
 			logger.info("Sem informações de incidentes disponíveis");
 		}
 
 		if (!incidentes.isEmpty()) {
 			logger.info("Novo(s) incidente(s) a comunicar: {}", incidentes.size());
 
-			comunicacaoService.pushDeEventos(destinatarioService.todos().stream().filter(d -> d.getAssinanteEventos())
-					.collect(Collectors.toList()), incidentes);
+			comunicacaoService.pushDeEventos(destinatarioService.interessadosIncidentes(), incidentes);
+		}
+
+	}
+
+	@Scheduled(fixedDelay = 30000)
+	public void enviaComunicacaoRecalls() {
+
+		List<CampanhaRecallTO> recalls = new ArrayList<>();
+
+		recalls = campanhaService.buscar(Estado.ATIVA, 30);
+
+		if (recalls.isEmpty()) {
+			logger.info("Sem informações de recalls ativos disponíveis");
+		} else {
+			logger.info("Novo(s) Recall(s) a comunicar: {}", recalls.size());
+
+			comunicacaoService.pushDeEventos(destinatarioService.interessadosRecall(), recalls);
 		}
 
 	}

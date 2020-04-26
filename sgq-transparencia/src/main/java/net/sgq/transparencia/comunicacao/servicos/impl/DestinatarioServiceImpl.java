@@ -28,6 +28,16 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 	}
 
 	@Override
+	public List<DestinatarioTO> interessadosRecall() {
+		return repository.findByAssinanteRecallIsTrue().stream().map(d -> d.toTO()).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<DestinatarioTO> interessadosIncidentes() {
+		return repository.findByAssinanteEventosIsTrue().stream().map(d -> d.toTO()).collect(Collectors.toList());
+	}
+
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Long salvarDestinatario(DestinatarioTO destinatarioTO, Long id) {
 
@@ -60,13 +70,13 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void removeDestinatario(Long id) {
 		Optional<Destinatario> oDestinatario = consultaDestinatario(id);
-		
+
 		validaDestinatario(id, oDestinatario);
-		
+
 		Destinatario destinatario = oDestinatario.get();
 		this.repository.delete(destinatario);
 	}
-	
+
 	private Optional<Destinatario> consultaDestinatario(Long id) {
 		Optional<Destinatario> oDestinatario = this.repository.findById(id);
 
