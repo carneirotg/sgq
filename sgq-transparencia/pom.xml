@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>net.sgq.transparencia</groupId>
 	<artifactId>sgq-transparencia</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<name>sgq-transparencia</name>
 	<description>SGQ Divulgação e Transparência</description>
 
