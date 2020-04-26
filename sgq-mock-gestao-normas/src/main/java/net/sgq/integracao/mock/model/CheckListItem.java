@@ -64,29 +64,39 @@ public class CheckListItem {
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		CheckListItem other = (CheckListItem) obj;
 		if (criterio == null) {
-			if (other.criterio != null)
+			if (other.criterio != null) {
 				return false;
-		} else if (!criterio.equals(other.criterio))
+			}
+		} else if (!criterio.equals(other.criterio)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (normas == null) {
-			if (other.normas != null)
+			if (other.normas != null) {
 				return false;
-		} else if (!normas.equals(other.normas))
+			}
+		} else if (!normas.equals(other.normas)) {
 			return false;
+		}
 		return true;
 	}
 

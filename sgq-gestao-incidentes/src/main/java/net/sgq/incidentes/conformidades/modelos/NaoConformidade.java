@@ -202,8 +202,14 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((artefato == null) ? 0 : artefato.hashCode());
+		result = prime * result + ((detalhamentoArtefato == null) ? 0 : detalhamentoArtefato.hashCode());
+		result = prime * result + ((detalhamentoNaoConformidade == null) ? 0 : detalhamentoNaoConformidade.hashCode());
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((normaNaoConformidade == null) ? 0 : normaNaoConformidade.hashCode());
+		result = prime * result + ((prejuizoApurado == null) ? 0 : prejuizoApurado.hashCode());
+		result = prime * result + ((resumo == null) ? 0 : resumo.hashCode());
 		result = prime * result + ((setor == null) ? 0 : setor.hashCode());
 		result = prime * result + ((tipoNaoConformidade == null) ? 0 : tipoNaoConformidade.hashCode());
 		result = prime * result + ((titulo == null) ? 0 : titulo.hashCode());
@@ -211,30 +217,83 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		NaoConformidade other = (NaoConformidade) obj;
-		if (estado != other.estado)
+		if (artefato == null) {
+			if (other.artefato != null) {
+				return false;
+			}
+		} else if (!artefato.equals(other.artefato)) {
 			return false;
+		}
+		if (detalhamentoArtefato == null) {
+			if (other.detalhamentoArtefato != null) {
+				return false;
+			}
+		} else if (!detalhamentoArtefato.equals(other.detalhamentoArtefato)) {
+			return false;
+		}
+		if (detalhamentoNaoConformidade == null) {
+			if (other.detalhamentoNaoConformidade != null) {
+				return false;
+			}
+		} else if (!detalhamentoNaoConformidade.equals(other.detalhamentoNaoConformidade)) {
+			return false;
+		}
+		if (estado != other.estado) {
+			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
-		if (setor != other.setor)
+		}
+		if (normaNaoConformidade == null) {
+			if (other.normaNaoConformidade != null) {
+				return false;
+			}
+		} else if (!normaNaoConformidade.equals(other.normaNaoConformidade)) {
 			return false;
-		if (tipoNaoConformidade != other.tipoNaoConformidade)
+		}
+		if (prejuizoApurado == null) {
+			if (other.prejuizoApurado != null) {
+				return false;
+			}
+		} else if (!prejuizoApurado.equals(other.prejuizoApurado)) {
 			return false;
+		}
+		if (resumo == null) {
+			if (other.resumo != null) {
+				return false;
+			}
+		} else if (!resumo.equals(other.resumo)) {
+			return false;
+		}
+		if (setor != other.setor) {
+			return false;
+		}
+		if (tipoNaoConformidade != other.tipoNaoConformidade) {
+			return false;
+		}
 		if (titulo == null) {
-			if (other.titulo != null)
+			if (other.titulo != null) {
 				return false;
-		} else if (!titulo.equals(other.titulo))
+			}
+		} else if (!titulo.equals(other.titulo)) {
 			return false;
+		}
 		return true;
 	}
 

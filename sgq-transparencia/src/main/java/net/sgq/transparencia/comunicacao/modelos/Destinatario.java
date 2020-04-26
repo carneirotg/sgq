@@ -112,18 +112,23 @@ public class Destinatario {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Destinatario other = (Destinatario) obj;
 		if (endpoint == null) {
-			if (other.endpoint != null)
+			if (other.endpoint != null) {
 				return false;
-		} else if (!endpoint.equals(other.endpoint))
+			}
+		} else if (!endpoint.equals(other.endpoint)) {
 			return false;
+		}
 		return true;
 	}
 	

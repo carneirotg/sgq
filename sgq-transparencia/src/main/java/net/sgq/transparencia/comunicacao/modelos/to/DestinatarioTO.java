@@ -93,24 +93,30 @@ public class DestinatarioTO  implements Comunicado {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((endpoint == null) ? 0 : endpoint.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		DestinatarioTO other = (DestinatarioTO) obj;
-		if (endpoint == null) {
-			if (other.endpoint != null)
+		if (id == null) {
+			if (other.id != null) {
 				return false;
-		} else if (!endpoint.equals(other.endpoint))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 	

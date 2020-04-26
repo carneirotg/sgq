@@ -103,35 +103,69 @@ public class Artefato implements TOAble<Artefato, ArtefatoTO, ArtefatoIdTO> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((criadoEm == null) ? 0 : criadoEm.hashCode());
+		result = prime * result + ((depreciado == null) ? 0 : depreciado.hashCode());
+		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		result = prime * result + ((urlImagem == null) ? 0 : urlImagem.hashCode());
 		return result;
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Artefato other = (Artefato) obj;
 		if (criadoEm == null) {
-			if (other.criadoEm != null)
+			if (other.criadoEm != null) {
 				return false;
-		} else if (!criadoEm.equals(other.criadoEm))
+			}
+		} else if (!criadoEm.equals(other.criadoEm)) {
 			return false;
+		}
+		if (depreciado == null) {
+			if (other.depreciado != null) {
+				return false;
+			}
+		} else if (!depreciado.equals(other.depreciado)) {
+			return false;
+		}
+		if (descricao == null) {
+			if (other.descricao != null) {
+				return false;
+			}
+		} else if (!descricao.equals(other.descricao)) {
+			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (nome == null) {
-			if (other.nome != null)
+			if (other.nome != null) {
 				return false;
-		} else if (!nome.equals(other.nome))
+			}
+		} else if (!nome.equals(other.nome)) {
 			return false;
+		}
+		if (urlImagem == null) {
+			if (other.urlImagem != null) {
+				return false;
+			}
+		} else if (!urlImagem.equals(other.urlImagem)) {
+			return false;
+		}
 		return true;
 	}
 

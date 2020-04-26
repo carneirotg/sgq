@@ -53,7 +53,6 @@ public class CampanhaRecallTO implements Comunicado {
 
 	public CampanhaRecallTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public CampanhaRecallTO(Long id, String titulo, Date inicio, Date fim, String informativoCampanha,
@@ -179,19 +178,25 @@ public class CampanhaRecallTO implements Comunicado {
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		CampanhaRecallTO other = (CampanhaRecallTO) obj;
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		return true;
 	}
 

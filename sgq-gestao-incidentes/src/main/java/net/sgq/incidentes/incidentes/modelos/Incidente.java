@@ -217,28 +217,37 @@ public class Incidente implements TOAble<Incidente, IncidenteTO, IncidenteIdTO> 
 		return result;
 	}
 
-	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Incidente other = (Incidente) obj;
-		if (classificacao != other.classificacao)
+		if (classificacao != other.classificacao) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
-		if (setor != other.setor)
+		}
+		if (setor != other.setor) {
 			return false;
-		if (situacao != other.situacao)
+		}
+		if (situacao != other.situacao) {
 			return false;
-		if (tipoIncidente != other.tipoIncidente)
+		}
+		if (tipoIncidente != other.tipoIncidente) {
 			return false;
+		}
 		return true;
 	}
 

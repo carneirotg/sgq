@@ -116,6 +116,7 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 		case ANO_CORRENTE:
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			cal.set(Calendar.MONTH, 0);
+			break;
 		default:
 			break;
 		}

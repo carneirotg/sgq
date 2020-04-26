@@ -112,9 +112,9 @@ public class IncidenteTO {
 			return "Em Análise";
 		case "CONCLUIDA":
 			return "Concluídos";
+		default:
+			return "Indefinido";
 		}
-
-		return "Indefinido";
 	}
 
 	public void setSituacao(String situacao) {
@@ -135,44 +135,60 @@ public class IncidenteTO {
 	}
 
 	@Override
+	@SuppressWarnings({"squid:S3776"})
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		IncidenteTO other = (IncidenteTO) obj;
 		if (classificacao == null) {
-			if (other.classificacao != null)
+			if (other.classificacao != null) {
 				return false;
-		} else if (!classificacao.equals(other.classificacao))
+			}
+		} else if (!classificacao.equals(other.classificacao)) {
 			return false;
+		}
 		if (id == null) {
-			if (other.id != null)
+			if (other.id != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!id.equals(other.id)) {
 			return false;
+		}
 		if (setor == null) {
-			if (other.setor != null)
+			if (other.setor != null) {
 				return false;
-		} else if (!setor.equals(other.setor))
+			}
+		} else if (!setor.equals(other.setor)) {
 			return false;
+		}
 		if (situacao == null) {
-			if (other.situacao != null)
+			if (other.situacao != null) {
 				return false;
-		} else if (!situacao.equals(other.situacao))
+			}
+		} else if (!situacao.equals(other.situacao)) {
 			return false;
+		}
 		if (tipo == null) {
-			if (other.tipo != null)
+			if (other.tipo != null) {
 				return false;
-		} else if (!tipo.equals(other.tipo))
+			}
+		} else if (!tipo.equals(other.tipo)) {
 			return false;
+		}
 		if (titulo == null) {
-			if (other.titulo != null)
+			if (other.titulo != null) {
 				return false;
-		} else if (!titulo.equals(other.titulo))
+			}
+		} else if (!titulo.equals(other.titulo)) {
 			return false;
+		}
 		return true;
 	}
 

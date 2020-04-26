@@ -82,4 +82,34 @@ public class Norma {
 		this.checkList = checkList;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((normaId == null) ? 0 : normaId.hashCode());
+		return result;
+	}
+
+	@SuppressWarnings({"squid:S3776"})
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Norma other = (Norma) obj;
+		if (normaId == null) {
+			if (other.normaId != null) {
+				return false;
+			}
+		} else if (!normaId.equals(other.normaId)) {
+			return false;
+		}
+		return true;
+	}
+	
 }
