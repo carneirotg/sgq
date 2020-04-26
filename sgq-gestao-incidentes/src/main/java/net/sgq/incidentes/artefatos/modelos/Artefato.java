@@ -89,7 +89,7 @@ public class Artefato implements TOAble<Artefato, ArtefatoTO, ArtefatoIdTO> {
 	public void setUrlImagem(String urlImagem) {
 		this.urlImagem = urlImagem;
 	}
-
+	
 	public Boolean getDepreciado() {
 		return depreciado;
 	}

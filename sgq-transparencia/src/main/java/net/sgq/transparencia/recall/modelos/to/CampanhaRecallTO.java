@@ -1,79 +1,76 @@
-package net.sgq.transparencia.recall.modelos;
+package net.sgq.transparencia.recall.modelos.to;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
+import net.sgq.transparencia.recall.modelos.NaoConformidade;
 import net.sgq.transparencia.recall.modelos.enums.Estado;
-import net.sgq.transparencia.recall.modelos.to.CampanhaRecallTO;
+import net.sgq.transparencia.recall.modelos.enums.TipoRisco;
 
-@Entity
-@Table(name = "campanhas_recall")
-public class CampanhaRecall {
+public class CampanhaRecallTO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@NotBlank
-	@Column(length = 100, nullable = false)
 	private String titulo;
 
 	@PastOrPresent
-	@Column(nullable = false)
 	private Date inicio;
 
 	@Future
-	@Column(nullable = false)
 	private Date fim;
 
 	@NotBlank
-	@Lob
 	private String informativoCampanha;
 
 	@NotBlank
-	@Column(length = 1000, nullable = false)
 	private String medidasCorretivas;
 
-	@Column(nullable = false)
+	@NotNull
 	private Boolean incidentesConhecidos;
 
-	@Embedded
-	private InformacaoTecnica informacaoTecnica;
+	private Date dataConstatacao;
+	
+	@NotBlank
+	private String defeito;
+	
+	@Column
+	private TipoRisco tipoRisco;
 
-	@ManyToMany
 	@Size(min = 1)
 	private List<NaoConformidade> ncsEnvolvidas = new ArrayList<>();
 
-	@Enumerated(EnumType.STRING)
-	@Column
 	private Estado estadoCampanha;
 
-	public CampanhaRecall() {
+	public CampanhaRecallTO() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	@PrePersist
-	public void prePersist() {
-		this.inicio = new Date();
-		this.estadoCampanha = Estado.ATIVA;
+	public CampanhaRecallTO(Long id, String titulo, Date inicio, Date fim, String informativoCampanha,
+			String medidasCorretivas, Boolean incidentesConhecidos, Date dataConstatacao, String defeito,
+			TipoRisco tipoRisco, List<NaoConformidade> ncsEnvolvidas, Estado estadoCampanha) {
+		super();
+		this.id = id;
+		this.titulo = titulo;
+		this.inicio = inicio;
+		this.fim = fim;
+		this.informativoCampanha = informativoCampanha;
+		this.medidasCorretivas = medidasCorretivas;
+		this.incidentesConhecidos = incidentesConhecidos;
+		this.dataConstatacao = dataConstatacao;
+		this.defeito = defeito;
+		this.tipoRisco = tipoRisco;
+		this.ncsEnvolvidas = ncsEnvolvidas;
+		this.estadoCampanha = estadoCampanha;
 	}
 
 	public Long getId() {
@@ -132,12 +129,28 @@ public class CampanhaRecall {
 		this.incidentesConhecidos = incidentesConhecidos;
 	}
 
-	public InformacaoTecnica getInformacaoTecnica() {
-		return informacaoTecnica;
+	public Date getDataConstatacao() {
+		return dataConstatacao;
 	}
 
-	public void setInformacaoTecnica(InformacaoTecnica informacaoTecnica) {
-		this.informacaoTecnica = informacaoTecnica;
+	public void setDataConstatacao(Date dataConstatacao) {
+		this.dataConstatacao = dataConstatacao;
+	}
+
+	public String getDefeito() {
+		return defeito;
+	}
+
+	public void setDefeito(String defeito) {
+		this.defeito = defeito;
+	}
+
+	public TipoRisco getTipoRisco() {
+		return tipoRisco;
+	}
+
+	public void setTipoRisco(TipoRisco tipoRisco) {
+		this.tipoRisco = tipoRisco;
 	}
 
 	public List<NaoConformidade> getNcsEnvolvidas() {
@@ -156,26 +169,6 @@ public class CampanhaRecall {
 		this.estadoCampanha = estadoCampanha;
 	}
 
-	public CampanhaRecallTO toTO() {
-		return new CampanhaRecallTO(getId(), getTitulo(), getInicio(), getFim(), getInformativoCampanha(),
-				getMedidasCorretivas(), getIncidentesConhecidos(), getInformacaoTecnica().getDataConstatacao(),
-				getInformacaoTecnica().getDefeito(), getInformacaoTecnica().getTipoRisco(), getNcsEnvolvidas(),
-				getEstadoCampanha());
-	}
-	
-	public CampanhaRecall fromTO(CampanhaRecallTO to) {
-		setEstadoCampanha(to.getEstadoCampanha());
-		setIncidentesConhecidos(to.getIncidentesConhecidos());
-		setInformacaoTecnica(new InformacaoTecnica(to.getDataConstatacao(), to.getDefeito(), to.getTipoRisco()));
-		setInformativoCampanha(to.getInformativoCampanha());
-		setMedidasCorretivas(to.getMedidasCorretivas());
-		setNcsEnvolvidas(to.getNcsEnvolvidas());
-		setTitulo(to.getTitulo());
-		setFim(to.getFim());
-		
-		return this;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -192,7 +185,7 @@ public class CampanhaRecall {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CampanhaRecall other = (CampanhaRecall) obj;
+		CampanhaRecallTO other = (CampanhaRecallTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -200,5 +193,5 @@ public class CampanhaRecall {
 			return false;
 		return true;
 	}
-
+	
 }

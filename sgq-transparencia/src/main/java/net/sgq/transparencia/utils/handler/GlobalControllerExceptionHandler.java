@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,9 +33,14 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 		return new ResponseEntity<>(mensagemErro(ex, "Tipo de dados incorreto na requisição"), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler({ EntityNotFoundException.class, IllegalStateException.class })
-	protected ResponseEntity<Object> entidadeNaoEncontrada(HttpServletRequest reques, Exception ex) {
+	@ExceptionHandler({ IllegalStateException.class, ConstraintViolationException.class })
+	protected ResponseEntity<Object> entidadeInvalida(HttpServletRequest reques, Exception ex) {
 		return new ResponseEntity<>(mensagemErro(ex, "Estado inválido"), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(EntityNotFoundException.class)
+	protected ResponseEntity<Object> entidadeNaoEncontrada(HttpServletRequest reques, Exception ex) {
+		return new ResponseEntity<>(mensagemErro(ex, "Entidade não encontrada"), HttpStatus.NOT_FOUND);
 	}
 
 	private Map<String, Object> mensagemErro(Exception ex, String erro) {

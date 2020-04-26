@@ -29,6 +29,17 @@ public class InformacaoTecnica {
 	@Enumerated(EnumType.STRING)
 	private TipoRisco tipoRisco;
 
+	public InformacaoTecnica() {
+		super();
+	}
+	
+	public InformacaoTecnica(Date dataConstatacao, String defeito, TipoRisco tipoRisco) {
+		super();
+		this.dataConstatacao = dataConstatacao;
+		this.defeito = defeito;
+		this.tipoRisco = tipoRisco;
+	}
+
 	public Date getDataConstatacao() {
 		return dataConstatacao;
 	}
