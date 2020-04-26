@@ -9,6 +9,9 @@ spring:
   datasource:
     url: jdbc:h2:mem:gestao_incidente
     sqlScriptEncoding: UTF-8
+  h2:
+    console:
+      enabled: true
     
 eureka:
   client:

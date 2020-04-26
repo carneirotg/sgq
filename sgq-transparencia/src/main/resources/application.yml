@@ -1,12 +1,18 @@
 server:
   port: 8300
   servlet:
-    context-path: /v1
+    context-path: /v1/
   
 
 spring:
   application:
     name: transparencia
+  datasource:
+    url: jdbc:h2:mem:transparencia
+    sqlScriptEncoding: UTF-8 
+  h2:
+    console:
+      enabled: true
     
 eureka:
   client:
