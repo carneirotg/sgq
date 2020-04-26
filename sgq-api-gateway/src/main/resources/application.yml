@@ -1,5 +1,7 @@
 server:
   port: 8080
+  servlet:
+    context-path: /api
 
 spring:
   application:
@@ -11,3 +13,48 @@ eureka:
       defaultZone: http://localhost:8000/eureka/
   instance:
     prefer-ip-address: true
+
+
+sgq:
+  rotas:
+    gestao-incidentes:
+      artefatos: 
+          v1: /v1/artefatos
+      incidentes:
+          v1: /v1/incidentes
+      nao-conformidades: 
+          v1: /v1/ncs
+    gw-normas:
+      normas:
+        v1: /v1/normas
+    relatorios:
+      relatorios: 
+        v1: /v1/relatorios
+    transparencia:
+      campanhas-recall:
+        v1: /v1/campanhas
+      relatorios:
+        v1: /v1/relatorios
+      
+          
+
+zuul:
+  routes:
+    artefatos-v1:
+      path: /artefatos/**
+      service-id: gestao-incidentes 
+    incidentes-v1:
+      path: /incidentes/**
+      service-id: gestao-incidentes
+    nao-conformidades-v1:
+      path: /ncs/**
+      service-id: gestao-incidentes
+    normas-v1:
+      path: /normas/**
+      service-id: gw-normas
+    relatorios-v1:
+      path: /relatorios/**
+      service-id: relatorios
+    campanhas-recall-v1:
+      path: /campanhas/**
+      service-id: transparencia
