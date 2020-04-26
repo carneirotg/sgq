@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 public class SgqServiceDiscoveryApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SgqServiceDiscoveryApplication.class, args);
+		SpringApplication.run(SgqServiceDiscoveryApplication.class, new String[] {});
 	}
 
 }

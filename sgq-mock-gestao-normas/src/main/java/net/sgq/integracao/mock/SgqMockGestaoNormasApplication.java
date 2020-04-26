@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SgqMockGestaoNormasApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SgqMockGestaoNormasApplication.class, args);
+		SpringApplication.run(SgqMockGestaoNormasApplication.class, new String[] {});
 	}
 
 }

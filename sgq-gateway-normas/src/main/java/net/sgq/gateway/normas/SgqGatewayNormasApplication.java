@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SgqGatewayNormasApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SgqGatewayNormasApplication.class, args);
+		SpringApplication.run(SgqGatewayNormasApplication.class, new String[] {});
 	}
 
 }

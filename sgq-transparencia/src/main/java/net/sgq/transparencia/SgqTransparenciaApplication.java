@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class SgqTransparenciaApplication {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(SgqTransparenciaApplication.class, args);
+		SpringApplication.run(SgqTransparenciaApplication.class, new String[] {});
 	}
 	
 }

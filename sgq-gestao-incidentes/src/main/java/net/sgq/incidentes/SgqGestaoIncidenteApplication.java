@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class SgqGestaoIncidenteApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SgqGestaoIncidenteApplication.class, args);
+		SpringApplication.run(SgqGestaoIncidenteApplication.class, new String[] {});
 	}
 	
 }
