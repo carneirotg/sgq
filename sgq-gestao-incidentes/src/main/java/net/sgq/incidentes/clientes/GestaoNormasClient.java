@@ -10,7 +10,7 @@ import net.sgq.incidentes.conformidades.modelos.Norma;
 @FeignClient("gw-normas")
 public interface GestaoNormasClient {
 
-	@RequestMapping(method = RequestMethod.GET, path = "/normas/{normaId}")
+	@RequestMapping(method = RequestMethod.GET, path = "/v1/normas/{normaId}")
 	Norma consultaNorma(@PathVariable Long normaId);
 
 }

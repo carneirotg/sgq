@@ -15,7 +15,7 @@ public class NaoConformidadeValidator {
 
 	public void validaNCRetornada(Long ncId, Optional<NaoConformidade> oNC) {
 		if (oNC.isEmpty()) {
-			throw new EntityNotFoundException("Artefato", ncId);
+			throw new EntityNotFoundException("NaoConformidade", ncId);
 		}
 	}
 
