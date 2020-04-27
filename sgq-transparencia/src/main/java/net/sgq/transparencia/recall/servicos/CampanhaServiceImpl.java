@@ -105,6 +105,11 @@ public class CampanhaServiceImpl implements CampanhaService {
 		Optional<CampanhaRecall> oCampanha = buscaCampanhaValida(id);
 
 		CampanhaRecall campanha = oCampanha.get();
+		
+		if(campanha.getEstadoCampanha() == Estado.CONCLUIDA) {
+			throw new IllegalStateException("Campanha já foi concluída e não pode ter data de fim alterada.");
+		}
+		
 		campanha.setFim(novaDataTermino);
 
 		logger.info("Data de término da campanha {} foi atualizado para {}", id, novaDataTermino);
