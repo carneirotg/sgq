@@ -45,26 +45,6 @@ public class CampanhaServiceImpl implements CampanhaService {
 		return campanhaRecall.getId();
 	}
 
-	private void trataNCSCampanha(CampanhaRecallTO campanha) {
-		
-		List<NaoConformidade> ncs = new ArrayList<>();
-		
-		for(NaoConformidade nc : campanha.getNcsEnvolvidas()) {
-			
-			Optional<NaoConformidade> oNC = this.ncRepository.findById(nc.getId());
-			
-			if(oNC.isPresent()) {
-				ncs.add(oNC.get());
-			} else {
-				ncs.add(this.ncRepository.save(nc));
-			}
-			
-		}
-		
-		campanha.setNcsEnvolvidas(ncs);
-		
-	}
-
 	@Override
 	public List<CampanhaRecallTO> buscar(Estado estado) {
 
@@ -153,6 +133,26 @@ public class CampanhaServiceImpl implements CampanhaService {
 		}
 
 		return oCampanha;
+	}
+	
+	private void trataNCSCampanha(CampanhaRecallTO campanha) {
+		
+		List<NaoConformidade> ncs = new ArrayList<>();
+		
+		for(NaoConformidade nc : campanha.getNcsEnvolvidas()) {
+			
+			Optional<NaoConformidade> oNC = this.ncRepository.findById(nc.getId());
+			
+			if(oNC.isPresent()) {
+				ncs.add(oNC.get());
+			} else {
+				ncs.add(this.ncRepository.save(nc));
+			}
+			
+		}
+		
+		campanha.setNcsEnvolvidas(ncs);
+		
 	}
 
 }
