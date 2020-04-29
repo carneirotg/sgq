@@ -95,6 +95,8 @@ public class RelIncidentesControllerImpl implements RelIncidentesController {
 	private void validaPeriodo(Date inicio, Date fim) {
 		if (Period.between(toLocalDate(inicio), toLocalDate(fim)).getYears() >= 1) {
 			throw new IllegalStateException("Período maior que 12 meses");
+		} else if(inicio.after(fim)) {
+			throw new IllegalStateException("Data de início maior que a de fim");
 		}
 	}
 
