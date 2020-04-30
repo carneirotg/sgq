@@ -61,7 +61,7 @@ public class ArtefatoControllerImpl implements ArtefatoController {
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
 		List<ArtefatoIdTO> artefatos = this.service.buscaArtefatos(nome, pagina, registros);
 
-		if(artefatos == null) {
+		if(artefatos.isEmpty()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
@@ -80,7 +80,7 @@ public class ArtefatoControllerImpl implements ArtefatoController {
 	@Override
 	@PutMapping(path = "/{id}")
 	@ResponseStatus(code=HttpStatus.NO_CONTENT)
-	public void atualizaArtefato(@PathVariable Long id, @RequestBody ArtefatoTO artefatoTO) {
+	public void atualizaArtefato(@PathVariable Long id, @Validated @RequestBody ArtefatoTO artefatoTO) {
 		this.service.salvaArtefato(artefatoTO, id);
 	}
 
