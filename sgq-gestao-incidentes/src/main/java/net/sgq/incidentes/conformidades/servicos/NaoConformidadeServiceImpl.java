@@ -21,7 +21,6 @@ import net.sgq.incidentes.conformidades.modelos.Norma;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
-import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @Service
 public class NaoConformidadeServiceImpl implements NaoConformidadeService {
@@ -42,12 +41,12 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	
 	@Override
 	public List<NaoConformidadeIdTO> listaNCs() {
-		return this.repository.findAll().stream().map(nc -> nc.toTOId()).collect(Collectors.toList());
+		return this.repository.findAll().stream().map(NaoConformidade::toTOId).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<NaoConformidadeIdTO> listaNCs(String titulo) {
-		return this.repository.findByTituloContaining(titulo).stream().map(nc -> nc.toTOId()).collect(Collectors.toList());
+		return this.repository.findByTituloContaining(titulo).stream().map(NaoConformidade::toTOId).collect(Collectors.toList());
 	}
 
 	@Override
@@ -99,7 +98,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 			resultado = this.repository.findByEstado(estado);
 		}
 		
-		return resultado.stream().map(nc -> nc.toTOId()).collect(Collectors.toList());
+		return resultado.stream().map(NaoConformidade::toTOId).collect(Collectors.toList());
 	}
 
 	@Override
@@ -107,9 +106,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	public void naoConformidadeMudaEstado(Long id, Estado estado) {
 		Optional<NaoConformidade> oNC = this.repository.findById(id);
 		
-		validator.validaNCRetornada(id, oNC);
-		
-		NaoConformidade nc = oNC.get();
+		NaoConformidade nc = validator.validaNCRetornada(id, oNC);
 		
 		if(validator.trasicaoValida(nc, estado)) {
 			logger.info("NC({}) transicionou de {} para {}", id, nc.getEstado(), estado);
@@ -127,9 +124,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		Norma norma = this.normaService.consultaNorma(normaId);
 		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
 		
-		validator.validaNCRetornada(ncId, oNC);
-		
-		NaoConformidade nc = oNC.get();
+		NaoConformidade nc = validator.validaNCRetornada(ncId, oNC);
 		nc.setNormaNaoConformidade(norma);
 		
 	}
@@ -140,9 +135,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		
 		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
 		
-		validator.validaNCRetornada(ncId, oNC);
-		
-		NaoConformidade nc = oNC.get();
+		NaoConformidade nc = validator.validaNCRetornada(ncId, oNC);
 		
 		if(nc.getNormaNaoConformidade().getNormaId() == null) {
 			throw new IllegalStateException("NC não possui norma associada");
@@ -164,14 +157,10 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		
 	}
 	
-	private NaoConformidade atualizaNaoConformidade(NaoConformidadeTO naoConformidadeTo, Long id) {
-		Optional<NaoConformidade> oNC = this.repository.findById(id);
+	private NaoConformidade atualizaNaoConformidade(NaoConformidadeTO naoConformidadeTo, Long ncID) {
+		Optional<NaoConformidade> oNC = this.repository.findById(ncID);
 		
-		if(oNC.isEmpty()) {
-			throw new EntityNotFoundException("NaoConformidade", id);
-		}
-		
-		NaoConformidade nc = oNC.get();
+		NaoConformidade nc = validator.validaNCRetornada(ncID, oNC);
 		
 		if(nc.getEstado() == Estado.CONCLUIDA) {
 			throw new IllegalStateException("NC já foi concluída e não pode mais ser alterada.");

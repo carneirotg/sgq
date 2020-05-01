@@ -16,6 +16,8 @@ import com.netflix.zuul.exception.ZuulException;
 @ConfigurationProperties("sgq")
 public class SGQRouterFilter extends ZuulFilter {
 
+	private static final String REQUEST_URI = "requestURI";
+
 	private Map<String, Map<String, Map<String, String>>> rotas;
 	
 	private Logger logger = LoggerFactory.getLogger(SGQRouterFilter.class);
@@ -36,7 +38,7 @@ public class SGQRouterFilter extends ZuulFilter {
 	public Object run() throws ZuulException {
 
 		RequestContext context = RequestContext.getCurrentContext();
-		context.put("requestURI", trataModuloEVersao(context));
+		context.put(REQUEST_URI, trataModuloEVersao(context));
 		return null;
 	}
 
@@ -67,10 +69,10 @@ public class SGQRouterFilter extends ZuulFilter {
 			final String recurso = proxy.replace("-".concat(versao), "");
 			final String moduloPathVersao = rotas.get(modulo).get(recurso).get(versao);
 
-			return moduloPathVersao + context.get("requestURI").toString();
+			return moduloPathVersao + context.get(REQUEST_URI).toString();
 		} catch(Exception e) {
 			logger.debug("Erro ao rotear para padrão SGQ. Retornando ao padrão para o request: {}", context.entrySet());
-			return context.get("requestURI").toString();
+			return context.get(REQUEST_URI).toString();
 		}
 	}
 

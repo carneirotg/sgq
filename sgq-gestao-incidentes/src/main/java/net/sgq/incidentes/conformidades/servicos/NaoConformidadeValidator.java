@@ -13,19 +13,16 @@ import net.sgq.incidentes.utils.EntityNotFoundException;
 @Component
 public class NaoConformidadeValidator {
 
-	public void validaNCRetornada(Long ncId, Optional<NaoConformidade> oNC) {
+	public NaoConformidade validaNCRetornada(Long ncId, Optional<NaoConformidade> oNC) {
 		if (oNC.isEmpty()) {
 			throw new EntityNotFoundException("NaoConformidade", ncId);
 		}
+		
+		return oNC.get();
 	}
 
 	public boolean trasicaoValida(NaoConformidade nc, Estado estado) {
-
-		if (nc.getEstado() == estado || nc.getEstado() == Estado.CONCLUIDA) {
-			return false;
-		}
-
-		return true;
+		return !(nc.getEstado() == estado || nc.getEstado() == Estado.CONCLUIDA);
 	}
 
 	public void validaArtefato(NaoConformidadeTO naoConformidadeTo, Artefato artefato) {

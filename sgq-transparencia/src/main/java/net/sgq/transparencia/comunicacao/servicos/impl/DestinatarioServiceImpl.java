@@ -24,17 +24,17 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 
 	@Override
 	public List<DestinatarioTO> todos() {
-		return repository.findAll().stream().map(d -> d.toTO()).collect(Collectors.toList());
+		return repository.findAll().stream().map(Destinatario::toTO).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<DestinatarioTO> interessadosRecall() {
-		return repository.findByAssinanteRecallIsTrue().stream().map(d -> d.toTO()).collect(Collectors.toList());
+		return repository.findByAssinanteRecallIsTrue().stream().map(Destinatario::toTO).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<DestinatarioTO> interessadosIncidentes() {
-		return repository.findByAssinanteEventosIsTrue().stream().map(d -> d.toTO()).collect(Collectors.toList());
+		return repository.findByAssinanteEventosIsTrue().stream().map(Destinatario::toTO).collect(Collectors.toList());
 	}
 
 	@Override

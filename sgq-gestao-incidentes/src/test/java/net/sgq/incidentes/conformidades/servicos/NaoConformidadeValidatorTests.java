@@ -1,6 +1,7 @@
 package net.sgq.incidentes.conformidades.servicos;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
@@ -66,7 +67,7 @@ public class NaoConformidadeValidatorTests {
 
 		nc.setArtefato(artefato.getId());
 
-		validator.validaArtefato(nc, artefato);
+		assertDoesNotThrow(() -> validator.validaArtefato(nc, artefato));
 	}
 
 	@Test

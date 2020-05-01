@@ -51,12 +51,12 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Override
 	public List<IncidenteIdTO> listaIncidentes() {
-		return this.repository.findAll().stream().map(i -> i.toTOId()).collect(Collectors.toList());
+		return this.repository.findAll().stream().map(Incidente::toTOId).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<IncidenteIdTO> listaIncidentes(String nome) {
-		return this.repository.findByTituloContaining(nome).stream().map(i -> i.toTOId()).collect(Collectors.toList());
+		return this.repository.findByTituloContaining(nome).stream().map(Incidente::toTOId).collect(Collectors.toList());
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 			incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, trataData(janelaMinutos));
 		}
 
-		return incidentes.stream().map(i -> i.toTOId()).collect(Collectors.toList());
+		return incidentes.stream().map(Incidente::toTOId).collect(Collectors.toList());
 	}
 
 	@Override
@@ -99,9 +99,8 @@ public class IncidenteServiceImpl implements IncidenteService {
 		validator.validaNC(nc, nCId);
 
 		Optional<Incidente> oIc = this.repository.findById(iId);
-		validator.validaIncidenteRetornado(iId, oIc);
 
-		Incidente incidente = oIc.get();
+		Incidente incidente = validator.validaIncidenteRetornado(iId, oIc);
 
 		if (!validator.validaDuplicidadeNC(incidente, nCId)) {
 			incidente.getNcEnvolvidas().add(nc);
@@ -114,11 +113,10 @@ public class IncidenteServiceImpl implements IncidenteService {
 	public void removeNaoConformidade(Long iId, Long nCId) {
 
 		Optional<Incidente> oIc = this.repository.findById(nCId);
-		validator.validaIncidenteRetornado(iId, oIc);
 
-		Incidente incidente = oIc.get();
+		Incidente incidente = validator.validaIncidenteRetornado(iId, oIc);
 
-		if (incidente.getNcEnvolvidas().removeIf(nc -> nc.getId() == nCId)) {
+		if (incidente.getNcEnvolvidas().removeIf(nc -> nc.getId().equals(nCId))) {
 			logger.info("NC #{} removida de Incidente #{}", nCId, iId);
 		}
 
@@ -140,10 +138,8 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 		Optional<Incidente> oIc = this.repository.findById(iId);
 
-		validator.validaIncidenteRetornado(iId, oIc);
-
-		Incidente nc = oIc.get();
-
+		Incidente nc = validator.validaIncidenteRetornado(iId, oIc);
+		
 		if (validator.trasicaoValida(nc, estado)) {
 			logger.info("NC({}) transicionou de {} para {}", iId, nc.getSituacao(), estado);
 			nc.setSituacao(estado);
@@ -165,18 +161,14 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	private Incidente retornaIncidenteValidado(Long id) {
 		Optional<Incidente> oIc = this.repository.findById(id);
-		validator.validaIncidenteRetornado(id, oIc);
-
-		return oIc.get();
+		return validator.validaIncidenteRetornado(id, oIc);
 	}
 
 	private Incidente atualizaIncidente(IncidenteTO incidenteTo, Long id) {
 
 		Optional<Incidente> oIC = this.repository.findById(id);
 
-		validator.validaIncidenteRetornado(id, oIC);
-
-		Incidente incidente = oIC.get();
+		Incidente incidente = validator.validaIncidenteRetornado(id, oIC);
 
 		if (incidente.getSituacao() == Estado.CONCLUIDA) {
 			throw new IllegalStateException("Incidente já foi concluído e não pode mais ser alterado.");

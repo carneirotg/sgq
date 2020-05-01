@@ -36,7 +36,7 @@ public class CampanhaRecallTO implements Comunicado {
 	private String medidasCorretivas;
 
 	@NotNull
-	private Boolean incidentesConhecidos;
+	private Boolean incidentesConhecidos = Boolean.FALSE;
 
 	private Date dataConstatacao;
 	

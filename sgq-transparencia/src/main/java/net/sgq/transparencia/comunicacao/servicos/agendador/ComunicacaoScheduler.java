@@ -58,9 +58,7 @@ public class ComunicacaoScheduler {
 	@Scheduled(fixedDelay = 30000)
 	public void enviaComunicacaoRecalls() {
 
-		List<CampanhaRecallTO> recalls = new ArrayList<>();
-
-		recalls = campanhaService.buscar(Estado.ATIVA, 30);
+		List<CampanhaRecallTO> recalls = campanhaService.buscar(Estado.ATIVA, 30);
 
 		if (recalls.isEmpty()) {
 			logger.info("Sem informações de recalls ativos disponíveis");

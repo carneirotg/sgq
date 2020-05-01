@@ -1,6 +1,7 @@
 package net.sgq.incidentes.incidentes.servicos;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -35,9 +36,6 @@ public class IncidenteServiceTests {
 	@MockBean
 	private NaoConformidadeService ncService;
 
-	@MockBean
-	private IncidenteValidator validator;
-	
 	@Test
 	public void serviceOk() {
 		assertThat(service).isNotNull();
@@ -118,34 +116,30 @@ public class IncidenteServiceTests {
 	@Test
 	public void adicionaNaoConformidade() {
 		preencheRepositorio();
-		service.adicionaNaoConformidade(1L, 1L);
+		assertDoesNotThrow(() -> service.adicionaNaoConformidade(1L, 1L));
 	}
 	
 	@Test
 	public void naoAdicionaNaoConformidadeDuplicada() {
 		preencheRepositorio();
-		when(validator.validaDuplicidadeNC(any(), any())).thenReturn(Boolean.TRUE);
-		service.adicionaNaoConformidade(1L, 1L);
+		assertDoesNotThrow(() -> service.adicionaNaoConformidade(1L, 1L));
 	}
 	
 	@Test
 	public void removeNCsDeIncidente() {
 		preencheRepositorio();
 		
-		service.removeNaoConformidade(2L, 2L);
-		service.removeTodasNaoConformidades(1L);
+		assertDoesNotThrow(() -> service.removeNaoConformidade(2L, 2L));
+		assertDoesNotThrow(() -> service.removeTodasNaoConformidades(1L));
 	}
 	
 	@Test
 	public void mudancaDeEstados() {
 		preencheRepositorioEstados();
 		
-		when(validator.trasicaoValida(any(), any())).thenReturn(Boolean.TRUE);
 		
-		service.incidenteMudaEstado(1L, Estado.EM_ANALISE);
-		service.incidenteMudaEstado(2L, Estado.CONCLUIDA);
-		
-		when(validator.trasicaoValida(any(), any())).thenReturn(Boolean.FALSE);
+		assertDoesNotThrow(() -> service.incidenteMudaEstado(1L, Estado.EM_ANALISE));
+		assertDoesNotThrow(() -> service.incidenteMudaEstado(2L, Estado.CONCLUIDA));
 		
 		assertThrows(IllegalStateException.class, () -> {
 			service.incidenteMudaEstado(1L, Estado.EM_ANALISE);	
@@ -164,13 +158,15 @@ public class IncidenteServiceTests {
 		when(repository.findBySituacaoAndConcluidoEmAfter(any(), any())).thenReturn(incidentes);
 		
 		Incidente ic = new Incidente();
-		NaoConformidade nc = new NaoConformidade();
+		NaoConformidade nc1 = new NaoConformidade();
+		NaoConformidade nc2 = new NaoConformidade();
 		
-		nc.setId(2L);
-		ic.getNcEnvolvidas().add(nc);
+		nc1.setId(2L);
+		ic.getNcEnvolvidas().add(nc1);
 		when(repository.findById(2L)).thenReturn(Optional.of(ic));
 		
-		when(ncService.consultaEntidadeNC(any())).thenReturn(new NaoConformidade());
+		nc2.setEstado(Estado.CONCLUIDA);
+		when(ncService.consultaEntidadeNC(any())).thenReturn(nc2);
 		
 	}
 	
@@ -181,6 +177,7 @@ public class IncidenteServiceTests {
 		
 		Incidente ic2 = new Incidente();
 		ic2.setSituacao(Estado.ABERTA);
+		ic2.setConclusao("Incidente concluido");
 		when(repository.findById(2L)).thenReturn(Optional.of(ic2));
 	}
 	

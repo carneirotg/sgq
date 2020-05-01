@@ -1,6 +1,7 @@
 package net.sgq.incidentes.incidentes.servicos;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class IncidentesValidatorTests {
 		NaoConformidade nc = new NaoConformidade();
 		nc.setEstado(Estado.CONCLUIDA);
 		
-		validator.validaNC(nc, 1L);
+		assertDoesNotThrow(() -> validator.validaNC(nc, 1L));
 	}
 	
 	@Test

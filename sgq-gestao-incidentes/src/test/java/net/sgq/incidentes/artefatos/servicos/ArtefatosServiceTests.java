@@ -94,7 +94,7 @@ public class ArtefatosServiceTests {
 		Artefato a1 = criaArtefatoConsultavel(Boolean.FALSE);
 		when(repository.save(Mockito.any())).thenReturn(a1);
 
-		service.salvaArtefato(new ArtefatoTO(), 1L);
+		assertThat(service.salvaArtefato(new ArtefatoTO(), 1L)).isEqualTo(1L);
 
 	}
 
@@ -121,6 +121,7 @@ public class ArtefatosServiceTests {
 		a1.setDescricao("Abc");
 		a1.setNome("Abcdefg");
 		a1.setUrlImagem("imagem.png");
+		a1.setId(1L);
 
 		when(repository.findById(Mockito.any())).thenReturn(Optional.of(a1));
 		return a1;

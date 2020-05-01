@@ -12,6 +12,8 @@ import com.netflix.zuul.exception.ZuulException;
 @SpringBootTest
 public class SGQRouterFilterTests {
 
+	private static final String REQUEST_URI = "requestURI";
+	
 	@Autowired
 	private SGQRouterFilter router;
 
@@ -36,10 +38,10 @@ public class SGQRouterFilterTests {
 		RequestContext context = RequestContext.getCurrentContext();
 		context.set("serviceId", "gestao-incidentes");
 		context.set("proxy", "incidentes-v1");
-		context.set("requestURI", "");
+		context.set(REQUEST_URI, "");
 		router.run();
 
-		assertThat(context.get("requestURI")).isEqualTo("/v1/incidentes");
+		assertThat(context.get(REQUEST_URI)).isEqualTo("/v1/incidentes");
 	}
 	
 	@Test
@@ -47,10 +49,10 @@ public class SGQRouterFilterTests {
 		RequestContext context = RequestContext.getCurrentContext();
 		context.set("serviceId", "gestao-incidentes");
 		context.set("proxy", null);
-		context.set("requestURI", "");
+		context.set(REQUEST_URI, "");
 		router.run();
 
-		assertThat(context.get("requestURI")).isEqualTo("");
+		assertThat(context.get(REQUEST_URI)).isEqualTo("");
 	}
 
 }

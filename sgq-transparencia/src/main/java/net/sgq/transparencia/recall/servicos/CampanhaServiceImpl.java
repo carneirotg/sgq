@@ -56,7 +56,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 			campanhas = this.repository.findByEstadoCampanha(estado);
 		}
 
-		return campanhas.stream().map(c -> c.toTO()).collect(Collectors.toList());
+		return campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());
 	}
 	
 	@Override
@@ -75,7 +75,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 			}
 		}
 
-		return campanhas.stream().map(c -> c.toTO()).collect(Collectors.toList());
+		return campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());
 		
 	}
 
@@ -121,7 +121,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 	private void validaEstadoCampanha(CampanhaRecall campanha) {
 		if (Estado.CONCLUIDA == campanha.getEstadoCampanha()) {
 			logger.warn("Campanha já concluída teve atualização de dados negada");
-			new IllegalStateException("Campanha já foi concluída, não pode ter seu estado alterado");
+			throw new IllegalStateException("Campanha já foi concluída, não pode ter seu estado alterado");
 		}
 	}
 

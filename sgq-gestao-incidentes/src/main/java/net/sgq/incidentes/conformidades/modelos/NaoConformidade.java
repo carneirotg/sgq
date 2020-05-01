@@ -12,8 +12,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
@@ -38,7 +37,7 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(nullable = false)
-	private TipoNaoConformidade tipoNaoConformidade;
+	private TipoNaoConformidade tipoNaoConformidade = TipoNaoConformidade.ESPECIFICACAO_DIVERGENTE;
 
 	@NotBlank
 	@Column(length = 300, nullable = false)
@@ -52,7 +51,7 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 	@Enumerated(EnumType.STRING)
 	@NotNull
 	@Column(nullable = false)
-	private Setor setor;
+	private Setor setor = Setor.COMPRAS;
 
 	@ManyToOne
 	private Artefato artefato;

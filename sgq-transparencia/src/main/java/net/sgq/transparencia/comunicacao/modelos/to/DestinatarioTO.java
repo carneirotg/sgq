@@ -1,8 +1,7 @@
 package net.sgq.transparencia.comunicacao.modelos.to;
 
 import javax.validation.constraints.NotBlank;
-
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 
 import net.sgq.transparencia.comunicacao.modelos.Comunicado;
 import net.sgq.transparencia.comunicacao.modelos.Destinatario;
@@ -19,7 +18,7 @@ public class DestinatarioTO  implements Comunicado {
 	private String endpoint;
 	
 	@NotNull
-	private TipoDestinatario tipoDestinatario;
+	private TipoDestinatario tipoDestinatario = TipoDestinatario.WEBSERVICE;
 	
 	@NotNull
 	private Boolean assinanteRecall;

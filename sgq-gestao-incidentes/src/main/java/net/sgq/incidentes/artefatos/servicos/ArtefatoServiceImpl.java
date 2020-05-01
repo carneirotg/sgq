@@ -42,10 +42,10 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 		PageRequest page = PageRequest.of(pagina - 1, registros);
 
 		if (nome == null || "".equals(nome)) {
-			return this.repository.findAll(page).stream().map(a -> a.toTOId()).collect(Collectors.toList());
+			return this.repository.findAll(page).stream().map(Artefato::toTOId).collect(Collectors.toList());
 		}
 
-		return this.repository.findByNomeContaining(nome, page).stream().map(a -> a.toTOId())
+		return this.repository.findByNomeContaining(nome, page).stream().map(Artefato::toTOId)
 				.collect(Collectors.toList());
 	}
 
@@ -86,7 +86,7 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 		Artefato artefato = oArtefato.get();
 		
 		if(artefato.getDepreciado()) {
-			throw new IllegalStateException(String.format("Artefato depreciado não pode ser atualizado"));
+			throw new IllegalStateException("Artefato depreciado não pode ser atualizado");
 		}
 		
 		return this.repository.save(artefato.fromTO(artefatoTO));

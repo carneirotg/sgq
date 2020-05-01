@@ -31,11 +31,11 @@ public class GestaoNormaClient {
 				HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String, Object>>>() {
 				});
 
-		if (responseEntity == null) {
-			throw new IllegalStateException("Client retornou vazio para lista de normas");
+		if (responseEntity == null || responseEntity.getStatusCode().is5xxServerError()) {
+			throw new IllegalStateException("Client retornou vazio / erro para lista de normas");
 		}
 
-		return responseEntity.getBody().stream().map(resp -> new Norma(resp)).collect(Collectors.toList());
+		return responseEntity.getBody().stream().map(Norma::new).collect(Collectors.toList());
 	}
 
 	public Norma consultaNorma(Long id) {

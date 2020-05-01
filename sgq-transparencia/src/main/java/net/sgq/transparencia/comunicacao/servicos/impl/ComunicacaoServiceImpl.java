@@ -20,7 +20,7 @@ public class ComunicacaoServiceImpl implements ComunicacaoService {
 
 		for (DestinatarioTO destinatario : destinatarios) {
 			for (Comunicado comunicado : comunicados) {
-				logger.info("Push enviado para '{}': {}", destinatario.getDescricao(), comunicado.toString());
+				logger.info("Push enviado para '{}': {}", destinatario.getDescricao(), comunicado);
 			}
 		}
 

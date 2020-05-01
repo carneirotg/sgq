@@ -22,14 +22,16 @@ public class IncidenteValidator {
 		}
 	}
 
-	public void validaIncidenteRetornado(Long iId, Optional<Incidente> oIc) {
+	public Incidente validaIncidenteRetornado(Long iId, Optional<Incidente> oIc) {
 		if (oIc.isEmpty()) {
 			throw new EntityNotFoundException("Incidente", iId);
 		}
+		
+		return oIc.get();
 	}
 	
 	public Boolean validaDuplicidadeNC(Incidente ic, Long ncId) {
-		return ic.getNcEnvolvidas().stream().anyMatch(nc -> nc.getId() == ncId);
+		return ic.getNcEnvolvidas().stream().anyMatch(nc -> nc.getId().equals(ncId));
 	}
 	
 	public boolean trasicaoValida(Incidente ic, Estado estado) {
