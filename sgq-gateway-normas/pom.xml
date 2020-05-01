@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>net.sgq.gateway</groupId>
 	<artifactId>sgq-gateway-normas</artifactId>
-	<version>0.5.0-SNAPSHOT</version>
+	<version>0.5.5-SNAPSHOT</version>
 	<name>sgq-gateway-normas</name>
 	<description>SGQ Gateway Gestão de Normas</description>
 
