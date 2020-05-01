@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -98,7 +99,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 
 	@Override
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> novoIncidente(@RequestBody IncidenteTO incidente) throws URISyntaxException {
+	public ResponseEntity<Void> novoIncidente(@Validated @RequestBody IncidenteTO incidente) throws URISyntaxException {
 		Long id = this.service.salvarIncidente(incidente, 0L);
 		return ResponseEntity.created(new URI("/incidentes/" + id)).build();
 	}
@@ -106,7 +107,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	@Override
 	@PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(code = NO_CONTENT)
-	public void atualizaIncidente(@PathVariable Long id, @RequestBody IncidenteTO incidente) {
+	public void atualizaIncidente(@PathVariable Long id, @Validated @RequestBody IncidenteTO incidente) {
 		this.service.salvarIncidente(incidente, id);
 	}
 	
