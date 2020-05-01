@@ -36,7 +36,7 @@ public class IncidenteValidator {
 
 		if (ic.getSituacao() == estado || ic.getSituacao() == Estado.CONCLUIDA) {
 			return false;
-		} else if(estado == Estado.CONCLUIDA && "".equalsIgnoreCase(ic.getConclusao())) {
+		} else if(estado == Estado.CONCLUIDA && ("".equalsIgnoreCase(ic.getConclusao()) || ic.getConclusao() == null)) {
 			throw new IllegalStateException("Não é possível fechar um Incidente sem fornecer a conclusão do mesmo");
 		}
 
