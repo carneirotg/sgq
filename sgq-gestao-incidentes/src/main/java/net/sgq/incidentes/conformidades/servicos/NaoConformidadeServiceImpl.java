@@ -174,7 +174,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		NaoConformidade nc = oNC.get();
 		
 		if(nc.getEstado() == Estado.CONCLUIDA) {
-			throw new IllegalArgumentException("NC já foi concluída e não pode mais ser alterada.");
+			throw new IllegalStateException("NC já foi concluída e não pode mais ser alterada.");
 		}
 		
 		nc.fromTO(naoConformidadeTo);
