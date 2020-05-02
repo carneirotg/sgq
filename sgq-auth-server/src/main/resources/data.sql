@@ -3,7 +3,7 @@ INSERT INTO usuarios(username, display_name, password)
 VALUES
 	('gestor', 'Gestor de Qualidade', '{noop}g123'),
 	('analista', 'Analista de Qualidade', '{noop}a123'),
-	('interno', 'SGQ Interno', '{noop}a123');
+	('interno', 'SGQ Interno', '{noop}i123');
 	
 -- PAPEIS PADRAO
 INSERT INTO papeis(authority)

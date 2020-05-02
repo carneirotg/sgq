@@ -3,7 +3,6 @@ server:
   servlet:
     context-path: /v1/
   
-
 spring:
   application:
     name: transparencia
@@ -13,13 +12,7 @@ spring:
   h2:
     console:
       enabled: true
-
-security:
-  oauth2:
-    resource:
-      jwt:
-        key-value: secret-sgq
-            
+      
 eureka:
   client:
     serviceUrl:
@@ -27,3 +20,10 @@ eureka:
   instance:
     instanceId: ${spring.application.name}:${random.value} 
     preferIpAddress: true
+
+sgq:
+  authorizationServer:
+    url: ${AUTH_URL:http://localhost:8086/oauth}/token
+    credential: c2dxOnFncw==
+    username: ${AUTH_USER:interno}
+    password: ${AUTH_PASS:i123}
