@@ -1,0 +1,22 @@
+server:
+  port: 8085
+  
+spring:
+  application:
+    name: sgq-authorization-server
+  datasource:
+    url: jdbc:h2:mem:authorization_server
+    sqlScriptEncoding: UTF-8
+  h2:
+    console:
+      enabled: true
+
+security:
+  oauth2:
+    client:
+      client-id: sgq
+      client-secret: "{noop}qgs"
+      
+sgq:
+  security:
+    jwt-secret: secret-sgq

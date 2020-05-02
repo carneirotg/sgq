@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "sgq.security.jwt-secret",
+  "type": "java.lang.String",
+  "description": "Secret utilizado para tokens JWT emitidos por este servidor de autenticação."
+}]}
