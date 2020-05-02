@@ -21,9 +21,9 @@ eureka:
     instanceId: ${spring.application.name}:${random.value} 
     preferIpAddress: true
 
-
 sgq:
   integracao:
     gestao-normas:
       host: http://localhost:18080
       credencial: 123123123123123
+      
