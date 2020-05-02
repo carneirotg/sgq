@@ -18,7 +18,6 @@ public class IncidenteTO {
 	@Size(max = 100)
 	private String descricao;
 
-	@NotBlank
 	@Size(max = 2000)
 	private String conclusao;
 
