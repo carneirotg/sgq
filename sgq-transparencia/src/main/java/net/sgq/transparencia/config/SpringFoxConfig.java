@@ -1,4 +1,4 @@
-package net.sgq.transparencia;
+package net.sgq.transparencia.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

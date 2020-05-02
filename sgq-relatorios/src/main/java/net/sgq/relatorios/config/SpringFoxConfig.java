@@ -1,4 +1,4 @@
-package net.sgq.relatorios;
+package net.sgq.relatorios.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

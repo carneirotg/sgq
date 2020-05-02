@@ -14,7 +14,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
-
 sgq:
   rotas:
     gestao-incidentes:
@@ -36,9 +35,9 @@ sgq:
       relatorios:
         v1: /v1/relatorios
       
-          
 
 zuul:
+  sensitiveHeaders: Cookie,Set-Cookie
   routes:
     artefatos-v1:
       path: /artefatos/**

@@ -1,4 +1,4 @@
-package net.sgq.gateway.normas;
+package net.sgq.gateway.normas.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

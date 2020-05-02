@@ -15,6 +15,11 @@ eureka:
     instanceId: ${spring.application.name}:${random.value} 
     preferIpAddress: true
 
+security:
+  oauth2:
+    resource:
+      jwt:
+        key-value: secret-sgq
 
 sgq:
   integracao:
