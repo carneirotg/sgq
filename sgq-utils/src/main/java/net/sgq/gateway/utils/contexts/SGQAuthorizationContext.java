@@ -1,4 +1,4 @@
-package net.sgq.relatorios.utils;
+package net.sgq.gateway.utils.contexts;
 
 public class SGQAuthorizationContext {
 

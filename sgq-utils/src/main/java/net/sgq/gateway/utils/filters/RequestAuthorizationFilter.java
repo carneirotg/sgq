@@ -1,4 +1,4 @@
-package net.sgq.relatorios.utils;
+package net.sgq.gateway.utils.filters;
 
 import java.io.IOException;
 
@@ -10,6 +10,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Component;
+
+import net.sgq.gateway.utils.contexts.SGQAuthorizationContext;
 
 @Component
 public class RequestAuthorizationFilter implements Filter {
