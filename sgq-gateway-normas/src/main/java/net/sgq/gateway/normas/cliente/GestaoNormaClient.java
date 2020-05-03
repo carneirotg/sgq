@@ -20,9 +20,6 @@ public class GestaoNormaClient {
 	@Value("${sgq.integracao.gestao-normas.host}")
 	private String urlGN;
 
-	@Value("${sgq.integracao.gestao-normas.credencial}")
-	private String credencial;
-
 	@Autowired
 	private RestTemplate restTemplate;
 

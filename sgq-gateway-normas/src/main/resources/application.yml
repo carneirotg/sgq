@@ -20,6 +20,11 @@ security:
     resource:
       jwt:
         key-value: secret-sgq
+
+sgq:
+  integracao:
+    gestao-normas:
+      host: http://localhost:18080
       
 logging:
   level:

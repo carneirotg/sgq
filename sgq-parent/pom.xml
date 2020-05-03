@@ -7,14 +7,14 @@
   <name>Sistema de Gestão de Qualidade</name>
   <description>Projeto de conclusão de curso do especialização em Arquitetura de Software Distribuídos @ PUC Minas.</description>
   <modules>
-  	<module>../sgq/sgq-api-gateway</module>
-  	<module>../sgq/sgq-gateway-normas</module>
-  	<module>../sgq/sgq-gestao-incidentes</module>
-  	<module>../sgq/sgq-mock-gestao-normas</module>
-  	<module>../sgq/sgq-relatorios</module>
-  	<module>../sgq/sgq-service-discovery</module>
-  	<module>../sgq/sgq-transparencia</module>
-  	<module>../sgq/sgq-auth-server</module>
-  	<module>../sgq/sgq-utils</module>
+  	<module>../sgq-api-gateway</module>
+  	<module>../sgq-gateway-normas</module>
+  	<module>../sgq-gestao-incidentes</module>
+  	<module>../sgq-mock-gestao-normas</module>
+  	<module>../sgq-relatorios</module>
+  	<module>../sgq-service-discovery</module>
+  	<module>../sgq-transparencia</module>
+  	<module>../sgq-auth-server</module>
+  	<module>../sgq-utils</module>
   </modules>
 </project>
