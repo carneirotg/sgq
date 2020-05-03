@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: '11'
     - name: Build Utils
-      run: mvn -B install --file sgq-utilitarios/pom.xml
+      run: mvn -B install --file sgq-utils/pom.xml
     - name: Build Auth Server
       run: mvn -B package --file sgq-auth-server/pom.xml
     - name: Build API Gateway
