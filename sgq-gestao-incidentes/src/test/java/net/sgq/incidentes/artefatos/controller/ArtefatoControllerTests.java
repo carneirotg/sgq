@@ -12,15 +12,22 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import net.sgq.incidentes.artefatos.modelos.to.ArtefatoIdTO;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
 
-@WebMvcTest(controllers = ArtefatoController.class)
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 public class ArtefatoControllerTests {
 
 	@Autowired
@@ -29,21 +36,24 @@ public class ArtefatoControllerTests {
 	@MockBean
 	private ArtefatoService service;
 	
+	@Value("${sgq.test.token}")
+	private String jwtToken;
+	
 	@Test
 	public void listaArtefatosOK() throws Exception {
-		mock.perform(get("/artefatos")).andExpect(status().isOk());
+		mock.perform(setJwt(get("/artefatos"))).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void encontraArtefatoPorId() throws Exception {
 		when(service.buscaArtefatoPor(any())).thenReturn(new ArtefatoIdTO());
 		
-		mock.perform(get("/artefatos/1")).andExpect(status().isOk());
+		mock.perform(setJwt(get("/artefatos/1"))).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void naoEncontraArtefatoPorId() throws Exception {
-		mock.perform(get("/artefatos/1")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/artefatos/1"))).andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -53,12 +63,12 @@ public class ArtefatoControllerTests {
 		
 		when(service.buscaArtefatos(any(), any(), any())).thenReturn(arts);
 		
-		mock.perform(get("/artefatos?nome=abc")).andExpect(status().isOk());
+		mock.perform(setJwt(get("/artefatos?nome=abc"))).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void naoEncontraArtefatosPorNome() throws Exception {
-		mock.perform(get("/artefatos?nome=abc")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/artefatos?nome=abc"))).andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -66,7 +76,7 @@ public class ArtefatoControllerTests {
 		String artefato = "{\"nome\":\"abc\",\"descricao\":\"abc123\", \"urlImagem\": \"img.jpg\"}";
 		when(service.salvaArtefato(any(), any())).thenReturn(1L);
 		
-		mock.perform(post("/artefatos").contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isCreated());
+		mock.perform(setJwt(post("/artefatos")).contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isCreated());
 		
 	}
 	
@@ -75,7 +85,7 @@ public class ArtefatoControllerTests {
 		String artefato = "{\"nome\":\"ab\",\"descricao\":\"abc123\", \"urlImagem\": \"img.jpg\"}";
 		when(service.salvaArtefato(any(), any())).thenReturn(1L);
 		
-		mock.perform(post("/artefatos").contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isBadRequest());
+		mock.perform(setJwt(post("/artefatos")).contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isBadRequest());
 		
 	}
 	
@@ -84,7 +94,7 @@ public class ArtefatoControllerTests {
 		String artefato = "{\"nome\":\"abc\",\"descricao\":\"abc123\", \"urlImagem\": \"img.jpg\"}";
 		when(service.salvaArtefato(any(), any())).thenReturn(1L);
 		
-		mock.perform(put("/artefatos/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isNoContent());
+		mock.perform(setJwt(put("/artefatos/1")).contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isNoContent());
 		
 	}
 	
@@ -93,12 +103,15 @@ public class ArtefatoControllerTests {
 		String artefato = "{\"nome\":\"ab\",\"descricao\":\"abc123\", \"urlImagem\": \"img.jpg\"}";
 		when(service.salvaArtefato(any(), any())).thenReturn(1L);
 		
-		mock.perform(put("/artefatos/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato)).andExpect(status().isBadRequest());
+		mock.perform(setJwt(put("/artefatos/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(artefato))).andExpect(status().isBadRequest());
 	}
 
 	@Test
 	public void depreciaArtefato() throws Exception {
-		mock.perform(patch("/artefatos/1/depreciado")).andExpect(status().isNoContent());
+		mock.perform(setJwt(patch("/artefatos/1/depreciado"))).andExpect(status().isNoContent());
 	}
-	
+
+	private MockHttpServletRequestBuilder setJwt(MockHttpServletRequestBuilder builder) {
+		return builder.header("Authorization", "Bearer " + this.jwtToken);
+	}
 }

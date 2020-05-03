@@ -11,22 +11,36 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import net.sgq.gateway.normas.modelos.Norma;
 import net.sgq.gateway.normas.servicos.NormaService;
 
-@WebMvcTest(controllers = NormaController.class)
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 public class NormaControllerTests {
 
 	@Autowired
 	private MockMvc mock;
 	
+	@MockBean	
+	private JwtDecoder jwtDecoder;
+	
 	@MockBean
 	private NormaService service;
 	
+	@Value("${sgq.test.token}")
+	private String jwtToken;
+
 	@Test
 	public void normaControllerOk() {
 		assertThat(service).isNotNull();
@@ -36,31 +50,31 @@ public class NormaControllerTests {
 	public void listaNormasOk() throws Exception {
 		this.listaUmaNorma();
 		
-		mock.perform(get("/normas")).andExpect(status().isOk());
+		mock.perform(setJwt(get("/normas"))).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void listaNormasRetornoNuloSistemaExterno() throws Exception {
 		this.listaNormaNula();
 		
-		mock.perform(get("/normas")).andExpect(status().isBadGateway());
+		mock.perform(setJwt(get("/normas"))).andExpect(status().isBadGateway());
 	}
 	
 	@Test
 	public void listaNormasVazias() throws Exception {
-		mock.perform(get("/normas")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/normas"))).andExpect(status().isNotFound());
 	}
 	
 	@Test
 	public void consultaNormaOk() throws Exception {
 		when(service.consultaNorma(Mockito.anyLong())).thenReturn(new Norma());
-		mock.perform(get("/normas/1")).andExpect(status().isOk());
+		mock.perform(setJwt(get("/normas/1"))).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void listaNormasInexistente() throws Exception {
 		when(service.consultaNorma(Mockito.anyLong())).thenReturn(null);
-		mock.perform(get("/normas/1")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/normas/1"))).andExpect(status().isNotFound());
 	}
 	
 	private void listaUmaNorma() {
@@ -72,6 +86,10 @@ public class NormaControllerTests {
 	
 	private void listaNormaNula() {
 		when(service.listaNormas()).thenReturn(null);
+	}
+	
+	private MockHttpServletRequestBuilder setJwt(MockHttpServletRequestBuilder builder) {
+		return builder.header("Authorization", "Bearer " + this.jwtToken);
 	}
 	
 }

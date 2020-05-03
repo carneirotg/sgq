@@ -26,3 +26,8 @@ sgq:
     gestao-normas:
       host: http://localhost:18080
       credencial: 123123123123123
+
+      
+logging:
+  level:
+    org.springframework.security: DEBUG

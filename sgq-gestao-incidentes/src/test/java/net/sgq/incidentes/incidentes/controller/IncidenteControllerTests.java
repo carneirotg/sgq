@@ -16,10 +16,15 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
@@ -28,7 +33,9 @@ import net.sgq.incidentes.incidentes.modelos.enums.TipoIncidente;
 import net.sgq.incidentes.incidentes.modelos.to.IncidenteIdTO;
 import net.sgq.incidentes.incidentes.servicos.IncidenteService;
 
-@WebMvcTest(controllers = IncidenteController.class)
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
+@AutoConfigureMockMvc
 public class IncidenteControllerTests {
 
 	@MockBean
@@ -36,6 +43,9 @@ public class IncidenteControllerTests {
 	
 	@Autowired
 	private MockMvc mock;
+
+	@Value("${sgq.test.token}")
+	private String jwtToken;
 	
 	@BeforeEach
 	public void init() {
@@ -59,29 +69,29 @@ public class IncidenteControllerTests {
 	@Test
 	public void consultaIncidentes() throws Exception {
 		
-		mock.perform(get("/incidentes")).andExpect(status().isOk());
-		mock.perform(get("/incidentes?nome=Incidente 123")).andExpect(status().isOk());
-		mock.perform(get("/incidentes?nome=Incidente 456")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/incidentes"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?nome=Incidente 123"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?nome=Incidente 456"))).andExpect(status().isNotFound());
 	}
 	
 	@Test
 	public void consultaIncidente() throws Exception {
 		
-		mock.perform(get("/incidentes/1")).andExpect(status().isOk());
-		mock.perform(get("/incidentes/2")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/incidentes/1"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes/2"))).andExpect(status().isNotFound());
 		
 	}
 	
 	@Test
 	public void listaEstados() throws Exception {
 		
-		mock.perform(get("/incidentes?estado=abertos")).andExpect(status().isOk());
-		mock.perform(get("/incidentes?estado=em_analise")).andExpect(status().isOk());
-		mock.perform(get("/incidentes?estado=concluidos")).andExpect(status().isOk());
-		mock.perform(get("/incidentes?estado=concluidos&janelaMinutos=100")).andExpect(status().isOk());
-		mock.perform(get("/incidentes?estado=nao_concluidos")).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?estado=abertos"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?estado=em_analise"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?estado=concluidos"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?estado=concluidos&janelaMinutos=100"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/incidentes?estado=nao_concluidos"))).andExpect(status().isOk());
 		
-		mock.perform(get("/incidentes?estado=concluidos&janelaMinutos=1000")).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/incidentes?estado=concluidos&janelaMinutos=1000"))).andExpect(status().isNotFound());
 	}
 	
 	@Test
@@ -90,8 +100,8 @@ public class IncidenteControllerTests {
 		String corpoValido = "{\"titulo\":\"Máquina Y baixa produtividade\",\"descricao\":\"Máquina Y está apresentando problemas.\",\"conclusao\":\"conclusao aqui\",\"setor\":\"LINHA\",\"classificacao\":\"MEDIO\",\"tipoIncidente\":\"DANO_FINANCEIRO\"}";
 		String corpoInvalido = "{\"descricao\":\"Máquina Y está apresentando problemas quanto à sua produtividade visto a baixa potência da corrente que está ligada\",\"conclusao\":\"\",\"setor\":\"LINHA\",\"classificacao\":\"MEDIO\",\"tipoIncidente\":\"DANO_FINANCEIRO\"}";
 		
-		mock.perform(put("/incidentes/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoValido)).andExpect(status().isNoContent());
-		mock.perform(put("/incidentes/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoInvalido)).andExpect(status().isBadRequest());
+		mock.perform(setJwt(put("/incidentes/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoValido))).andExpect(status().isNoContent());
+		mock.perform(setJwt(put("/incidentes/1").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoInvalido))).andExpect(status().isBadRequest());
 	}
 	
 	@Test
@@ -100,8 +110,12 @@ public class IncidenteControllerTests {
 		String corpoValido = "{\"titulo\":\"Máquina Y baixa produtividade\",\"descricao\":\"Máquina Y está apresentando problemas.\",\"setor\":\"LINHA\",\"conclusao\":\"Ok\",\"classificacao\":\"MEDIO\",\"tipoIncidente\":\"DANO_FINANCEIRO\"}";
 		String corpoInvalido = "{\"descricao\":\"Máquina Y está apresentando problemas quanto à sua produtividade visto a baixa potência da corrente que está ligada\",\"conclusao\":\"\",\"setor\":\"LINHA\",\"classificacao\":\"MEDIO\",\"tipoIncidente\":\"DANO_FINANCEIRO\"}";
 		
-		mock.perform(post("/incidentes").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoValido)).andExpect(status().isCreated()).andExpect(header().string("Location", "/incidentes/1"));
-		mock.perform(post("/incidentes").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoInvalido)).andExpect(status().isBadRequest());
+		mock.perform(setJwt(post("/incidentes").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoValido))).andExpect(status().isCreated()).andExpect(header().string("Location", "/incidentes/1"));
+		mock.perform(setJwt(post("/incidentes").contentType(MediaType.APPLICATION_JSON_VALUE).content(corpoInvalido))).andExpect(status().isBadRequest());
+	}
+	
+	private MockHttpServletRequestBuilder setJwt(MockHttpServletRequestBuilder builder) {
+		return builder.header("Authorization", "Bearer " + this.jwtToken);
 	}
 	
 }
