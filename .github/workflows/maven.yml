@@ -20,6 +20,10 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: '11'
+    - name: Build Utils
+      run: mvn -B install --file sgq-utilitarios/pom.xml
+    - name: Build Auth Server
+      run: mvn -B package --file sgq-auth-server/pom.xml
     - name: Build API Gateway
       run: mvn -B package --file sgq-api-gateway/pom.xml
     - name: Build Gateway de Normas
