@@ -29,7 +29,8 @@ security:
 
 sgq:
   authorizationServer:
-    url: ${AUTH_URL:http://localhost:8086/oauth}/token
-    credential: c2dxOnFncw==
+    credential:
+      username: sgq
+      password: qgs
     username: ${AUTH_USER:interno}
     password: ${AUTH_PASS:i123}

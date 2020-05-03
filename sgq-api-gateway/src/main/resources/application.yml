@@ -34,7 +34,6 @@ sgq:
         v1: /v1/campanhas
       relatorios:
         v1: /v1/relatorios
-      
 
 zuul:
   sensitiveHeaders: Cookie,Set-Cookie

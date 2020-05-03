@@ -3,13 +3,21 @@ server:
   
 spring:
   application:
-    name: sgq-authorization-server
+    name: authorization-server
   datasource:
     url: jdbc:h2:mem:authorization_server
     sqlScriptEncoding: UTF-8
   h2:
     console:
       enabled: true
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8000/eureka/
+  instance:
+    instanceId: ${spring.application.name}:${random.value} 
+    preferIpAddress: true
 
 security:
   oauth2:
