@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Container, Col, Modal, Row, Tabs, Tab, Table } from 'react-bootstrap';
 
+import { Link } from 'react-router-dom';
+
 import logo from '../../images/logo_sgq_texto.png';
 
 class Eventos extends Component {
@@ -20,7 +22,7 @@ class Eventos extends Component {
                 setor: "LINHA_MONTAGEM",
             },
             {
-                id: 34516,
+                id: 12312,
                 titulo: "Braço mecânico emperrado",
                 descricao: "Braço mecânico da linha de montagem apresentou problemas no funcionamento, tendo emperrado durante as horas inicias do dia do evento. Foi necessário a lubrificação do mesmo, o suporte atuou de pronto.",
                 conclusao: "Desgaste apresentado que causou o problema foi devido ao peso excessivo, causando maior atrito que o suportado pela especificação do componente.",
@@ -30,7 +32,7 @@ class Eventos extends Component {
                 concluidoEm: "2020-01-09 13:30:00",
                 setor: "LINHA_MONTAGEM",
             }, {
-                id: 34516,
+                id: 2345,
                 titulo: "Braço mecânico emperrado",
                 descricao: "Braço mecânico da linha de montagem apresentou problemas no funcionamento, tendo emperrado durante as horas inicias do dia do evento. Foi necessário a lubrificação do mesmo, o suporte atuou de pronto.",
                 conclusao: "Desgaste apresentado que causou o problema foi devido ao peso excessivo, causando maior atrito que o suportado pela especificação do componente.",
@@ -40,7 +42,7 @@ class Eventos extends Component {
                 concluidoEm: "2020-01-09 13:30:00",
                 setor: "LINHA_MONTAGEM",
             }, {
-                id: 34516,
+                id: 33156,
                 titulo: "Braço mecânico emperrado",
                 descricao: "Braço mecânico da linha de montagem apresentou problemas no funcionamento, tendo emperrado durante as horas inicias do dia do evento. Foi necessário a lubrificação do mesmo, o suporte atuou de pronto.",
                 conclusao: "Desgaste apresentado que causou o problema foi devido ao peso excessivo, causando maior atrito que o suportado pela especificação do componente.",
@@ -50,7 +52,7 @@ class Eventos extends Component {
                 concluidoEm: "2020-01-09 13:30:00",
                 setor: "LINHA_MONTAGEM",
             }, {
-                id: 34516,
+                id: 9687,
                 titulo: "Braço mecânico emperrado",
                 descricao: "Braço mecânico da linha de montagem apresentou problemas no funcionamento, tendo emperrado durante as horas inicias do dia do evento. Foi necessário a lubrificação do mesmo, o suporte atuou de pronto.",
                 conclusao: "Desgaste apresentado que causou o problema foi devido ao peso excessivo, causando maior atrito que o suportado pela especificação do componente.",
@@ -67,18 +69,8 @@ class Eventos extends Component {
         return this.eventos();
     }
 
-    _modalIncidente(incidente) {
-        console.log(`Modal acionado com ${incidente}`);
-        if (incidente == null) {
-            this.setState({ modal: { visivel: false, incidente: null } });
-        } else {
-            this.setState({ modal: { visivel: true, incidente } });
-        }
-
-
-    }
-
     eventos() {
+
         return (
             <div className="App">
                 <Container>
@@ -118,6 +110,15 @@ class Eventos extends Component {
                         <Col md></Col>
                     </Row>
                 </Container>
+                <Container>
+                    <Row>
+                        <Col md="5"></Col>
+                        <Col md="2">
+                            <Button variant="info" as={Link} to="/">Voltar</Button>
+                        </Col>
+                        <Col md="5"></Col>
+                    </Row>
+                </Container>
                 {this._Modal()}
             </div>
         );
@@ -141,7 +142,7 @@ class Eventos extends Component {
                             .incidentes
                             .filter(i => i.tipoIncidente === tipo)
                             .map(i => (
-                                <tr>
+                                <tr key={i.id}>
                                     <td>{i.id}</td>
                                     <td>{i.titulo}</td>
                                     <td>{i.setor}</td>
@@ -154,6 +155,17 @@ class Eventos extends Component {
                 </tbody>
             </Table>
         )
+    }
+
+    _modalIncidente(incidente) {
+        console.log(`Modal acionado com ${incidente}`);
+        if (incidente == null) {
+            this.setState({ modal: { visivel: false, incidente: null } });
+        } else {
+            this.setState({ modal: { visivel: true, incidente } });
+        }
+
+
     }
 
     _Modal() {
@@ -179,7 +191,7 @@ class Eventos extends Component {
                                             <Col md><p><b>Criado em</b><br />{incidente.criadoEm}</p></Col>
                                             <Col md><p><b>Concluído em</b><br />{incidente.concluidoEm}</p></Col>
                                         </Row>
-                                        <br/>
+                                        <br />
                                         <Row>
                                             <Col><p><b>Descrição</b><br />{incidente.descricao}</p></Col>
                                         </Row>
