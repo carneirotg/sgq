@@ -18,13 +18,10 @@ import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
 import net.sgq.incidentes.conformidades.modelos.enums.TipoNaoConformidade;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
-import net.sgq.incidentes.utils.TOAble;
 
 @Entity
 @Table(name = "nao_conformidades")
-public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeTO, NaoConformidadeIdTO> {
+public class NaoConformidade {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -160,41 +157,6 @@ public class NaoConformidade implements TOAble<NaoConformidade, NaoConformidadeT
 
 	public void setNormaNaoConformidade(Norma normaNaoConformidade) {
 		this.normaNaoConformidade = normaNaoConformidade;
-	}
-
-	@Override
-	public NaoConformidadeTO toTO() {
-		return new NaoConformidadeTO(getTitulo(), getTipoNaoConformidade(), getResumo(),
-				getDetalhamentoNaoConformidade(), getSetor(), getArtefato().getId(), getDetalhamentoArtefato(),
-				getPrejuizoApurado());
-	}
-
-	@Override
-	public NaoConformidadeIdTO toTOId() {
-		return new NaoConformidadeIdTO(getTitulo(), getTipoNaoConformidade(), getResumo(),
-				getDetalhamentoNaoConformidade(), getSetor(), getArtefato().getId(), getDetalhamentoArtefato(),
-				getPrejuizoApurado(), getId(), getEstado(), getNormaNaoConformidade());
-	}
-
-	@Override
-	public NaoConformidade fromTO(NaoConformidadeTO to) {
-		setDetalhamentoArtefato(to.getDetalhamentoArtefato());
-		setDetalhamentoNaoConformidade(to.getDetalhamentoNaoConformidade());
-		setPrejuizoApurado(to.getPrejuizoApurado());
-		setResumo(to.getResumo());
-		setSetor(to.getSetor());
-		setTipoNaoConformidade(to.getTipoNaoConformidade());
-		setTitulo(to.getTitulo());
-		
-		return this;
-	}
-
-	@Override
-	public NaoConformidade fromTOID(NaoConformidadeIdTO toid) {
-		fromTO(toid);
-		setId(toid.getId());
-		
-		return this;
 	}
 
 	@Override

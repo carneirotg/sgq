@@ -21,8 +21,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.Norma;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
 import net.sgq.incidentes.utils.EntityNotFoundException;
 
@@ -56,16 +56,16 @@ public class NCNormasControllerTests {
 	@Test
 	public void buscaNormaAssociada() throws Exception {
 
-		NaoConformidadeIdTO mNC = Mockito.mock(NaoConformidadeIdTO.class);
+		NaoConformidade mNC = Mockito.mock(NaoConformidade.class);
 		when(service.consultaNC(anyLong())).thenReturn(mNC);
-		when(mNC.getNorma()).thenReturn(new Norma());
+		when(mNC.getNormaNaoConformidade()).thenReturn(new Norma());
 
 		mock.perform(setJwt(get("/ncs/1/norma/1"))).andExpect(status().isOk());
 	}
 
 	@Test
 	public void buscaNormaAssociadaInexistente() throws Exception {
-		when(service.consultaNC(anyLong())).thenReturn(Mockito.mock(NaoConformidadeIdTO.class));
+		when(service.consultaNC(anyLong())).thenReturn(Mockito.mock(NaoConformidade.class));
 
 		mock.perform(setJwt(get("/ncs/1/norma/1"))).andExpect(status().isNotFound());
 	}

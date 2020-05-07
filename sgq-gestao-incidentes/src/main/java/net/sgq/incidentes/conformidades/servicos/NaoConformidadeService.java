@@ -1,26 +1,26 @@
 package net.sgq.incidentes.conformidades.servicos;
 
-import java.util.List;
 import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
 
 public interface NaoConformidadeService {
 
-	List<NaoConformidadeIdTO> listaNCs();
+	Page<NaoConformidade> listaNCs(Pageable pageable);
 
-	List<NaoConformidadeIdTO>listaNCs(String nome);
+	Page<NaoConformidade>listaNCs(String nome, Pageable pageable);
 
-	NaoConformidadeIdTO consultaNC(Long id);
+	NaoConformidade consultaNC(Long id);
 	
 	NaoConformidade consultaEntidadeNC(Long nCId);
 
-	Long salvarNC(NaoConformidadeTO naoConformidadeTo, Long l);
+	Long salvarNC(NaoConformidade naoConformidadeTo, Long l);
 
-	List<NaoConformidadeIdTO> listaNCs(Estado aberta);
+	Page<NaoConformidade> listaNCs(Estado aberta, Pageable pageable);
 
 	void naoConformidadeMudaEstado(Long id, Estado estado);
 

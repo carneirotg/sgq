@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,9 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeTO;
-import net.sgq.incidentes.utils.EntityNotFoundException;
-
+	
 @SpringBootTest
 public class NaoConformidadeValidatorTests {
 
@@ -60,19 +60,23 @@ public class NaoConformidadeValidatorTests {
 
 	@Test
 	public void validaArtefato() {
-		NaoConformidadeTO nc = new NaoConformidadeTO();
+		NaoConformidade nc = new NaoConformidade();
 		Artefato artefato = new Artefato();
 		artefato.setId(1L);
 		artefato.setDepreciado(Boolean.FALSE);
 
-		nc.setArtefato(artefato.getId());
+		nc.setArtefato(artefato);
 
 		assertDoesNotThrow(() -> validator.validaArtefato(nc, artefato));
 	}
 
 	@Test
 	public void validaArtefatoNulo() {
-		NaoConformidadeTO nc = new NaoConformidadeTO();
+		Artefato a = new Artefato();
+		a.setId(1L);
+		
+		NaoConformidade nc = new NaoConformidade();
+		nc.setArtefato(a);
 
 		assertThrows(EntityNotFoundException.class, () -> {
 			validator.validaArtefato(nc, null);
@@ -81,12 +85,12 @@ public class NaoConformidadeValidatorTests {
 	
 	@Test
 	public void validaArtefatoDepreciado() {
-		NaoConformidadeTO nc = new NaoConformidadeTO();
+		NaoConformidade nc = new NaoConformidade();
 		Artefato artefato = new Artefato();
 		artefato.setId(1L);
 		artefato.setDepreciado(Boolean.TRUE);
 
-		nc.setArtefato(artefato.getId());
+		nc.setArtefato(artefato);
 
 		assertThrows(IllegalStateException.class, () -> {
 			validator.validaArtefato(nc, artefato);

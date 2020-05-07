@@ -20,15 +20,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
 import net.sgq.incidentes.conformidades.modelos.enums.TipoNaoConformidade;
-import net.sgq.incidentes.conformidades.modelos.to.NaoConformidadeIdTO;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
 
 @ActiveProfiles("test")
@@ -47,6 +49,7 @@ public class NCControllerTests {
 
 	@Test
 	public void listaNCS() throws Exception {
+		when(service.listaNCs(any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/ncs"))).andExpect(status().isOk());
 	}
 
@@ -59,6 +62,7 @@ public class NCControllerTests {
 
 	@Test
 	public void listaNCSNomeNaoEncontrado() throws Exception {
+		when(service.listaNCs(anyString(), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/ncs?nome=a"))).andExpect(status().isNotFound());
 	}
 
@@ -100,6 +104,7 @@ public class NCControllerTests {
 
 	@Test
 	public void consultaNCQualquerEstadoNaoEncontrada() throws Exception {
+		when(service.listaNCs(any(Estado.class), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/ncs?estado=nao_concluidas"))).andExpect(status().isNotFound());
 	}
 
@@ -117,17 +122,26 @@ public class NCControllerTests {
 	}
 
 	private void preencheListaDeNCS() {
-		List<NaoConformidadeIdTO> list = new ArrayList<>();
+		List<NaoConformidade> list = new ArrayList<>();
 		list.add(criaNC());
-		when(service.listaNCs(anyString())).thenReturn(list);
-		when(service.listaNCs(any(Estado.class))).thenReturn(list);
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		Page<NaoConformidade> pageNC = new PageImpl(list);
+		
+		when(service.listaNCs(anyString(), any())).thenReturn(pageNC);
+		when(service.listaNCs(any(Estado.class), any())).thenReturn(pageNC);
 	}
 
-	private NaoConformidadeIdTO criaNC() {
-		return new NaoConformidadeIdTO("", TipoNaoConformidade.AUSENCIA_MEDIDA, "", "", Setor.COMPRAS, 1L, "",
-				Boolean.TRUE, 1L, Estado.ABERTA, null);
+	private NaoConformidade criaNC() {
+		NaoConformidade nc = new NaoConformidade();
+		nc.setTipoNaoConformidade(TipoNaoConformidade.AUSENCIA_MEDIDA);
+		nc.setSetor(Setor.COMPRAS);
+		nc.setPrejuizoApurado(Boolean.TRUE);
+		nc.setEstado(Estado.ABERTA);
+		return nc;
+		
 	}
-	
+
 	private MockHttpServletRequestBuilder setJwt(MockHttpServletRequestBuilder builder) {
 		return builder.header("Authorization", "Bearer " + this.jwtToken);
 	}

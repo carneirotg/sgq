@@ -36,7 +36,7 @@ public class NCNormasControllerImpl implements NCNormaController {
 	@Override
 	@GetMapping("/norma/{normaId}")
 	public ResponseEntity<Norma> buscaNormaNC(@PathVariable Long ncId) {
-		Norma norma = this.service.consultaNC(ncId).getNorma();
+		Norma norma = this.service.consultaNC(ncId).getNormaNaoConformidade();
 		
 		if(norma == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
