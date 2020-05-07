@@ -7,8 +7,8 @@ const artefatos = {
     salvar: async (artefato) => {
         return _post('artefatos', artefato);
     },
-    listar: async () => {
-        return _get('artefatos');
+    listar: async (paginacao) => {
+        return _get('artefatos', paginacao);
     },
     consulta: async (id) => {
 
@@ -38,14 +38,15 @@ async function _patch(url) {
     return operationResponse;
 }
 
-async function _get(url) {
+async function _get(url, paginacao = {habilitada: false, pagina: 1}) {
     let operationResponse = {};
-    const response = await fetch(`/api/${url}`, { headers: _authHeader({}) });
+    const response = await fetch(`/api/${url}?${_paginar(paginacao)}`, { headers: _authHeader({}) });
 
     if (response.ok) {
         const retorno = await response.json();
+        const headers = _headersSGQ(response);
 
-        operationResponse = { sucesso: true, retorno };
+        operationResponse = { sucesso: true, retorno, headers };
     } else {
         operationResponse = { sucesso: false };
         await _trataErroPadrao(response);
@@ -53,6 +54,29 @@ async function _get(url) {
 
     return operationResponse;
 
+}
+
+function _paginar(paginacao) {
+    if (paginacao != null && paginacao.habilitada) {
+        const pagAtual = paginacao.pagina > 0 ? paginacao.pagina : 1;
+
+        return `&pagina=${paginacao.pagina}&registros=${paginacao.registros}`
+    }
+
+    return '';
+}
+
+function _headersSGQ(response) {
+    const reqHeaders = response.headers;
+    let headers = {};
+
+    for (let h of reqHeaders.entries()) {
+        if (h[0].includes("x-sgq")) {
+            headers[h[0]] = h[1];
+        }
+    }
+
+    return headers;
 }
 
 async function _post(url, objBody) {

@@ -9,14 +9,32 @@ class ArtefatosLista extends Component {
 
     state = {
         buscaArtefato: '',
-        artefatos: []
+        artefatos: [],
+        pagina: {
+            habilitada: true,
+            pagina: 1,
+            paginas: 0,
+            total: 0,
+            registros: 3
+        }
     }
 
     async componentDidMount() {
-        const resp = await cliente().artefatos.listar();
+        const resp = await cliente().artefatos.listar(this.state.pagina);
 
         if (resp.sucesso) {
-            this.setState({ artefatos: resp.retorno });
+            const artefatos = resp.retorno;
+            
+            this.setState(
+                {
+                    artefatos: artefatos,
+                    pagina: {
+                        ...this.state.pagina,
+                        pagina: resp.headers['x-sgq-pagina'],
+                        paginas: resp.headers['x-sgq-paginas'],
+                        total: resp.headers['x-sgq-total'],
+                    }
+                });
         }
     }
 
