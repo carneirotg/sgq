@@ -30,6 +30,7 @@ import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.incidentes.controller.IncidenteController;
 import net.sgq.incidentes.incidentes.modelos.Incidente;
 import net.sgq.incidentes.incidentes.servicos.IncidenteService;
+import net.sgq.incidentes.utils.handler.PageHeaders;
 
 @RestController
 @RequestMapping("/incidentes")
@@ -56,7 +57,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
 		Page<Incidente> incidentes = this.service.listaIncidentes(PageRequest.of(pagina, registros));
-		return new ResponseEntity<>(incidentes.getContent(), HttpStatus.OK);
+		return new ResponseEntity<>(incidentes.getContent(), PageHeaders.headers(incidentes), HttpStatus.OK);
 	}
 
 	@Override
@@ -70,7 +71,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 			return new ResponseEntity<>(NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(incidentes.getContent(), OK);
+		return new ResponseEntity<>(incidentes.getContent(), PageHeaders.headers(incidentes), OK);
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 			return new ResponseEntity<>(NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(incidentes.getContent(), OK);
+		return new ResponseEntity<>(incidentes.getContent(), PageHeaders.headers(incidentes), OK);
 	}
 
 }

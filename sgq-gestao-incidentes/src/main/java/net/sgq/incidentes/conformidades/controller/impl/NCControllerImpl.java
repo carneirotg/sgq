@@ -28,6 +28,7 @@ import net.sgq.incidentes.conformidades.controller.NCController;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
+import net.sgq.incidentes.utils.handler.PageHeaders;
 
 @RestController
 @RequestMapping("/ncs")
@@ -42,7 +43,7 @@ public class NCControllerImpl implements NCController {
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
 		Page<NaoConformidade> ncs = this.service.listaNCs(PageRequest.of(pagina - 1, registros));
-		return new ResponseEntity<>(ncs.getContent(), OK);
+		return new ResponseEntity<>(ncs.getContent(), PageHeaders.headers(ncs), OK);
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class NCControllerImpl implements NCController {
 			return new ResponseEntity<>(NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(nc.getContent(), OK);
+		return new ResponseEntity<>(nc.getContent(), PageHeaders.headers(nc), OK);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public class NCControllerImpl implements NCController {
 			return new ResponseEntity<>(NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(ncs.getContent(), OK);
+		return new ResponseEntity<>(ncs.getContent(), PageHeaders.headers(ncs), OK);
 	}
 
 }

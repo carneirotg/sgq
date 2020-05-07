@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
+import net.sgq.incidentes.utils.handler.PageHeaders;
 
 @RestController
 @RequestMapping("/artefatos")
@@ -42,7 +43,7 @@ public class ArtefatoControllerImpl implements ArtefatoController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(artefatos.getContent(), HttpStatus.OK);
+		return new ResponseEntity<>(artefatos.getContent(), PageHeaders.headers(artefatos), HttpStatus.OK);
 	}
 
 	@Override
@@ -69,7 +70,7 @@ public class ArtefatoControllerImpl implements ArtefatoController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(artefatos.getContent(), HttpStatus.OK);
+		return new ResponseEntity<>(artefatos.getContent(), PageHeaders.headers(artefatos), HttpStatus.OK);
 	}
 
 	@Override
