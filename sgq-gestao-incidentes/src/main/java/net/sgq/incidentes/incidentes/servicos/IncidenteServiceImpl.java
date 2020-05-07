@@ -2,14 +2,16 @@ package net.sgq.incidentes.incidentes.servicos;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +21,6 @@ import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
 import net.sgq.incidentes.incidentes.modelos.Incidente;
 import net.sgq.incidentes.incidentes.modelos.IncidenteRepository;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteIdTO;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteTO;
 
 @Service
 public class IncidenteServiceImpl implements IncidenteService {
@@ -37,7 +37,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 	private Logger logger = LoggerFactory.getLogger(IncidenteServiceImpl.class);
 
 	@Override
-	public IncidenteIdTO consultaIncidente(Long id) {
+	public Incidente consultaIncidente(Long id) {
 
 		Optional<Incidente> oIC = this.repository.findById(id);
 
@@ -45,41 +45,46 @@ public class IncidenteServiceImpl implements IncidenteService {
 			return null;
 		}
 
-		return oIC.get().toTOId();
+		return oIC.get();
 
 	}
 
 	@Override
-	public List<IncidenteIdTO> listaIncidentes() {
-		return this.repository.findAll().stream().map(Incidente::toTOId).collect(Collectors.toList());
+	public Page<Incidente> listaIncidentes(Pageable pageable) {
+		Page<Incidente> incidentes = this.repository.findAll(pageable);
+		
+		if(incidentes == null) {
+			incidentes = new PageImpl<>(new ArrayList<>());
+		}
+		
+		return incidentes;
 	}
 
 	@Override
-	public List<IncidenteIdTO> listaIncidentes(String nome) {
-		return this.repository.findByTituloContaining(nome).stream().map(Incidente::toTOId).collect(Collectors.toList());
+	public Page<Incidente> listaIncidentes(String nome, Pageable pageable) {
+		return this.repository.findByTituloContaining(nome, pageable);
 	}
 
 	@Override
-	public List<IncidenteIdTO> listaIncidentes(Estado estado, Integer janelaMinutos) {
-		List<Incidente> incidentes;
+	public Page<Incidente> listaIncidentes(Estado estado, Integer janelaMinutos, Pageable pageable) {
+		Page<Incidente> incidentes;
 
 		if (janelaMinutos == null) {
 			if (estado == Estado.NAO_CONCLUIDA) {
-				incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA);
+				incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA, pageable);
 			} else {
-				incidentes = this.repository.findBySituacao(estado);
+				incidentes = this.repository.findBySituacao(estado, pageable);
 			}
 		} else {
-
-			incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, trataData(janelaMinutos));
+			incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, trataData(janelaMinutos), pageable);
 		}
 
-		return incidentes.stream().map(Incidente::toTOId).collect(Collectors.toList());
+		return incidentes;
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Long salvarIncidente(IncidenteTO incidente, Long id) {
+	public Long salvarIncidente(Incidente incidente, Long id) {
 		Incidente ic = null;
 
 		if (id == null || id == 0) {
@@ -139,7 +144,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 		Optional<Incidente> oIc = this.repository.findById(iId);
 
 		Incidente nc = validator.validaIncidenteRetornado(iId, oIc);
-		
+
 		if (validator.trasicaoValida(nc, estado)) {
 			logger.info("NC({}) transicionou de {} para {}", iId, nc.getSituacao(), estado);
 			nc.setSituacao(estado);
@@ -154,7 +159,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 		}
 
 	}
-	
+
 	private Date trataData(Integer janelaMinutos) {
 		return Date.from(LocalDateTime.now().minusMinutes(janelaMinutos).atZone(ZoneId.systemDefault()).toInstant());
 	}
@@ -164,7 +169,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 		return validator.validaIncidenteRetornado(id, oIc);
 	}
 
-	private Incidente atualizaIncidente(IncidenteTO incidenteTo, Long id) {
+	private Incidente atualizaIncidente(Incidente incidenteTo, Long id) {
 
 		Optional<Incidente> oIC = this.repository.findById(id);
 
@@ -174,14 +179,12 @@ public class IncidenteServiceImpl implements IncidenteService {
 			throw new IllegalStateException("Incidente já foi concluído e não pode mais ser alterado.");
 		}
 
-		incidente.fromTO(incidenteTo);
+		incidenteTo.setId(id);
 
-		return incidente;
+		return repository.save(incidenteTo);
 	}
 
-	private Incidente novoIncidente(IncidenteTO incidenteTo) {
-
-		Incidente ic = new Incidente().fromTO(incidenteTo);
+	private Incidente novoIncidente(Incidente ic) {
 
 		return this.repository.save(ic);
 

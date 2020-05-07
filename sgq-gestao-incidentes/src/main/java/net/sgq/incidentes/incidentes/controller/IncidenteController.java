@@ -8,58 +8,58 @@ import org.springframework.http.ResponseEntity;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteIdTO;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteTO;
+import net.sgq.incidentes.incidentes.modelos.Incidente;
 
 public interface IncidenteController {
 
-	@ApiOperation(value = "Consulta um incidente por identificador", response = IncidenteIdTO.class)
+	@ApiOperation(value = "Consulta um incidente por identificador", response = Incidente.class)
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidente retornado com sucesso"),
 			@ApiResponse(code = 404, message = "Incidente não encontrado") })
-	ResponseEntity<IncidenteIdTO> buscaPor(Long id);
+	ResponseEntity<Incidente> buscaPor(Long id);
 
-	@ApiOperation(value = "Consulta incidentes por nome", response = IncidenteIdTO.class, responseContainer = "List")
+	@ApiOperation(value = "Consulta incidentes por nome", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> buscaPor(String descricao);
+	ResponseEntity<List<Incidente>> buscaPor(String descricao, Integer pagina, Integer registros);
 
-	@ApiOperation(value = "Consulta incidentes por nome", response = IncidenteIdTO.class, responseContainer = "List")
+	@ApiOperation(value = "Consulta incidentes por nome", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> listaIncidentes();
+	ResponseEntity<List<Incidente>> listaIncidentes(Integer pagina, Integer registros);
 
-	@ApiOperation(value = "Consulta incidentes com estado 'Aberto'", response = IncidenteIdTO.class, responseContainer = "List")
+	@ApiOperation(value = "Consulta incidentes com estado 'Aberto'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> incidentesAbertos();
+	ResponseEntity<List<Incidente>> incidentesAbertos(Integer pagina, Integer registros);
 
-	@ApiOperation(value = "Consulta incidentes com estado 'Em Análise'", response = IncidenteIdTO.class, responseContainer = "List")
+	@ApiOperation(value = "Consulta incidentes com estado 'Em Análise'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> incidentesEmAnalise();
+	ResponseEntity<List<Incidente>> incidentesEmAnalise(Integer pagina, Integer registros);
 
-	@ApiOperation(value = "Consulta incidentes com estado 'Concluído'", response = IncidenteIdTO.class, responseContainer = "List")
+	@ApiOperation(value = "Consulta incidentes com estado 'Concluído'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> incidentesConcluidos();
-	
-	@ApiOperation(value = "Consulta incidentes com estado 'Concluído'", response = IncidenteIdTO.class, responseContainer = "List")
+	ResponseEntity<List<Incidente>> incidentesConcluidos(Integer pagina, Integer registros);
+
+	@ApiOperation(value = "Consulta incidentes com estado 'Concluído'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> incidentesConcluidosJanela(Integer janelaMinutos);
-	
-	@ApiOperation(value = "Consulta incidentes ainda não concluídos", response = IncidenteIdTO.class, responseContainer = "List")
+	ResponseEntity<List<Incidente>> incidentesConcluidosJanela(Integer janelaMinutos, Integer pagina,
+			Integer registros);
+
+	@ApiOperation(value = "Consulta incidentes ainda não concluídos", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<IncidenteIdTO>> incidentesNaoConcluidos();
+	ResponseEntity<List<Incidente>> incidentesNaoConcluidos(Integer pagina, Integer registros);
 
 	@ApiOperation(value = "Cria um novo Incidente")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Incidente criado com sucesso") })
-	ResponseEntity<Void> novoIncidente(IncidenteTO incidente) throws URISyntaxException;
+	ResponseEntity<Void> novoIncidente(Incidente incidente) throws URISyntaxException;
 
 	@ApiOperation(value = "Atualiza um incidente")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Incidente atualizado com sucesso"),
 			@ApiResponse(code = 201, message = "Incidente atualizado com sucesso") })
-	void atualizaIncidente(Long id, IncidenteTO incidente);
+	void atualizaIncidente(Long id, Incidente incidente);
 
 }

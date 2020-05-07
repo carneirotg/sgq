@@ -25,13 +25,10 @@ import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
 import net.sgq.incidentes.incidentes.modelos.enums.ClassificacaoIncidente;
 import net.sgq.incidentes.incidentes.modelos.enums.TipoIncidente;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteIdTO;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteTO;
-import net.sgq.incidentes.utils.TOAble;
 
 @Entity
 @Table(name = "incidentes")
-public class Incidente implements TOAble<Incidente, IncidenteTO, IncidenteIdTO> {
+public class Incidente {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -134,11 +131,11 @@ public class Incidente implements TOAble<Incidente, IncidenteTO, IncidenteIdTO> 
 		this.conclusao = conclusao;
 	}
 
-	public ClassificacaoIncidente getClassificao() {
+	public ClassificacaoIncidente getClassificacao() {
 		return classificacao;
 	}
 
-	public void setClassificao(ClassificacaoIncidente classificao) {
+	public void setClassificacao(ClassificacaoIncidente classificao) {
 		this.classificacao = classificao;
 	}
 
@@ -172,37 +169,6 @@ public class Incidente implements TOAble<Incidente, IncidenteTO, IncidenteIdTO> 
 
 	public void setNcEnvolvidas(List<NaoConformidade> ncEnvolvidas) {
 		this.ncEnvolvidas = ncEnvolvidas;
-	}
-
-	@Override
-	public IncidenteTO toTO() {
-		return new IncidenteTO(getTitulo(), getDescricao(), getConclusao(), getSetor(), getClassificao(),
-				getTipoIncidente());
-	}
-
-	@Override
-	public IncidenteIdTO toTOId() {
-		return new IncidenteIdTO(getTitulo(), getDescricao(), getConclusao(), getSetor(), getClassificao(),
-				getTipoIncidente(), getId(), getNcEnvolvidas(), getCriadoEm(), getConcluidoEm(), getSituacao());
-	}
-
-	@Override
-	public Incidente fromTO(IncidenteTO to) {
-		setClassificao(to.getClassificacao());
-		setConclusao(to.getConclusao());
-		setDescricao(to.getDescricao());
-		setSetor(to.getSetor());
-		setTipoIncidente(to.getTipoIncidente());
-		setTitulo(to.getTitulo());
-
-		return this;
-	}
-
-	@Override
-	public Incidente fromTOID(IncidenteIdTO toid) {
-		fromTO(toid);
-
-		return null;
 	}
 
 	@Override

@@ -1,22 +1,22 @@
 package net.sgq.incidentes.incidentes.servicos;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteIdTO;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteTO;
+import net.sgq.incidentes.incidentes.modelos.Incidente;
 
 public interface IncidenteService {
 
-	IncidenteIdTO consultaIncidente(Long id);
+	Incidente consultaIncidente(Long id);
 
-	List<IncidenteIdTO> listaIncidentes();
+	Page<Incidente> listaIncidentes(Pageable pageable);
 
-	List<IncidenteIdTO> listaIncidentes(String nome);
+	Page<Incidente> listaIncidentes(String nome, Pageable pageable);
 
-	List<IncidenteIdTO> listaIncidentes(Estado estado, Integer janelaMinutos);
+	Page<Incidente> listaIncidentes(Estado estado, Integer janelaMinutos, Pageable pageable);
 
-	Long salvarIncidente(IncidenteTO incidente, Long id);
+	Long salvarIncidente(Incidente incidente, Long id);
 	
 	void adicionaNaoConformidade(Long iId, Long nCId);
 	void removeNaoConformidade(Long iId, Long nCId);

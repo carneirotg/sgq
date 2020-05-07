@@ -16,13 +16,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
 import net.sgq.incidentes.incidentes.modelos.Incidente;
 import net.sgq.incidentes.incidentes.modelos.IncidenteRepository;
-import net.sgq.incidentes.incidentes.modelos.to.IncidenteTO;
 
 @SpringBootTest
 public class IncidenteServiceTests {
@@ -53,31 +55,31 @@ public class IncidenteServiceTests {
 	@Test
 	public void listaIncidentes() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes()).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Pageable.unpaged()).getContent()).isNotNull().isNotEmpty();
 	}
 	
 	@Test
 	public void listaIncidentesPorTitulo() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes("Incidente x")).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes("Incidente x", Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test
 	public void listaIncidentesEstadoJanela() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes(Estado.ABERTA, 1)).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Estado.ABERTA, 1, Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test
 	public void listaIncidentesEstado() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes(Estado.ABERTA, null)).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Estado.ABERTA, null, Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test
 	public void listaIncidentesEstadoNaoConcluido() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes(Estado.NAO_CONCLUIDA, null)).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Estado.NAO_CONCLUIDA, null, Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test
@@ -87,17 +89,7 @@ public class IncidenteServiceTests {
 		
 		when(repository.save(any())).thenReturn(ic);
 		
-		assertThat(service.salvarIncidente(Mockito.mock(IncidenteTO.class), 0L)).isEqualTo(ic.getId());
-	}
-	
-	@Test
-	public void atualizaIncidente() {
-		Incidente ic = new Incidente();
-		ic.setId(1L);
-		
-		when(repository.findById(any())).thenReturn(Optional.of(ic));
-		
-		assertThat(service.salvarIncidente(Mockito.mock(IncidenteTO.class), 1L)).isEqualTo(1L);
+		assertThat(service.salvarIncidente(Mockito.mock(Incidente.class), 0L)).isEqualTo(ic.getId());
 	}
 	
 	@Test
@@ -109,7 +101,7 @@ public class IncidenteServiceTests {
 		when(repository.findById(any())).thenReturn(Optional.of(ic));
 		
 		assertThrows(IllegalStateException.class, () -> {
-			service.salvarIncidente(Mockito.mock(IncidenteTO.class), 1L);
+			service.salvarIncidente(Mockito.mock(Incidente.class), 1L);
 		});
 	}
 	
@@ -150,12 +142,15 @@ public class IncidenteServiceTests {
 		List<Incidente> incidentes = new ArrayList<>();
 		incidentes.add(new Incidente());
 		
+		Page<Incidente> pgIC = new PageImpl<>(incidentes);
+		
 		when(repository.findAll()).thenReturn(incidentes);
+		when(repository.findAll(any(Pageable.class))).thenReturn(pgIC);
 		when(repository.findById(any())).thenReturn(Optional.of(new Incidente()));
-		when(repository.findBySituacaoNot(eq(Estado.CONCLUIDA))).thenReturn(incidentes);
-		when(repository.findBySituacao(any())).thenReturn(incidentes);
-		when(repository.findByTituloContaining(Mockito.anyString())).thenReturn(incidentes);
-		when(repository.findBySituacaoAndConcluidoEmAfter(any(), any())).thenReturn(incidentes);
+		when(repository.findBySituacaoNot(eq(Estado.CONCLUIDA), any())).thenReturn(pgIC);
+		when(repository.findBySituacao(any(), any())).thenReturn(pgIC);
+		when(repository.findByTituloContaining(Mockito.anyString(), any())).thenReturn(pgIC);
+		when(repository.findBySituacaoAndConcluidoEmAfter(any(), any(), any())).thenReturn(pgIC);
 		
 		Incidente ic = new Incidente();
 		NaoConformidade nc1 = new NaoConformidade();
