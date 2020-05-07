@@ -7,6 +7,9 @@ const artefatos = {
     salvar: async (artefato) => {
         return _post('artefatos', artefato);
     },
+    buscarNome: async (nome, paginacao) => {
+        return _get(`artefatos?nome=${nome}`, paginacao);
+    },
     listar: async (paginacao) => {
         return _get('artefatos', paginacao);
     },
@@ -38,9 +41,9 @@ async function _patch(url) {
     return operationResponse;
 }
 
-async function _get(url, paginacao = {habilitada: false, pagina: 1}) {
+async function _get(url, paginacao = { habilitada: false, pagina: 0 }) {
     let operationResponse = {};
-    const response = await fetch(`/api/${url}?${_paginar(paginacao)}`, { headers: _authHeader({}) });
+    const response = await fetch(_trataParametrosRequest(`/api/${url}`, _paginar(paginacao)), { headers: _authHeader({}) });
 
     if (response.ok) {
         const retorno = await response.json();
@@ -49,18 +52,33 @@ async function _get(url, paginacao = {habilitada: false, pagina: 1}) {
         operationResponse = { sucesso: true, retorno, headers };
     } else {
         operationResponse = { sucesso: false };
-        await _trataErroPadrao(response);
+
+        if (response.status == 404) {
+            operationResponse['status'] = 404;
+        } else {
+            await _trataErroPadrao(response);
+        }
     }
 
     return operationResponse;
 
 }
 
+function _trataParametrosRequest(url, params){ 
+    if(url.includes('?')){
+        url +=  '&';
+    } else {
+        url += '?';
+    }
+
+    return `${url}${params}`;
+}
+
 function _paginar(paginacao) {
     if (paginacao != null && paginacao.habilitada) {
         const pagAtual = paginacao.pagina > 0 ? paginacao.pagina : 1;
 
-        return `&pagina=${paginacao.pagina}&registros=${paginacao.registros}`
+        return `pagina=${pagAtual}&registros=${paginacao.registros}`
     }
 
     return '';
@@ -104,7 +122,7 @@ function _authHeader(headers) {
 
 async function _trataErroPadrao(response) {
     let erro = `Erro no servidor: ${response.status}`;
-    const rJson = await response.json();
+    const rJson = response.json();
 
     if (rJson != null) {
         erro = rJson.erro;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, Pagination, Table, Row, Col, Jumbotron, Toast } from 'react-bootstrap';
+import { debounce } from 'lodash';
 import './Artefato.css';
 
 import { cliente } from '../../../Componentes/SGQClient';
@@ -12,40 +13,17 @@ class ArtefatosLista extends Component {
         artefatos: [],
         pagina: {
             habilitada: true,
-            pagina: 1,
+            pagina: 0,
             paginas: 0,
             total: 0,
-            registros: 3
+            registros: 5
         }
     }
+
+    timer = null;
 
     async componentDidMount() {
-        const resp = await cliente().artefatos.listar(this.state.pagina);
-
-        if (resp.sucesso) {
-            const artefatos = resp.retorno;
-            
-            this.setState(
-                {
-                    artefatos: artefatos,
-                    pagina: {
-                        ...this.state.pagina,
-                        pagina: resp.headers['x-sgq-pagina'],
-                        paginas: resp.headers['x-sgq-paginas'],
-                        total: resp.headers['x-sgq-total'],
-                    }
-                });
-        }
-    }
-
-    _valores(event) {
-        const name = event.target.name;
-        const value = event.target.value;
-        this.setState({ ...this.state, [name]: value });
-    }
-
-    _simNao(val) {
-        return val ? "Sim" : "Não";
+        this._consultar();
     }
 
     async _depreciar(artefato) {
@@ -65,14 +43,113 @@ class ArtefatosLista extends Component {
         }
     }
 
+    async _consultar(params = null) {
+
+        const paramsPaginacao = params != null ? params : this.state.pagina;
+        const nome = this.state.buscaArtefato;
+        let resp;
+
+        if (this.state.buscaArtefato != '') {
+            resp = await cliente().artefatos.buscarNome(nome, paramsPaginacao);
+        } else {
+            resp = await cliente().artefatos.listar(paramsPaginacao);
+        }
+
+        if (resp.sucesso) {
+            const artefatos = resp.retorno;
+            const { pagina } = paramsPaginacao;
+
+            const hPagina = parseInt(resp.headers['x-sgq-pagina']);
+            const hPaginas = parseInt(resp.headers['x-sgq-paginas']);
+            const hTotal = parseInt(resp.headers['x-sgq-total']);
+
+            if (this._atualizarArtefatosPaginas(pagina, paramsPaginacao, hPagina)) {
+                this.setState(
+                    {
+                        artefatos: artefatos,
+                        pagina: {
+                            ...this.state.pagina,
+                            pagina: hPagina,
+                            paginas: hPaginas,
+                            total: hTotal,
+                        }
+                    });
+            }
+        } else {
+            if (resp.status === 404) {
+                ToastManager.atencao(`Sem resultados`);
+                this.setState({ artefatos: [], buscaArtefato: '' });
+
+                setTimeout(() => this._consultar(), 1000);
+            }
+        }
+    }
+
+    async _paginar(pag) {
+        if (parseInt(this.state.pagina.pagina) !== pag) {
+            const paramsPaginacao = { ...this.state.pagina, pagina: pag };
+            this._consultar(paramsPaginacao);
+        }
+    }
+
+    _atualizarArtefatosPaginas(pagina, paramsPaginacao, hPagina) {
+        return parseInt(pagina) === 0 || parseInt(paramsPaginacao.pagina) === parseInt(hPagina)
+    }
+
+    _valores(event) {
+        const name = event.target.name;
+        const value = event.target.value;
+
+        this.setState({ ...this.state, [name]: value });
+
+        if (this.state.buscaArtefato.length > 3) {
+            clearTimeout(this.timer);
+            this.timer = setTimeout(() => this._consultar(), 300)
+        } else if(this.state.buscaArtefato.length == 0){
+            this._consultar();
+        }
+    }
+
+    _simNao(val) {
+        return val ? "Sim" : "Não";
+    }
+
+    _paginador() {
+        let itens = [];
+
+        const { pagina, paginas } = this.state.pagina;
+
+        itens.push(<Pagination.Item key="-1" onClick={this._paginar.bind(this, 1)}>|&lt;</Pagination.Item>);
+        itens.push(<Pagination.Item key="0" onClick={this._navegar.bind(this, -1)}>&lt;</Pagination.Item>);
+
+        for (let i = 1; i <= paginas; i++) {
+            itens.push(
+                <Pagination.Item key={i} active={i === parseInt(pagina)} onClick={this._paginar.bind(this, i)}>{i}</Pagination.Item>
+            );
+        }
+
+        itens.push(<Pagination.Item key="1000" onClick={this._navegar.bind(this, 1)}>&gt;</Pagination.Item>);
+        itens.push(<Pagination.Item key="10000" onClick={this._paginar.bind(this, this.state.pagina.paginas)}>&gt;|</Pagination.Item>);
+
+        return (
+            <Pagination>{itens}</Pagination>
+        )
+
+    }
+
+    _navegar(direcao) {
+        const { pagina, paginas } = this.state.pagina;
+
+        if (direcao === 1 && pagina < paginas) {
+            this._paginar(pagina + 1);
+        } else if(direcao === -1 && pagina > 1) {
+            this._paginar(pagina - 1);
+        }
+    }
+
     render() {
 
         let arts = this.state.artefatos;
-        const busca = this.state.buscaArtefato;
-
-        if (this.state.buscaArtefato != '') {
-            arts = this.state.artefatos.filter(a => a.nome.toLowerCase().includes(busca.toLowerCase()));
-        }
 
         return (
             <div className="App">
@@ -108,7 +185,7 @@ class ArtefatosLista extends Component {
                                     <tbody>
                                         {
                                             arts.map(a => (
-                                                <tr>
+                                                <tr key={a.id}>
                                                     <td>{a.id}</td>
                                                     <td>{a.nome}</td>
                                                     <td>{a.descricao}</td>
@@ -125,6 +202,11 @@ class ArtefatosLista extends Component {
                                     </tbody>
                                 </Table>
                             </Col>
+                            <Col md="2"></Col>
+                        </Row>
+                        <Row>
+                            <Col md="2"></Col>
+                            <Col>{this._paginador()}</Col>
                             <Col md="2"></Col>
                         </Row>
 
