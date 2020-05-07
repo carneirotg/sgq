@@ -22,6 +22,10 @@ class Login extends Component {
     this.setState({ loginForm: { ...this.state.loginForm, [name]: value } });
   }
 
+  _reset(){
+    this.setState({loginForm: {username: '', password: ''}});
+  }
+
   async _fazLogin() {
     let { username, password } = this.state.loginForm;
     let redir = await this._loginClient.login(username, password);
@@ -86,7 +90,7 @@ class Login extends Component {
                 <Row className="Btns">
                   <Col md></Col>
                   <Col md><Button className="Btn" onClick={this._fazLogin.bind(this)}>Entrar</Button></Col>
-                  <Col md><Button className="Btn" variant="warning" type="reset">Limpar</Button></Col>
+                  <Col md><Button className="Btn" variant="warning" onClick={this._reset.bind(this)}>Limpar</Button></Col>
                   <Col md></Col>
                 </Row>
               </Form>

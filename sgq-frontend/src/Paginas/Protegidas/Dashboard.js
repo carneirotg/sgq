@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import logo from '../../images/logo_sgq_texto.png';
-import { Container, Row, Col, Jumbotron, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Jumbotron } from 'react-bootstrap';
 import './Dashboard.css';
 
 class Dashboard extends Component {

@@ -32,10 +32,21 @@ ReactDOM.render(
         </Route>
 
 
-        <Protegidas.RotaProtegida path="/dashboard">
+        <Protegidas.RotaProtegida exact path="/dashboard">
           <NavbarSGQ />
           <Protegidas.Dashboard />
         </Protegidas.RotaProtegida>
+
+        <Protegidas.RotaProtegida path="/dashboard/artefato">
+          <NavbarSGQ />
+          <Protegidas.ArtefatoNovo />
+        </Protegidas.RotaProtegida>
+
+        <Protegidas.RotaProtegida path="/dashboard/artefatos">
+          <NavbarSGQ />
+          <Protegidas.ArtefatosLista />
+        </Protegidas.RotaProtegida>
+
       </Switch>
     </BrowserRouter>
     <ToastContainer/>
