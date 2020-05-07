@@ -32,6 +32,8 @@ class ArtefatoNovo extends Component {
         if (resp.sucesso) {
             ToastManager.sucesso("Artefato cadastrado");
             this._reset();
+        } else {
+            ToastManager.erro("Erro ao cadastrar. Tente mais tarde.")
         }
     }
 
@@ -44,15 +46,15 @@ class ArtefatoNovo extends Component {
                             <Row>
                                 <Col md><h1>Novo Artefato</h1></Col>
                             </Row>
-                            <Form noValidate onSubmit={this._cadastrarArtefato.bind(this)}>
+                            <Form validated onSubmit={this._cadastrarArtefato.bind(this)}>
                                 <Row>
                                     <Col md></Col>
                                     <Col md="4">
                                         <Form.Group controlId="gNomeArtefato">
                                             <Form.Label>Nome</Form.Label>
-                                            <Form.Control type="text" name="nome" value={this.state.artefato.nome} onChange={this._valores.bind(this)} required />
+                                            <Form.Control type="text" name="nome" value={this.state.artefato.nome} onChange={this._valores.bind(this)} minLength="5" required />
                                             <Form.Control.Feedback type="invalid">
-                                                Forneça um nome .
+                                                Forneça um nome
                                             </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
@@ -63,7 +65,10 @@ class ArtefatoNovo extends Component {
                                     <Col md="4">
                                         <Form.Group controlId="gDescrArtefato">
                                             <Form.Label>Descrição</Form.Label>
-                                            <Form.Control as="textarea" name="descricao" value={this.state.artefato.descricao} onChange={this._valores.bind(this)} size="500" />
+                                            <Form.Control as="textarea" name="descricao" value={this.state.artefato.descricao} onChange={this._valores.bind(this)} size="500" minLength="5" required />
+                                            <Form.Control.Feedback type="invalid">
+                                                Forneça a descrição
+                                            </Form.Control.Feedback>
                                         </Form.Group>
                                     </Col>
                                     <Col md></Col>
