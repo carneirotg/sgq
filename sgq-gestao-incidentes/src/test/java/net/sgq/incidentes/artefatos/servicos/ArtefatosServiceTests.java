@@ -14,13 +14,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.modelos.ArtefatoRepository;
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoIdTO;
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoTO;
 import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @SpringBootTest
@@ -57,19 +56,21 @@ public class ArtefatosServiceTests {
 		arts.add(new Artefato());
 		when(repository.findAll(Mockito.any(PageRequest.class))).thenReturn(new PageImpl<>(arts));
 
-		List<ArtefatoIdTO> artefatos = service.buscaArtefatos(null, 1, 1);
+		Page<Artefato> artefatos = service.buscaArtefatos(null, 1, 1);
 
 		assertThat(artefatos).isNotNull().isNotEmpty();
 	}
 
 	@Test
 	public void buscaArtefatosPorNome() {
-		List<Artefato> arts = new ArrayList<>();
-		arts.add(new Artefato());
+		List<Artefato> artsList = new ArrayList<>();
+		artsList.add(new Artefato());
+		
+		Page<Artefato> arts = new PageImpl<>(artsList);
 
 		when(repository.findByNomeContaining(Mockito.anyString(), Mockito.any())).thenReturn(arts);
 
-		List<ArtefatoIdTO> artefatos = service.buscaArtefatos("nome", 1, 1);
+		Page<Artefato> artefatos = service.buscaArtefatos("nome", 1, 1);
 
 		assertThat(artefatos).isNotNull().isNotEmpty();
 	}
@@ -82,7 +83,7 @@ public class ArtefatosServiceTests {
 
 		when(repository.save(Mockito.any())).thenReturn(a);
 
-		Long id = service.salvaArtefato(new ArtefatoTO(), 0L);
+		Long id = service.salvaArtefato(new Artefato(), 0L);
 
 		assertThat(id).isEqualTo(1);
 
@@ -94,7 +95,7 @@ public class ArtefatosServiceTests {
 		Artefato a1 = criaArtefatoConsultavel(Boolean.FALSE);
 		when(repository.save(Mockito.any())).thenReturn(a1);
 
-		assertThat(service.salvaArtefato(new ArtefatoTO(), 1L)).isEqualTo(1L);
+		assertThat(service.salvaArtefato(new Artefato(), 1L)).isEqualTo(1L);
 
 	}
 
@@ -102,7 +103,7 @@ public class ArtefatosServiceTests {
 	public void tentaAtualizarArtefatoInexistente() {
 
 		assertThrows(EntityNotFoundException.class, () -> {
-			service.salvaArtefato(new ArtefatoTO(), 1L);
+			service.salvaArtefato(new Artefato(), 1L);
 		});
 
 	}
@@ -111,7 +112,7 @@ public class ArtefatosServiceTests {
 	public void tentaAtualizarArtefatoDepreciado() {
 		criaArtefatoConsultavel(Boolean.TRUE);
 		assertThrows(IllegalStateException.class, () -> {
-			service.salvaArtefato(new ArtefatoTO(), 1L);
+			service.salvaArtefato(new Artefato(), 1L);
 		});
 	}
 

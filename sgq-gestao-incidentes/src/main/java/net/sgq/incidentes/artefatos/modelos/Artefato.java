@@ -14,13 +14,9 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoIdTO;
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoTO;
-import net.sgq.incidentes.utils.TOAble;
-
 @Entity
 @Table(name = "artefatos")
-public class Artefato implements TOAble<Artefato, ArtefatoTO, ArtefatoIdTO> {
+public class Artefato {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -167,33 +163,6 @@ public class Artefato implements TOAble<Artefato, ArtefatoTO, ArtefatoIdTO> {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public ArtefatoTO toTO() {
-		return new ArtefatoTO(getNome(), getDescricao(), getCriadoEm(), getUrlImagem(), getDepreciado());
-	}
-
-	@Override
-	public ArtefatoIdTO toTOId() {
-		return new ArtefatoIdTO(getNome(), getDescricao(), getCriadoEm(), getUrlImagem(), getId(), getDepreciado());
-	}
-
-	@Override
-	public Artefato fromTO(ArtefatoTO to) {
-		setDescricao(to.getDescricao());
-		setNome(to.getNome());
-		setUrlImagem(to.getUrlImagem());
-		
-		return this;
-	}
-
-	@Override
-	public Artefato fromTOID(ArtefatoIdTO toid) {
-		fromTO(toid);
-		setId(toid.getId());
-		
-		return this;
 	}
 
 	@Override

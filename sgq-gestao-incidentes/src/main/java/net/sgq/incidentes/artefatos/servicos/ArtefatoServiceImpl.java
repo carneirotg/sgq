@@ -1,12 +1,11 @@
 package net.sgq.incidentes.artefatos.servicos;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.modelos.ArtefatoRepository;
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoIdTO;
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoTO;
 import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @Service
@@ -27,79 +24,78 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 	private Logger logger = LoggerFactory.getLogger(ArtefatoServiceImpl.class);
 
 	@Override
-	public ArtefatoIdTO buscaArtefatoPor(Long id) {
+	public Artefato buscaArtefatoPor(Long id) {
 		Optional<Artefato> oArtefato = this.repository.findById(id);
 
 		if (oArtefato.isEmpty()) {
 			return null;
 		}
 
-		return oArtefato.get().toTOId();
+		return oArtefato.get();
 	}
 
 	@Override
-	public List<ArtefatoIdTO> buscaArtefatos(String nome, Integer pagina, Integer registros) {
+	public Page<Artefato> buscaArtefatos(String nome, Integer pagina, Integer registros) {
 		PageRequest page = PageRequest.of(pagina - 1, registros);
 
 		if (nome == null || "".equals(nome)) {
-			return this.repository.findAll(page).stream().map(Artefato::toTOId).collect(Collectors.toList());
+			return this.repository.findAll(page);
 		}
 
-		return this.repository.findByNomeContaining(nome, page).stream().map(Artefato::toTOId)
-				.collect(Collectors.toList());
+		return this.repository.findByNomeContaining(nome, page);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public Long salvaArtefato(ArtefatoTO artefatoTO, Long id) {
+	public Long salvaArtefato(Artefato artefato, Long id) {
 
-		Artefato artefato;
-		
-		if(id == null || id == 0) {
-			artefato = novoArtefato(artefatoTO);			
+		Long artefatoId;
+
+		if (id == null || id == 0) {
+			artefatoId = novoArtefato(artefato).getId();
 		} else {
-			artefato = atualizarArtefato(artefatoTO, id);
+			artefatoId = atualizarArtefato(artefato, id).getId();
 		}
-		
-		return artefato.getId();
+
+		return artefatoId;
 
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void depreciaArtefato(Long id) {
 		int count = this.repository.setDepreciado(id);
-		
-		if(count == 0) {
+
+		if (count == 0) {
 			logger.warn("Update de depreciacao nao realizado para entidade id {}", id);
 		}
 
 	}
 
-	private Artefato atualizarArtefato(ArtefatoTO artefatoTO, Long id) {
+	private Artefato atualizarArtefato(Artefato artefato, Long id) {
 		Optional<Artefato> oArtefato = this.repository.findById(id);
 
 		if (oArtefato.isEmpty()) {
 			throw new EntityNotFoundException(Artefato.class.getSimpleName(), id);
 		}
-		
-		Artefato artefato = oArtefato.get();
-		
-		if(artefato.getDepreciado()) {
+
+		Artefato dbArtefato = oArtefato.get();
+
+		if (dbArtefato.getDepreciado()) {
 			throw new IllegalStateException("Artefato depreciado não pode ser atualizado");
 		}
-		
-		return this.repository.save(artefato.fromTO(artefatoTO));
+
+		return this.repository.save(artefato);
 	}
 
-	private Artefato novoArtefato(ArtefatoTO artefatoTO) {
-		return this.repository.save(new Artefato().fromTO(artefatoTO));
+	private Artefato novoArtefato(Artefato artefato) {
+		return this.repository.save(artefato);
 	}
 
 	@Override
 	public Artefato buscaEntidadeArtefatoPor(Long id) {
 		Optional<Artefato> oArtefato = this.repository.findById(id);
-		
+
 		if (oArtefato.isEmpty()) {
 			return null;
 		}

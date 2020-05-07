@@ -9,20 +9,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
-import net.sgq.incidentes.artefatos.modelos.to.ArtefatoIdTO;
+import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
 
 @ActiveProfiles("test")
@@ -41,12 +45,17 @@ public class ArtefatoControllerTests {
 	
 	@Test
 	public void listaArtefatosOK() throws Exception {
+		@SuppressWarnings("unchecked")
+		Page<Artefato> pageMock = Mockito.mock(Page.class);
+		when(pageMock.getTotalPages()).thenReturn(100);
+		
+		when(service.buscaArtefatos(any(), any(), any())).thenReturn(pageMock);
 		mock.perform(setJwt(get("/artefatos"))).andExpect(status().isOk());
 	}
 	
 	@Test
 	public void encontraArtefatoPorId() throws Exception {
-		when(service.buscaArtefatoPor(any())).thenReturn(new ArtefatoIdTO());
+		when(service.buscaArtefatoPor(any())).thenReturn(new Artefato());
 		
 		mock.perform(setJwt(get("/artefatos/1"))).andExpect(status().isOk());
 	}
@@ -58,8 +67,9 @@ public class ArtefatoControllerTests {
 	
 	@Test
 	public void encontraArtefatosPorNome() throws Exception {
-		ArrayList<ArtefatoIdTO> arts = new ArrayList<>();
-		arts.add(new ArtefatoIdTO());
+		List<Artefato> artsList = new ArrayList<>();
+		artsList.add(new Artefato());
+		Page<Artefato> arts = new PageImpl<>(artsList);
 		
 		when(service.buscaArtefatos(any(), any(), any())).thenReturn(arts);
 		
@@ -68,6 +78,11 @@ public class ArtefatoControllerTests {
 	
 	@Test
 	public void naoEncontraArtefatosPorNome() throws Exception {
+		@SuppressWarnings("unchecked")
+		Page<Artefato> pageMock = Mockito.mock(Page.class);
+		when(pageMock.getTotalPages()).thenReturn(100);
+		
+		when(service.buscaArtefatos(any(), any(), any())).thenReturn(pageMock);
 		mock.perform(setJwt(get("/artefatos?nome=abc"))).andExpect(status().isNotFound());
 	}
 	
