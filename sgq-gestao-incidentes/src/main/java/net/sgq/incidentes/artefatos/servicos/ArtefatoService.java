@@ -1,7 +1,5 @@
 package net.sgq.incidentes.artefatos.servicos;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;

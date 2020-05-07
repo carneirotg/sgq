@@ -68,7 +68,7 @@ public class ArtefatosServiceTests {
 		
 		Page<Artefato> arts = new PageImpl<>(artsList);
 
-		when(repository.findByNomeContaining(Mockito.anyString(), Mockito.any())).thenReturn(arts);
+		when(repository.findByNomeContainingIgnoreCase(Mockito.anyString(), Mockito.any())).thenReturn(arts);
 
 		Page<Artefato> artefatos = service.buscaArtefatos("nome", 1, 1);
 

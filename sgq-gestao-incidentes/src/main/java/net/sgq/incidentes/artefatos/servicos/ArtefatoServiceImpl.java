@@ -42,7 +42,7 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 			return this.repository.findAll(page);
 		}
 
-		return this.repository.findByNomeContaining(nome, page);
+		return this.repository.findByNomeContainingIgnoreCase(nome, page);
 	}
 
 	@Override

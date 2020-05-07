@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArtefatoRepository extends JpaRepository<Artefato, Long> {
 
-	Page<Artefato> findByNomeContaining(String nome, Pageable page);
+	Page<Artefato> findByNomeContainingIgnoreCase(String nome, Pageable page);
 	
 	@Modifying
 	@Query("update Artefato a set a.depreciado = true where a.id = :id")
