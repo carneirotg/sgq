@@ -64,7 +64,6 @@ public class Incidente {
 	@Enumerated(EnumType.STRING)
 	private TipoIncidente tipoIncidente;
 
-	@NotNull
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private Estado situacao;
@@ -80,6 +79,7 @@ public class Incidente {
 	@PrePersist
 	private void prePersist() {
 		this.criadoEm = new Date();
+		this.conclusao = "";
 		this.situacao = Estado.ABERTA;
 	}
 

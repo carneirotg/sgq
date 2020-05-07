@@ -51,7 +51,7 @@ public class NCControllerImpl implements NCController {
 	public ResponseEntity<List<NaoConformidade>> consultaNC(@RequestParam String nome,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		Page<NaoConformidade> nc = this.service.listaNCs(nome, PageRequest.of(pagina, registros));
+		Page<NaoConformidade> nc = this.service.listaNCs(nome, PageRequest.of(pagina - 1, registros));
 
 		if (nc.getContent().isEmpty()) {
 			return new ResponseEntity<>(NOT_FOUND);

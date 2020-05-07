@@ -56,7 +56,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> listaIncidentes(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		Page<Incidente> incidentes = this.service.listaIncidentes(PageRequest.of(pagina, registros));
+		Page<Incidente> incidentes = this.service.listaIncidentes(PageRequest.of(pagina - 1, registros));
 		return new ResponseEntity<>(incidentes.getContent(), PageHeaders.headers(incidentes), HttpStatus.OK);
 	}
 
@@ -65,7 +65,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> buscaPor(@RequestParam String nome,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		Page<Incidente> incidentes = this.service.listaIncidentes(nome, PageRequest.of(pagina, registros));
+		Page<Incidente> incidentes = this.service.listaIncidentes(nome, PageRequest.of(pagina - 1, registros));
 
 		if (incidentes.getContent().isEmpty()) {
 			return new ResponseEntity<>(NOT_FOUND);
@@ -79,7 +79,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesAbertos(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.ABERTA, null, PageRequest.of(pagina, registros));
+		return listaPorEstado(Estado.ABERTA, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesEmAnalise(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.EM_ANALISE, null, PageRequest.of(pagina, registros));
+		return listaPorEstado(Estado.EM_ANALISE, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesConcluidos(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.CONCLUIDA, null, PageRequest.of(pagina, registros));
+		return listaPorEstado(Estado.CONCLUIDA, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -104,7 +104,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 			@RequestParam(defaultValue = "30") Integer janelaMinutos,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.CONCLUIDA, janelaMinutos, PageRequest.of(pagina, registros));
+		return listaPorEstado(Estado.CONCLUIDA, janelaMinutos, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesNaoConcluidos(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.NAO_CONCLUIDA, null, PageRequest.of(pagina, registros));
+		return listaPorEstado(Estado.NAO_CONCLUIDA, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
