@@ -21,6 +21,12 @@ const artefatos = {
     }
 }
 
+const normas = {
+    listar: async() => {
+        return _get('normas');
+    }
+}
+
 const incidentes = {
     novo: (incidente) => {
 
@@ -133,6 +139,6 @@ async function _trataErroPadrao(response) {
 
 export function cliente() {
     return {
-        artefatos
+        artefatos, normas
     }
 }

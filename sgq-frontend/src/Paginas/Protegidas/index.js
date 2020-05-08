@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
 import Dashboard from './Dashboard';
-import { ArtefatoNovo , ArtefatosLista} from './Incidentes';
+import { ArtefatoNovo, ArtefatosLista, ConsultaNormas } from './Incidentes';
 
 import LoginManager from '../../Componentes/LoginManager';
 
@@ -22,4 +22,4 @@ function RotaProtegida({ children, ...params }) {
     );
 }
 
-export { RotaProtegida, Dashboard, ArtefatoNovo, ArtefatosLista }
+export { RotaProtegida, Dashboard, ArtefatoNovo, ArtefatosLista, ConsultaNormas }

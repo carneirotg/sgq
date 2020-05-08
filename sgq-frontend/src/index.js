@@ -47,6 +47,11 @@ ReactDOM.render(
           <Protegidas.ArtefatosLista />
         </Protegidas.RotaProtegida>
 
+        <Protegidas.RotaProtegida path="/dashboard/normas">
+          <NavbarSGQ />
+          <Protegidas.ConsultaNormas />
+        </Protegidas.RotaProtegida>
+
       </Switch>
     </BrowserRouter>
     <ToastContainer/>
