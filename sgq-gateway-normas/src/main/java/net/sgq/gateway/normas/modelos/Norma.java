@@ -4,13 +4,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Norma {
 
 	private Long normaId;
 	
+	@JsonIgnore
 	private String tituloNorma;
+	
+	private String area;
+	
+	private String resumo;
 
 	private Map<String, Boolean> checkList = new LinkedHashMap<>();
+	
+	private String linkRepositorio;
 
 	public Norma() {
 		super();
@@ -26,6 +35,9 @@ public class Norma {
 	public Norma(Map<String, Object> normaResponse) {
 		this.setNormaId(((Integer) normaResponse.get("id")).longValue());
 		this.setNorma((String) normaResponse.get("nome"));
+		this.setArea((String) normaResponse.get("areaIndustrial"));
+		this.setLinkRepositorio((String) normaResponse.get("linkRepositorio"));
+		this.setResumo((String) normaResponse.get("resumo"));
 		
 		@SuppressWarnings("unchecked")
 		List<Object> normaCheckList = (List<Object>) normaResponse.get("checkList");
@@ -61,6 +73,38 @@ public class Norma {
 
 	public void setCheckList(Map<String, Boolean> checkList) {
 		this.checkList = checkList;
+	}
+
+	public String getTituloNorma() {
+		return tituloNorma;
+	}
+
+	public void setTituloNorma(String tituloNorma) {
+		this.tituloNorma = tituloNorma;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public String getResumo() {
+		return resumo;
+	}
+
+	public void setResumo(String resumo) {
+		this.resumo = resumo;
+	}
+
+	public String getLinkRepositorio() {
+		return linkRepositorio;
+	}
+
+	public void setLinkRepositorio(String linkRepositorio) {
+		this.linkRepositorio = linkRepositorio;
 	}
 
 }
