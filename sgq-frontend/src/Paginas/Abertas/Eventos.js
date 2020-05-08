@@ -158,14 +158,11 @@ class Eventos extends Component {
     }
 
     _modalIncidente(incidente) {
-        console.log(`Modal acionado com ${incidente}`);
         if (incidente == null) {
             this.setState({ modal: { visivel: false, incidente: null } });
         } else {
             this.setState({ modal: { visivel: true, incidente } });
         }
-
-
     }
 
     _Modal() {
