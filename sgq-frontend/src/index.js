@@ -33,23 +33,23 @@ ReactDOM.render(
 
 
         <Protegidas.RotaProtegida exact path="/dashboard">
-          <NavbarSGQ />
           <Protegidas.Dashboard />
         </Protegidas.RotaProtegida>
 
         <Protegidas.RotaProtegida path="/dashboard/artefato">
-          <NavbarSGQ />
           <Protegidas.ArtefatoNovo />
         </Protegidas.RotaProtegida>
 
         <Protegidas.RotaProtegida path="/dashboard/artefatos">
-          <NavbarSGQ />
           <Protegidas.ArtefatosLista />
         </Protegidas.RotaProtegida>
 
         <Protegidas.RotaProtegida path="/dashboard/normas">
-          <NavbarSGQ />
           <Protegidas.ConsultaNormas />
+        </Protegidas.RotaProtegida>
+
+        <Protegidas.RotaProtegida path="/dashboard/destinatarios">
+          <Protegidas.Destinatario />
         </Protegidas.RotaProtegida>
 
       </Switch>

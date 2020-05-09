@@ -22,8 +22,32 @@ const artefatos = {
 }
 
 const normas = {
-    listar: async() => {
+    listar: async () => {
         return _get('normas');
+    },
+    consulta: async (id) => {
+
+    }
+}
+
+const destinatarios = {
+    listar: async () => {
+        return _get('destinatarios');
+    },
+    salvar: async (destinatario) => {
+        const id = destinatario.id;
+        let resp;
+
+        if (id == null || id == 0) {
+            resp = _post(`destinatarios`, destinatario);
+        } else {
+            resp = _put(`destinatarios/${id}`, destinatario);
+        }
+
+        return resp;
+    },
+    remover: async (id) => {
+        return _delete(`destinatarios/${id}`);
     }
 }
 
@@ -36,6 +60,20 @@ const incidentes = {
 async function _patch(url) {
     let operationResponse = {};
     const response = await fetch(`/api/${url}`, { method: 'PATCH', headers: _authHeader({}) });
+
+    if (response.ok) {
+        operationResponse = { sucesso: true };
+    } else {
+        operationResponse = { sucesso: false };
+        await _trataErroPadrao(response);
+    }
+
+    return operationResponse;
+}
+
+async function _delete(url) {
+    let operationResponse = {};
+    const response = await fetch(`/api/${url}`, { method: 'DELETE', headers: _authHeader({}) });
 
     if (response.ok) {
         operationResponse = { sucesso: true };
@@ -70,9 +108,9 @@ async function _get(url, paginacao = { habilitada: false, pagina: 0 }) {
 
 }
 
-function _trataParametrosRequest(url, params){ 
-    if(url.includes('?')){
-        url +=  '&';
+function _trataParametrosRequest(url, params) {
+    if (url.includes('?')) {
+        url += '&';
     } else {
         url += '?';
     }
@@ -104,17 +142,33 @@ function _headersSGQ(response) {
 }
 
 async function _post(url, objBody) {
+    return _pxxt('POST', url, objBody);
+}
+
+async function _put(url, objBody) {
+    return _pxxt('PUT', url, objBody);
+}
+
+async function _pxxt(metodo, url, objBody) {
     let operationResponse = {};
     const body = JSON.stringify(objBody);
 
-    const response = await fetch(`/api/${url}`, { body, method: 'POST', headers: _authHeader({ 'Content-Type': 'application/json' }) });
+    const response = await fetch(`/api/${url}`, { body, method: metodo, headers: _authHeader({ 'Content-Type': 'application/json' }) });
 
     if (response.ok) {
         operationResponse = { sucesso: true };
+
+        const location = response.headers.get('Location');
+
+        if (location != null) {
+            const splitted = location.split('/');
+            const chave = splitted[splitted.length - 1];
+
+            operationResponse['resourceId'] = parseInt(chave);
+        }
+
     } else {
-        operationResponse = { sucesso: false }
-
-
+        operationResponse = { sucesso: false };
     }
 
     return operationResponse;
@@ -139,6 +193,6 @@ async function _trataErroPadrao(response) {
 
 export function cliente() {
     return {
-        artefatos, normas
+        artefatos, normas, destinatarios
     }
 }

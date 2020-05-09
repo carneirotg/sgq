@@ -1,0 +1,24 @@
+.App-jumbo h1, h3 {
+  text-align: center;
+}
+
+.App-jumbo .Btns {
+  text-align: center;
+}
+
+.App-jumbo .Btn {
+  width: 100%;
+}
+
+.App-header {
+  text-align: center;
+  height: 100px;
+}
+
+.App-logo {
+  height: 100px;
+}
+
+.text-center {
+  text-align: center;
+}
