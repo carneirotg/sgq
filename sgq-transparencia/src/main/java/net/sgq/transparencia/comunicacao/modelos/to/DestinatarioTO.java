@@ -3,11 +3,10 @@ package net.sgq.transparencia.comunicacao.modelos.to;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import net.sgq.transparencia.comunicacao.modelos.Comunicado;
 import net.sgq.transparencia.comunicacao.modelos.Destinatario;
 import net.sgq.transparencia.comunicacao.modelos.enums.TipoDestinatario;
 
-public class DestinatarioTO  implements Comunicado {
+public class DestinatarioTO {
 
 	private Long id;
 

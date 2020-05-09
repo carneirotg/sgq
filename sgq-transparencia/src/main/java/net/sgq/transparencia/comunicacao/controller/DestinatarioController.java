@@ -12,6 +12,8 @@ public interface DestinatarioController {
 	ResponseEntity<List<DestinatarioTO>> todos();
 
 	ResponseEntity<Void> novoDestinatario(DestinatarioTO to) throws URISyntaxException;
+	
+	void atualizaDestinatario(DestinatarioTO to, Long id) throws URISyntaxException;
 
 	void removerDestinatario(Long id);
 

@@ -32,8 +32,8 @@ sgq:
     transparencia:
       campanhas-recall:
         v1: /v1/campanhas
-      relatorios:
-        v1: /v1/relatorios
+      destinatarios:
+        v1: /v1/destinatarios
 
 zuul:
   sensitiveHeaders: Cookie,Set-Cookie
@@ -55,4 +55,7 @@ zuul:
       service-id: relatorios
     campanhas-recall-v1:
       path: /campanhas/**
+      service-id: transparencia
+    destinatarios-v1:
+      path: /destinatarios/**
       service-id: transparencia
