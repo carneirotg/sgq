@@ -1,0 +1,28 @@
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	xmlns='http://www.ehcache.org/v3'
+	xsi:schemaLocation="
+            http://www.ehcache.org/v3 
+            http://www.ehcache.org/schema/ehcache-core-3.8.xsd">
+	<persistence directory="/tmp/ehcache" />
+	<cache-template name="default">
+		<expiry>
+			<ttl unit="hours">6</ttl>
+		</expiry>
+		<resources>
+			<heap>50</heap>
+			<offheap unit="MB">10</offheap>
+			<disk persistent="true" unit="MB">20</disk>
+		</resources>
+	</cache-template>
+
+	<cache alias="destinatarios" uses-template="default" />
+	<cache alias="destinatariosRecall" uses-template="default" />
+	<cache alias="destinatariosIncidentes" uses-template="default" />
+
+	<cache alias="incidentes" uses-template="default">
+		<expiry>
+			<ttl unit="minutes">30</ttl>
+		</expiry>
+	</cache>
+
+</config>

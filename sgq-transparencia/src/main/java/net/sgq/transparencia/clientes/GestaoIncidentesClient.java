@@ -2,6 +2,7 @@ package net.sgq.transparencia.clientes;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -16,6 +17,7 @@ public interface GestaoIncidentesClient {
 	@GetMapping(path = "/v1/incidentes/?estado=concluidos&janelaMinutos")
 	@JacksonXmlElementWrapper(useWrapping = true)
 	@JacksonXmlProperty(localName = "Incidente")
+	@Cacheable(value = "incidentes")
 	List<IncidenteTO> consultaIncidentesConcluidos();
-	
+
 }

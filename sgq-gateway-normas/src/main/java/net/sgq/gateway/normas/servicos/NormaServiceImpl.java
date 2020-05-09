@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import net.sgq.gateway.normas.cliente.GestaoNormaClient;
@@ -19,6 +20,7 @@ public class NormaServiceImpl implements NormaService {
 	private GestaoNormaClient client;
 	
 	@Override
+	@Cacheable(value = "normasCache")
 	public List<Norma> listaNormas() {
 		
 		try {
@@ -31,6 +33,7 @@ public class NormaServiceImpl implements NormaService {
 	}
 
 	@Override
+	@Cacheable(value = "normasPorIDCache")
 	public Norma consultaNorma(Long id) {
 
 		try {

@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 	private Logger logger = LoggerFactory.getLogger(ArtefatoServiceImpl.class);
 
 	@Override
+	@Cacheable(value = "artefato")
 	public Artefato buscaArtefatoPor(Long id) {
 		Optional<Artefato> oArtefato = this.repository.findById(id);
 
@@ -47,6 +50,7 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "artefatoPorID", key = "#id")
 	public Long salvaArtefato(Artefato artefato, Long id) {
 
 		Long artefatoId;
@@ -63,6 +67,7 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "artefatoID", key = "#id")
 	public void depreciaArtefato(Long id) {
 		int count = this.repository.setDepreciado(id);
 
@@ -90,17 +95,6 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 
 	private Artefato novoArtefato(Artefato artefato) {
 		return this.repository.save(artefato);
-	}
-
-	@Override
-	public Artefato buscaEntidadeArtefatoPor(Long id) {
-		Optional<Artefato> oArtefato = this.repository.findById(id);
-
-		if (oArtefato.isEmpty()) {
-			return null;
-		}
-
-		return oArtefato.get();
 	}
 
 }

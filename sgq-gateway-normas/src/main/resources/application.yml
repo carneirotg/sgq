@@ -6,6 +6,9 @@ server:
 spring:
   application:
     name: gw-normas
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
     
 eureka:
   client:
@@ -25,7 +28,4 @@ sgq:
   integracao:
     gestao-normas:
       host: http://localhost:18080
-      
-logging:
-  level:
-    org.springframework.security: DEBUG
+   

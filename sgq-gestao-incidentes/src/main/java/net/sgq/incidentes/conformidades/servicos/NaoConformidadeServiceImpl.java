@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -42,26 +44,27 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	@Override
 	public Page<NaoConformidade> listaNCs(Pageable pageable) {
 		Page<NaoConformidade> ncs = this.repository.findAll(pageable);
-		
-		if(ncs == null) {
+
+		if (ncs == null) {
 			ncs = new PageImpl<>(new ArrayList<>());
 		}
-		
+
 		return ncs;
 	}
 
 	@Override
 	public Page<NaoConformidade> listaNCs(String titulo, Pageable pageable) {
 		Page<NaoConformidade> ncs = this.repository.findByTituloContaining(titulo, pageable);
-		
-		if(ncs == null) {
+
+		if (ncs == null) {
 			ncs = new PageImpl<>(new ArrayList<>());
 		}
-		
+
 		return ncs;
 	}
 
 	@Override
+	@Cacheable(value = "nc")
 	public NaoConformidade consultaNC(Long id) {
 
 		Optional<NaoConformidade> oNC = this.repository.findById(id);
@@ -74,18 +77,8 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	}
 
 	@Override
-	public NaoConformidade consultaEntidadeNC(Long nCId) {
-		Optional<NaoConformidade> oNC = this.repository.findById(nCId);
-
-		if (oNC.isEmpty()) {
-			return null;
-		}
-
-		return oNC.get();
-	}
-
-	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "nc", key = "#id")
 	public Long salvarNC(NaoConformidade naoConformidade, Long id) {
 
 		NaoConformidade nc = null;
@@ -109,8 +102,8 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		} else {
 			resultado = this.repository.findByEstado(estado, pageable);
 		}
-		
-		if(resultado == null) {
+
+		if (resultado == null) {
 			resultado = new PageImpl<>(new ArrayList<>());
 		}
 
@@ -119,6 +112,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "nc", key = "#id")
 	public void naoConformidadeMudaEstado(Long id, Estado estado) {
 		Optional<NaoConformidade> oNC = this.repository.findById(id);
 
@@ -136,23 +130,25 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void associaNCANorma(Long ncId, Long normaId) {
+	@CacheEvict(value = "nc", key = "#id")
+	public void associaNCANorma(Long id, Long normaId) {
 
 		Norma norma = this.normaService.consultaNorma(normaId);
-		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
+		Optional<NaoConformidade> oNC = this.repository.findById(id);
 
-		NaoConformidade nc = validator.validaNCRetornada(ncId, oNC);
+		NaoConformidade nc = validator.validaNCRetornada(id, oNC);
 		nc.setNormaNaoConformidade(norma);
 
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
-	public void atualizaChecklist(Long ncId, Map<String, Boolean> checklist) {
+	@CacheEvict(value = "nc", key = "#id")
+	public void atualizaChecklist(Long id, Map<String, Boolean> checklist) {
 
-		Optional<NaoConformidade> oNC = this.repository.findById(ncId);
+		Optional<NaoConformidade> oNC = this.repository.findById(id);
 
-		NaoConformidade nc = validator.validaNCRetornada(ncId, oNC);
+		NaoConformidade nc = validator.validaNCRetornada(id, oNC);
 
 		if (nc.getNormaNaoConformidade().getNormaId() == null) {
 			throw new IllegalStateException("NC não possui norma associada");

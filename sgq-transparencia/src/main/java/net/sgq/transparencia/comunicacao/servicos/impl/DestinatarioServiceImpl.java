@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,22 +26,30 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 	private DestinatarioRepository repository;
 
 	@Override
+	@Cacheable(value = "destinatarios")
 	public List<DestinatarioTO> todos() {
 		return repository.findAll().stream().map(Destinatario::toTO).collect(Collectors.toList());
 	}
 
 	@Override
+	@Cacheable(value = "destinatariosRecall")
 	public List<DestinatarioTO> interessadosRecall() {
 		return repository.findByAssinanteRecallIsTrue().stream().map(Destinatario::toTO).collect(Collectors.toList());
 	}
 
 	@Override
+	@Cacheable(value = "destinatariosIncidentes")
 	public List<DestinatarioTO> interessadosIncidentes() {
 		return repository.findByAssinanteEventosIsTrue().stream().map(Destinatario::toTO).collect(Collectors.toList());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@Caching(evict = {
+			@CacheEvict("destinatarios"),
+			@CacheEvict("destinatariosRecall"),
+			@CacheEvict("destinatariosIncidentes")
+	})
 	public Long salvarDestinatario(DestinatarioTO destinatarioTO, Long id) {
 
 		Destinatario destinatario;
@@ -53,6 +64,22 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	@Caching(evict = {
+			@CacheEvict("destinatarios"),
+			@CacheEvict("destinatariosRecall"),
+			@CacheEvict("destinatariosIncidentes")
+	})
+	public void removeDestinatario(Long id) {
+		Optional<Destinatario> oDestinatario = consultaDestinatario(id);
+
+		validaDestinatario(id, oDestinatario);
+
+		Destinatario destinatario = oDestinatario.get();
+		this.repository.delete(destinatario);
+	}
+	
 	private Destinatario novoDestinatario(DestinatarioTO destinatarioTO) {
 		return this.repository.save(new Destinatario().fromTO(destinatarioTO));
 
@@ -64,17 +91,6 @@ public class DestinatarioServiceImpl implements DestinatarioService {
 		Destinatario destinatario = oDestinatario.get();
 
 		return this.repository.save(destinatario.fromTO(destinatarioTO));
-	}
-
-	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
-	public void removeDestinatario(Long id) {
-		Optional<Destinatario> oDestinatario = consultaDestinatario(id);
-
-		validaDestinatario(id, oDestinatario);
-
-		Destinatario destinatario = oDestinatario.get();
-		this.repository.delete(destinatario);
 	}
 
 	private Optional<Destinatario> consultaDestinatario(Long id) {

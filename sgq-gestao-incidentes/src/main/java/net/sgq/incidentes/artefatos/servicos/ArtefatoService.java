@@ -6,8 +6,6 @@ import net.sgq.incidentes.artefatos.modelos.Artefato;
 
 public interface ArtefatoService {
 
-	Artefato buscaEntidadeArtefatoPor(Long id);
-	
 	Artefato buscaArtefatoPor(Long id);
 	Page<Artefato> buscaArtefatos(String nome, Integer pagina, Integer registros);
 

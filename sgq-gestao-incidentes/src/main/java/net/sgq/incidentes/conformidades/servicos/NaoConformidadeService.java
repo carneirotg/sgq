@@ -16,8 +16,6 @@ public interface NaoConformidadeService {
 
 	NaoConformidade consultaNC(Long id);
 	
-	NaoConformidade consultaEntidadeNC(Long nCId);
-
 	Long salvarNC(NaoConformidade naoConformidadeTo, Long l);
 
 	Page<NaoConformidade> listaNCs(Estado aberta, Pageable pageable);

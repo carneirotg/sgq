@@ -161,7 +161,7 @@ public class IncidenteServiceTests {
 		when(repository.findById(2L)).thenReturn(Optional.of(ic));
 		
 		nc2.setEstado(Estado.CONCLUIDA);
-		when(ncService.consultaEntidadeNC(any())).thenReturn(nc2);
+		when(ncService.consultaNC(any())).thenReturn(nc2);
 		
 	}
 	

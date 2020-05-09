@@ -124,7 +124,7 @@ public class NaoConformidadeServiceTests {
 
 		when(repository.findById(anyLong())).thenReturn(Optional.of(nc));
 
-		assertThat(service.consultaEntidadeNC(1L)).isNotNull();
+		assertThat(service.consultaNC(1L)).isNotNull();
 	}
 
 	@Test
@@ -132,7 +132,7 @@ public class NaoConformidadeServiceTests {
 
 		when(repository.findById(anyLong())).thenReturn(Optional.ofNullable(null));
 
-		assertThat(service.consultaEntidadeNC(1L)).isNull();
+		assertThat(service.consultaNC(1L)).isNull();
 	}
 
 	@Test

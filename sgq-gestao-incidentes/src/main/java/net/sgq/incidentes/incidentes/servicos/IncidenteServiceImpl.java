@@ -9,6 +9,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 	private Logger logger = LoggerFactory.getLogger(IncidenteServiceImpl.class);
 
 	@Override
+	@Cacheable(value = "incidente")
 	public Incidente consultaIncidente(Long id) {
 
 		Optional<Incidente> oIC = this.repository.findById(id);
@@ -84,6 +87,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "incidente", key = "#id")
 	public Long salvarIncidente(Incidente incidente, Long id) {
 		Incidente ic = null;
 
@@ -98,8 +102,9 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "incidente", key = "#iId")
 	public void adicionaNaoConformidade(Long iId, Long nCId) {
-		NaoConformidade nc = this.ncService.consultaEntidadeNC(nCId);
+		NaoConformidade nc = this.ncService.consultaNC(nCId);
 
 		validator.validaNC(nc, nCId);
 
@@ -115,6 +120,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "incidente", key = "#iId")
 	public void removeNaoConformidade(Long iId, Long nCId) {
 
 		Optional<Incidente> oIc = this.repository.findById(nCId);
@@ -129,6 +135,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "incidente", key = "#id")
 	public void removeTodasNaoConformidades(Long id) {
 		Incidente incidente = retornaIncidenteValidado(id);
 
@@ -139,6 +146,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
+	@CacheEvict(value = "incidente", key = "#iId")
 	public void incidenteMudaEstado(Long iId, Estado estado) {
 
 		Optional<Incidente> oIc = this.repository.findById(iId);

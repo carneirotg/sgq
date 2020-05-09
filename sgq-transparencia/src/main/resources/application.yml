@@ -6,6 +6,9 @@ server:
 spring:
   application:
     name: transparencia
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
   datasource:
     url: jdbc:h2:mem:transparencia
     sqlScriptEncoding: UTF-8 
