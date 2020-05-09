@@ -223,7 +223,7 @@ class ConsultaNorma extends Component {
                                 <Modal.Body>
                                     <Container>
                                         <Row>
-                                            <Col md><p><b>Norma</b><br />{norma.area}</p></Col>
+                                            <Col md><p><b>Norma</b><br />{norma.norma}</p></Col>
                                             <Col md><p><b>Área Industrial</b><br />{norma.area}</p></Col>
                                         </Row>
                                         <br />
