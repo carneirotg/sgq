@@ -13,10 +13,10 @@ class LoginManager {
             localStorage.setItem('usuario', JSON.stringify(jwt(jsonR.access_token)));
 
             return true;
-        } 
-        
+        }
+
         console.error(`Erro ao tentar login: ${statusCode}`);
-        
+
         return false;
 
     }
@@ -42,7 +42,18 @@ class LoginManager {
         return localStorage.getItem('token');
     }
 
-    logoff(){
+    possuiPapel(papel) {
+        const role = `ROLE_${papel}`;
+
+        if(this.user() != null) {
+            return this.user().authorities.includes(role);
+        }
+
+        return false;
+
+    }
+
+    logoff() {
         return this._expirado(null);
     }
 

@@ -4,6 +4,7 @@ import { Button, Form, FormControl, Nav, NavDropdown, Navbar } from 'react-boots
 import { Link, Redirect } from 'react-router-dom';
 
 import LoginManager from './LoginManager';
+import ComponenteProtegido from './ComponenteProtegido';
 
 import logo from '../images/logo_sgq.png';
 
@@ -44,23 +45,27 @@ class NavbarSGQ extends Component {
                         <Nav.Link as={Link} to="/dashboard">Inicío</Nav.Link>
                         <NavDropdown title="Artefatos" id="basic-nav-dropdown">
                             <NavDropdown.Item as={Link} to="/dashboard/artefato">Cadastrar</NavDropdown.Item>
-                            <NavDropdown.Item as={Link} to="/dashboard/artefatos">Buscar</NavDropdown.Item>                            
+                            <NavDropdown.Item as={Link} to="/dashboard/artefatos">Buscar</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Não Conformidades" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Cadastrar</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>   
-                            <NavDropdown.Divider />                         
-                            <NavDropdown.Item as={Link} to="/dashboard/normas">Normas</NavDropdown.Item>   
+                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item as={Link} to="/dashboard/normas">Normas</NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Incidentes" id="basic-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">Cadastrar</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>                            
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.2">Relatórios</NavDropdown.Item>                            
+                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
+                            <ComponenteProtegido papel="GESTOR">
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item href="#action/3.2">Relatórios</NavDropdown.Item>
+                            </ComponenteProtegido>
                         </NavDropdown>
                         <NavDropdown title="Campanhas" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Cadastrar</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>    
+                            <ComponenteProtegido papel="GESTOR">
+                                <NavDropdown.Item href="#action/3.1">Cadastrar</NavDropdown.Item>
+                            </ComponenteProtegido>
+                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#action/3.1">Destinatários</NavDropdown.Item>
                         </NavDropdown>
