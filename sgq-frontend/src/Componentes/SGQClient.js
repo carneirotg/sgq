@@ -72,6 +72,9 @@ const naoConformidades = {
     },
     consultaEstado: async (estado, pagina) => {
         return _get(`ncs/?estado=${estado}`, pagina);
+    },
+    mudarEstado: async(id, estado) => {
+        return _patch(`ncs/${id}/estado/${estado}`);
     }
 }
 
