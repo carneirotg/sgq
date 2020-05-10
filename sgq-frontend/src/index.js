@@ -48,11 +48,11 @@ ReactDOM.render(
           <Protegidas.ConsultaNormas />
         </Protegidas.RotaProtegida>
 
-        <Protegidas.RotaProtegida path="/dashboard/destinatarios">
+        <Protegidas.RotaProtegida papel="GESTOR" path="/dashboard/destinatarios">
           <Protegidas.Destinatario />
         </Protegidas.RotaProtegida>
 
-        <Protegidas.RotaProtegida path="/dashboard/relatorios/incidentes">
+        <Protegidas.RotaProtegida papel="GESTOR" path="/dashboard/relatorios/incidentes">
           <Protegidas.RelIncidente />
         </Protegidas.RotaProtegida>
 
