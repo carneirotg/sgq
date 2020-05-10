@@ -10,6 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +28,10 @@ import net.sgq.transparencia.recall.servicos.CampanhaService;
 @RequestMapping("/campanhas")
 public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 
+	private static final String ROLE_GESTOR = "ROLE_GESTOR";
 	@Autowired
 	private CampanhaService service;
-	
+
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CampanhaRecallTO>> todas() {
@@ -37,7 +39,7 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 	}
 
 	@Override
-	@GetMapping(params = "estado=ativas",produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(params = "estado=ativas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CampanhaRecallTO>> todasEmAndamento() {
 		return trataRespostasBusca(Estado.ATIVA);
 	}
@@ -49,42 +51,46 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 	}
 
 	@Override
+	@Secured({ ROLE_GESTOR })
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> novaCampanha(@RequestBody CampanhaRecallTO campanha) throws URISyntaxException {
-		
+
 		Long id = this.service.salvar(campanha);
-		
+
 		return ResponseEntity.created(new URI("/campanhas/" + id)).build();
 	}
 
 	@Override
+	@Secured({ ROLE_GESTOR })
 	@PatchMapping("/{id}/fim/{novaDataTermino}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	public void atualizaDataTermino(@PathVariable Long id, @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date novaDataTermino) {
-		
-		if(novaDataTermino.before(new Date())) {
+	public void atualizaDataTermino(@PathVariable Long id,
+			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date novaDataTermino) {
+
+		if (novaDataTermino.before(new Date())) {
 			throw new IllegalStateException("Nova data de término deve futura.");
 		}
-		
+
 		this.service.atualizaDataTermino(id, novaDataTermino);
 	}
 
 	@Override
+	@Secured({ ROLE_GESTOR })
 	@PatchMapping("/{id}/estado/concluida")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void concluiCampanha(@PathVariable Long id) {
 		this.service.concluiCampanha(id);
 	}
-	
-	private ResponseEntity<List<CampanhaRecallTO>> trataRespostasBusca(Estado estado){
+
+	private ResponseEntity<List<CampanhaRecallTO>> trataRespostasBusca(Estado estado) {
 		List<CampanhaRecallTO> campanhasEstado = this.service.buscar(estado);
-		
-		if(campanhasEstado.isEmpty()) {
+
+		if (campanhasEstado.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		
+
 		return new ResponseEntity<>(campanhasEstado, HttpStatus.OK);
-		
+
 	}
 
 }

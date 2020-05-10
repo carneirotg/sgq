@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,10 @@ import net.sgq.relatorios.utils.GeracaoRelatorioException;
 
 @RestController
 @RequestMapping("/relatorios/incidentes")
+@Secured({ RelIncidentesControllerImpl.ROLE_GESTOR })
 public class RelIncidentesControllerImpl implements RelIncidentesController {
+
+	static final String ROLE_GESTOR = "ROLE_GESTOR";
 
 	@Autowired
 	private RelIncidentesService relService;
@@ -40,7 +44,7 @@ public class RelIncidentesControllerImpl implements RelIncidentesController {
 	}
 
 	@Override
-	@GetMapping({"/semestre", "ultimos-seis-meses"})
+	@GetMapping({ "/semestre", "ultimos-seis-meses" })
 	public ResponseEntity<byte[]> incidentesSemestre() {
 		return geraDownload(relService.geraRelatorioPor(Periodo.SEMESTRE), "Incidentes-Seis_Meses.pdf");
 	}
@@ -68,34 +72,33 @@ public class RelIncidentesControllerImpl implements RelIncidentesController {
 		return geraDownload(relService.geraRelatorioPor(inicio, fim), "Incidentes-Por_Periodo.pdf");
 	}
 
-	private ResponseEntity<byte[]> geraDownload(File relatorio, String nomeRelatorio){
-		
-		if(relatorio == null) {
+	private ResponseEntity<byte[]> geraDownload(File relatorio, String nomeRelatorio) {
+
+		if (relatorio == null) {
 			throw new GeracaoRelatorioException();
 		}
-		
+
 		try {
-			
+
 			HttpHeaders downloadHeaders = new HttpHeaders();
 			downloadHeaders.add("Content-Disposition", "attachment; filename=" + nomeRelatorio);
 			downloadHeaders.add("Content-Length", "" + relatorio.length());
-			
-			ResponseEntity<byte[]> relatorioDownload = ResponseEntity.ok()
-					.headers(downloadHeaders)
+
+			ResponseEntity<byte[]> relatorioDownload = ResponseEntity.ok().headers(downloadHeaders)
 					.body(IOUtils.toByteArray(new FileInputStream(relatorio)));
-			
+
 			return relatorioDownload;
 		} catch (IOException e) {
 			logger.error("Erro gerando byte array para download de relatório: {}", e.getMessage(), e);
 			throw new GeracaoRelatorioException();
 		}
-		
+
 	}
 
 	private void validaPeriodo(Date inicio, Date fim) {
 		if (Period.between(toLocalDate(inicio), toLocalDate(fim)).getYears() >= 1) {
 			throw new IllegalStateException("Período maior que 12 meses");
-		} else if(inicio.after(fim)) {
+		} else if (inicio.after(fim)) {
 			throw new IllegalStateException("Data de início maior que a de fim");
 		}
 	}
