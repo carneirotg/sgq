@@ -3,8 +3,9 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 
 import NavbarSGQ from '../../Componentes/Navbar';
 import ToastManager from '../../Componentes/ToastManager';
+
 import Dashboard from './Dashboard';
-import { ArtefatoNovo, ArtefatosLista, ConsultaNormas } from './Incidentes';
+import { ArtefatoNovo, ArtefatosLista, ConsultaNormas, NovaNC } from './Incidentes';
 import { RelIncidente } from './Relatorios';
 import { Destinatario } from './Transparencia'
 
@@ -60,6 +61,10 @@ function RotasProtegidas(props) {
 
                 <RotaProtegida exact path={`${path}/normas`}>
                     <ConsultaNormas />
+                </RotaProtegida>
+
+                <RotaProtegida exact path={`${path}/nc/nova`}>
+                    <NovaNC />
                 </RotaProtegida>
 
                 <RotaProtegida papel="GESTOR" exact path={`${path}/destinatarios`}>

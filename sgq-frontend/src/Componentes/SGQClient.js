@@ -14,7 +14,7 @@ const artefatos = {
         return _get('artefatos', paginacao);
     },
     consulta: async (id) => {
-
+        return _get(`artefatos/${id}`);
     },
     depreciar: async (id) => {
         return _patch(`artefatos/${id}/depreciado`);
@@ -26,7 +26,7 @@ const normas = {
         return _get('normas');
     },
     consulta: async (id) => {
-
+        return _get(`normas/${id}`);
     }
 }
 
@@ -57,10 +57,25 @@ const incidentes = {
     }
 }
 
+const naoConformidades = {
+    salvar: async (nc) => {
+        const id = nc.id;
+        let resp;
+
+        if (id === null || id === 0) {
+            resp = _post(`ncs`, nc);
+        } else {
+            resp = _put(`ncs/${id}`, nc);
+        }
+
+        return resp;
+    }
+}
+
 const relatorios = {
     gerar: async (tipo, periodo = null) => {
 
-        switch(tipo){
+        switch (tipo) {
             case "mesAtual": return _getBlob("relatorios/incidentes", tipo);
             case "anoAtual": return _getBlob("relatorios/incidentes/ano-corrente", tipo);
             case "seisMeses": return _getBlob("relatorios/incidentes/ultimos-seis-meses", tipo);
@@ -131,7 +146,7 @@ async function _getBlob(url, tipo) {
     const response = await fetch(`/api/${url}`, { headers: _authHeader({}) });
 
     if (response.ok) {
-        
+
         const relBlob = await response.blob();
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(relBlob);
@@ -214,6 +229,20 @@ async function _pxxt(metodo, url, objBody) {
 
     } else {
         operationResponse = { sucesso: false };
+        const rJson = await response.json();
+        
+        if (rJson != null) {
+            let detalhe = rJson.erroCompleto;
+            
+            erro = rJson.erro || rJson.error;
+            
+            if (detalhe != null && detalhe.length <= 50) {
+                erro += ` - ${detalhe}`;
+            }
+
+            operationResponse['erro'] = erro;
+        }
+        
     }
 
     return operationResponse;
@@ -231,10 +260,10 @@ async function _trataErroPadrao(response) {
 
     if (rJson != null) {
         let detalhe = rJson.erroCompleto;
-        
+
         erro = rJson.erro || rJson.error;
 
-        if(detalhe != null && detalhe.length <= 50){
+        if (detalhe != null && detalhe.length <= 50) {
             erro += ` - ${detalhe}`;
         }
     }
@@ -244,6 +273,6 @@ async function _trataErroPadrao(response) {
 
 export function cliente() {
     return {
-        artefatos, normas, destinatarios, relatorios
+        artefatos, normas, destinatarios, relatorios, naoConformidades
     }
 }
