@@ -2,6 +2,8 @@ package net.sgq.incidentes.artefatos.servicos;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.modelos.ArtefatoRepository;
-import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @Service
 public class ArtefatoServiceImpl implements ArtefatoService {
@@ -81,7 +82,7 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 		Optional<Artefato> oArtefato = this.repository.findById(id);
 
 		if (oArtefato.isEmpty()) {
-			throw new EntityNotFoundException(Artefato.class.getSimpleName(), id);
+			throw new EntityNotFoundException(String.format("Entidade do tipo 'Artefato' não encontrada para Id %d", id));
 		}
 
 		Artefato dbArtefato = oArtefato.get();

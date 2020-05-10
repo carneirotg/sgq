@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.incidentes.modelos.Incidente;
-import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @SpringBootTest
 public class IncidentesValidatorTests {

@@ -2,19 +2,20 @@ package net.sgq.incidentes.incidentes.servicos;
 
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.stereotype.Component;
 
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.incidentes.modelos.Incidente;
-import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @Component
 public class IncidenteValidator {
 
 	public void validaNC(NaoConformidade nc, Long ncId) {
 		if (nc == null) {
-			throw new EntityNotFoundException("NaoConformidade", ncId);
+			throw new EntityNotFoundException(String.format("Entidade do tipo 'Incidente' não encontrada para Id %d", ncId));
 		}
 
 		if (nc.getEstado() != Estado.CONCLUIDA) {
@@ -24,7 +25,7 @@ public class IncidenteValidator {
 
 	public Incidente validaIncidenteRetornado(Long iId, Optional<Incidente> oIc) {
 		if (oIc.isEmpty()) {
-			throw new EntityNotFoundException("Incidente", iId);
+			throw new EntityNotFoundException(String.format("Entidade do tipo 'Incidente' não encontrada para Id %d", iId));
 		}
 		
 		return oIc.get();

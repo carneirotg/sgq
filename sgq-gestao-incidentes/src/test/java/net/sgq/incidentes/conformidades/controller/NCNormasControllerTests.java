@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.Norma;
 import net.sgq.incidentes.conformidades.servicos.NaoConformidadeService;
-import net.sgq.incidentes.utils.EntityNotFoundException;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
