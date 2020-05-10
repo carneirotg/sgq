@@ -49,7 +49,7 @@ class NavbarSGQ extends Component {
                         </NavDropdown>
                         <NavDropdown title="Não Conformidades" id="basic-nav-dropdown">
                             <NavDropdown.Item as={Link} to="/dashboard/nc/nova">Cadastrar</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
+                            <NavDropdown.Item as={Link} to="/dashboard/ncs">Buscar</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item as={Link} to="/dashboard/normas">Normas</NavDropdown.Item>
                         </NavDropdown>

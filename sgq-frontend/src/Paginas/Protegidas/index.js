@@ -5,7 +5,7 @@ import NavbarSGQ from '../../Componentes/Navbar';
 import ToastManager from '../../Componentes/ToastManager';
 
 import Dashboard from './Dashboard';
-import { ArtefatoNovo, ArtefatosLista, ConsultaNormas, NovaNC } from './Incidentes';
+import { ArtefatoNovo, ArtefatosLista, ConsultaNormas, NovaNC, ListaNC } from './Incidentes';
 import { RelIncidente } from './Relatorios';
 import { Destinatario } from './Transparencia'
 
@@ -65,6 +65,10 @@ function RotasProtegidas(props) {
 
                 <RotaProtegida exact path={`${path}/nc/nova`}>
                     <NovaNC />
+                </RotaProtegida>
+
+                <RotaProtegida exact path={`${path}/ncs`}>
+                    <ListaNC />
                 </RotaProtegida>
 
                 <RotaProtegida papel="GESTOR" exact path={`${path}/destinatarios`}>

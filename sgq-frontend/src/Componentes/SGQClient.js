@@ -69,6 +69,9 @@ const naoConformidades = {
         }
 
         return resp;
+    },
+    consultaEstado: async (estado, pagina) => {
+        return _get(`ncs/?estado=${estado}`, pagina);
     }
 }
 
@@ -230,19 +233,19 @@ async function _pxxt(metodo, url, objBody) {
     } else {
         operationResponse = { sucesso: false };
         const rJson = await response.json();
-        
+
         if (rJson != null) {
             let detalhe = rJson.erroCompleto;
-            
+
             erro = rJson.erro || rJson.error;
-            
+
             if (detalhe != null && detalhe.length <= 50) {
                 erro += ` - ${detalhe}`;
             }
 
             operationResponse['erro'] = erro;
         }
-        
+
     }
 
     return operationResponse;

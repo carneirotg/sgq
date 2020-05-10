@@ -1,5 +1,5 @@
 import { ArtefatoNovo, ArtefatosLista } from './Artefatos/';
 import ConsultaNormas from './Normas/ConsultaNormas';
-import { NovaNC } from './NaoConformidades';
+import { NovaNC, ListaNC } from './NaoConformidades';
 
-export { ArtefatoNovo, ArtefatosLista, ConsultaNormas, NovaNC }
+export { ArtefatoNovo, ArtefatosLista, ConsultaNormas, NovaNC, ListaNC }
