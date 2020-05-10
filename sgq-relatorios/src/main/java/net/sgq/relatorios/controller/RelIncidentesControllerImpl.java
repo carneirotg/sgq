@@ -40,7 +40,7 @@ public class RelIncidentesControllerImpl implements RelIncidentesController {
 	}
 
 	@Override
-	@GetMapping("/semestre")
+	@GetMapping({"/semestre", "ultimos-seis-meses"})
 	public ResponseEntity<byte[]> incidentesSemestre() {
 		return geraDownload(relService.geraRelatorioPor(Periodo.SEMESTRE), "Incidentes-Seis_Meses.pdf");
 	}

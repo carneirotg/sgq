@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("PeriodoReportado", formataPeriodoQualquer(inicio, fim));
 
-		List<IncidenteTO> incidentes = incidentesClient.consultaIncidentesConcluidos();
+		List<IncidenteTO> incidentes = incidentesClient.consultaIncidentesPorPeriodo(inicio, fim);
 
 		return geraRelatorio(incidentes, params);
 	}
@@ -76,6 +77,10 @@ public class RelIncidentesServiceImpl implements RelIncidentesService {
 	private File geraRelatorio(List<IncidenteTO> incidentes, Map<String, Object> params) {
 
 		try {
+			
+			if(incidentes.isEmpty()) {
+				throw new EntityNotFoundException("Sem dados disponíveis para o período / relatório");
+			}
 
 			File jrxml = ResourceUtils.getFile("classpath:relatorios/Incidentes.jrxml");
 			JasperReport compiledReport = JasperCompileManager.compileReport(jrxml.getAbsolutePath());

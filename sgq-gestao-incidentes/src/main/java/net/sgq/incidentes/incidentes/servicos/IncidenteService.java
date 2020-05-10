@@ -1,5 +1,8 @@
 package net.sgq.incidentes.incidentes.servicos;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,6 +18,8 @@ public interface IncidenteService {
 	Page<Incidente> listaIncidentes(String nome, Pageable pageable);
 
 	Page<Incidente> listaIncidentes(Estado estado, Integer janelaMinutos, Pageable pageable);
+
+	List<Incidente> listaIncidentesPorPeriodo(Date inicio, Date fim);
 
 	Long salvarIncidente(Incidente incidente, Long id);
 	

@@ -36,6 +36,9 @@ sgq:
         v1: /v1/destinatarios
 
 zuul:
+  host:
+    connect-timeout-millis: 5000
+    socket-timeout-millis: 30000
   sensitiveHeaders: Cookie,Set-Cookie
   routes:
     artefatos-v1:
@@ -59,3 +62,4 @@ zuul:
     destinatarios-v1:
       path: /destinatarios/**
       service-id: transparencia
+      

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -83,6 +84,11 @@ public class IncidenteServiceImpl implements IncidenteService {
 		}
 
 		return incidentes;
+	}
+	
+	@Override
+	public List<Incidente> listaIncidentesPorPeriodo(Date inicio, Date fim) {
+		return this.repository.findByCriadoEmBetween(inicio, fim);
 	}
 
 	@Override
@@ -188,6 +194,8 @@ public class IncidenteServiceImpl implements IncidenteService {
 		}
 
 		incidenteTo.setId(id);
+		incidenteTo.setSituacao(incidente.getSituacao());
+		incidenteTo.setCriadoEm(incidente.getCriadoEm());
 
 		return repository.save(incidenteTo);
 	}

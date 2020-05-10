@@ -6,12 +6,14 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +60,16 @@ public class IncidenteControllerImpl implements IncidenteController {
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
 		Page<Incidente> incidentes = this.service.listaIncidentes(PageRequest.of(pagina - 1, registros));
 		return new ResponseEntity<>(incidentes.getContent(), PageHeaders.headers(incidentes), HttpStatus.OK);
+	}
+
+	@Override
+	@GetMapping(path = "/de/{inicio}/ate/{fim}", produces = MediaType.APPLICATION_JSON_VALUE, params = { "!nome",
+			"!estado" })
+	public ResponseEntity<List<Incidente>> listaIncidentesPorPeriodo(
+			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date inicio,
+			@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date fim) {
+		List<Incidente> incidentes = this.service.listaIncidentesPorPeriodo(inicio, fim);
+		return new ResponseEntity<>(incidentes, HttpStatus.OK);
 	}
 
 	@Override

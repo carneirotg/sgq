@@ -170,7 +170,7 @@ public class Incidente {
 	public void setNcEnvolvidas(List<NaoConformidade> ncEnvolvidas) {
 		this.ncEnvolvidas = ncEnvolvidas;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

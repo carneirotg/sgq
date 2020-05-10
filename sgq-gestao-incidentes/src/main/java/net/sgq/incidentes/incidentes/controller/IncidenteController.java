@@ -1,6 +1,7 @@
 package net.sgq.incidentes.incidentes.controller;
 
 import java.net.URISyntaxException;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,15 @@ public interface IncidenteController {
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
 	ResponseEntity<List<Incidente>> buscaPor(String descricao, Integer pagina, Integer registros);
 
-	@ApiOperation(value = "Consulta incidentes por nome", response = Incidente.class, responseContainer = "List")
+	@ApiOperation(value = "Consulta incidentes", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
 	ResponseEntity<List<Incidente>> listaIncidentes(Integer pagina, Integer registros);
+	
+	@ApiOperation(value = "Consulta incidentes por periodo", response = Incidente.class, responseContainer = "List")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
+			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
+	ResponseEntity<List<Incidente>> listaIncidentesPorPeriodo(Date inicio, Date fim);
 
 	@ApiOperation(value = "Consulta incidentes com estado 'Aberto'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
