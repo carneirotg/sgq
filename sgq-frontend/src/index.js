@@ -52,6 +52,10 @@ ReactDOM.render(
           <Protegidas.Destinatario />
         </Protegidas.RotaProtegida>
 
+        <Protegidas.RotaProtegida path="/dashboard/relatorios/incidentes">
+          <Protegidas.RelIncidente />
+        </Protegidas.RotaProtegida>
+
       </Switch>
     </BrowserRouter>
     <ToastContainer/>

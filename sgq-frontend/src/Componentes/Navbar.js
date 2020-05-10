@@ -58,7 +58,7 @@ class NavbarSGQ extends Component {
                             <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
                             <ComponenteProtegido papel="GESTOR">
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.2">Relatórios</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/dashboard/relatorios/incidentes">Relatórios</NavDropdown.Item>
                             </ComponenteProtegido>
                         </NavDropdown>
                         <NavDropdown title="Campanhas" id="basic-nav-dropdown">
@@ -68,7 +68,7 @@ class NavbarSGQ extends Component {
                             <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
                             <ComponenteProtegido papel="GESTOR">
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item as={Link} to ="/dashboard/destinatarios">Destinatários</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/dashboard/destinatarios">Destinatários</NavDropdown.Item>
                             </ComponenteProtegido>
                         </NavDropdown>
 

@@ -4,6 +4,7 @@ import { Route, Redirect } from 'react-router-dom';
 import NavbarSGQ from '../../Componentes/Navbar';
 import Dashboard from './Dashboard';
 import { ArtefatoNovo, ArtefatosLista, ConsultaNormas } from './Incidentes';
+import { RelIncidente } from './Relatorios';
 import { Destinatario } from './Transparencia'
 
 import LoginManager from '../../Componentes/LoginManager';
@@ -27,4 +28,11 @@ function RotaProtegida({ children, ...params }) {
     );
 }
 
-export { RotaProtegida, Dashboard, ArtefatoNovo, ArtefatosLista, ConsultaNormas, Destinatario }
+export {
+    RotaProtegida,
+    Dashboard,
+    ArtefatoNovo, ArtefatosLista,
+    ConsultaNormas,
+    Destinatario,
+    RelIncidente
+}

@@ -57,6 +57,24 @@ const incidentes = {
     }
 }
 
+const relatorios = {
+    gerar: async (tipo, periodo = null) => {
+
+        switch(tipo){
+            case "mesAtual": return _getBlob("relatorios/incidentes", tipo);
+            case "anoAtual": return _getBlob("relatorios/incidentes/ano-corrente", tipo);
+            case "seisMeses": return _getBlob("relatorios/incidentes/ultimos-seis-meses", tipo);
+            case "dozeMeses": return _getBlob("relatorios/incidentes/ultimos-doze-meses", tipo);
+            case "periodo": {
+                const inicio = periodo.inicio.toISOString().split('T')[0];
+                const fim = periodo.fim.toISOString().split('T')[0];
+
+                return _getBlob(`relatorios/incidentes/de/${inicio}/ate/${fim}`, tipo);
+            }
+        }
+    }
+}
+
 async function _patch(url) {
     let operationResponse = {};
     const response = await fetch(`/api/${url}`, { method: 'PATCH', headers: _authHeader({}) });
@@ -94,6 +112,33 @@ async function _get(url, paginacao = { habilitada: false, pagina: 0 }) {
         const headers = _headersSGQ(response);
 
         operationResponse = { sucesso: true, retorno, headers };
+    } else {
+        operationResponse = { sucesso: false };
+
+        if (response.status == 404) {
+            operationResponse['status'] = 404;
+        } else {
+            await _trataErroPadrao(response);
+        }
+    }
+
+    return operationResponse;
+
+}
+
+async function _getBlob(url, tipo) {
+    let operationResponse = {};
+    const response = await fetch(`/api/${url}`, { headers: _authHeader({}) });
+
+    if (response.ok) {
+        
+        const relBlob = await response.blob();
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(relBlob);
+        link.download = `relatorio-${tipo}.pdf`;
+        link.click();
+
+        operationResponse = { sucesso: true };
     } else {
         operationResponse = { sucesso: false };
 
@@ -182,10 +227,16 @@ function _authHeader(headers) {
 
 async function _trataErroPadrao(response) {
     let erro = `Erro no servidor: ${response.status}`;
-    const rJson = response.json();
+    const rJson = await response.json();
 
     if (rJson != null) {
-        erro = rJson.erro;
+        let detalhe = rJson.erroCompleto;
+        
+        erro = rJson.erro || rJson.error;
+
+        if(detalhe != null && detalhe.length <= 50){
+            erro += ` - ${detalhe}`;
+        }
     }
 
     Toast.erro(`${erro}`);
@@ -193,6 +244,6 @@ async function _trataErroPadrao(response) {
 
 export function cliente() {
     return {
-        artefatos, normas, destinatarios
+        artefatos, normas, destinatarios, relatorios
     }
 }
