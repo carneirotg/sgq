@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Container, Form, Pagination, Table, Row, Col, Modal } from 'react-bootstrap';
 import './ConsultaNormas.css';
 
-import { FaTrashAlt, FaArrowAltCircleDown, FaTasks } from 'react-icons/fa';
+import { FaArrowAltCircleDown, FaTasks } from 'react-icons/fa';
 
 import { cliente } from '../../../Componentes/SGQClient';
 import ToastManager from '../../../Componentes/ToastManager';
@@ -79,7 +79,7 @@ class ConsultaNorma extends Component {
         if (this.state.buscaNorma.length > 3) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this._consultar(), 300)
-        } else if (this.state.buscaNorma.length == 0) {
+        } else if (this.state.buscaNorma.length === 0) {
             this._consultar();
         }
     }

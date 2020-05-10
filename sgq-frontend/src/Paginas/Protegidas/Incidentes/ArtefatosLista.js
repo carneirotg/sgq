@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Container, Form, Pagination, Table, Row, Col, Jumbotron, Toast } from 'react-bootstrap';
-import { debounce } from 'lodash';
+import { Button, Container, Form, Pagination, Table, Row, Col } from 'react-bootstrap';
+
 import './Artefato.css';
 
 import { cliente } from '../../../Componentes/SGQClient';
@@ -49,7 +49,7 @@ class ArtefatosLista extends Component {
         const nome = this.state.buscaArtefato;
         let resp;
 
-        if (this.state.buscaArtefato != '') {
+        if (this.state.buscaArtefato !== '') {
             resp = await cliente().artefatos.buscarNome(nome, paramsPaginacao);
         } else {
             resp = await cliente().artefatos.listar(paramsPaginacao);
@@ -105,7 +105,7 @@ class ArtefatosLista extends Component {
         if (this.state.buscaArtefato.length > 3) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this._consultar(), 300)
-        } else if(this.state.buscaArtefato.length == 0){
+        } else if(this.state.buscaArtefato.length === 0){
             this._consultar();
         }
     }

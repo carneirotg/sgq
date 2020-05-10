@@ -83,7 +83,7 @@ class Destinatario extends Component {
         if (this.state.buscaDestinatario.length > 3) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this._consultar(), 300)
-        } else if (this.state.buscaDestinatario.length == 0) {
+        } else if (this.state.buscaDestinatario.length === 0) {
             this._consultar();
         }
     }
@@ -112,7 +112,7 @@ class Destinatario extends Component {
         if (this.state.buscaDestinatario.length > 3) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this._consultar(), 300)
-        } else if (this.state.buscaDestinatario.length == 0) {
+        } else if (this.state.buscaDestinatario.length === 0) {
             this._consultar();
         }
     }
@@ -179,7 +179,7 @@ class Destinatario extends Component {
 
         if (resp.sucesso) {
             ToastManager.sucesso("Destinatário removido com sucesso")
-            this.setState({ destinatarios: this.state.destinatarios.filter(d => d.id != destinatario.id) });
+            this.setState({ destinatarios: this.state.destinatarios.filter(d => d.id !== destinatario.id) });
         } else {
             ToastManager.erro("Erro ao remover destinatário. Tente mais tarde.");
         }
@@ -208,7 +208,7 @@ class Destinatario extends Component {
                     {
                         destinatarios: [
                             ...this.state.destinatarios.map(d => {
-                                if (d.id != destinatario.id) {
+                                if (d.id !== destinatario.id) {
                                     return d;
                                 } else {
                                     return destinatario

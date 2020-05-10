@@ -26,7 +26,9 @@ class Login extends Component {
     this.setState({loginForm: {username: '', password: ''}});
   }
 
-  async _fazLogin() {
+  async _fazLogin(evt) {
+    evt.preventDefault();
+
     let { username, password } = this.state.loginForm;
     let redir = await this._loginClient.login(username, password);
 
@@ -65,12 +67,12 @@ class Login extends Component {
               <Row>
                 <Col md><h1>Login</h1></Col>
               </Row>
-              <Form>
+              <Form onSubmit={this._fazLogin.bind(this)}>
                 <Row>
                   <Col md></Col>
                   <Col md="4">
                     <Form.Group controlId="nomeUsuario">
-                      <Form.Control type="text" placeholder="Nome de Usuário" name="username" value={this.state.loginForm.username} onChange={this._valores.bind(this)} />
+                      <Form.Control type="text" placeholder="Nome de Usuário" name="username" value={this.state.loginForm.username} onChange={this._valores.bind(this)} required />
                     </Form.Group>
                   </Col>
                   <Col md></Col>
@@ -79,7 +81,7 @@ class Login extends Component {
                   <Col md></Col>
                   <Col md="4">
                     <Form.Group controlId="senhaUsuario">
-                      <Form.Control type="password" placeholder="Senha de Usuário" name="password" value={this.state.loginForm.password} onChange={this._valores.bind(this)} />
+                      <Form.Control type="password" placeholder="Senha de Usuário" name="password" value={this.state.loginForm.password} onChange={this._valores.bind(this)} required/>
                       <Form.Text className="text-muted" style={{ textAlign: 'center' }}>
                         <i>gestor / g123</i> <b>ou</b> <i>analista / a123</i>
                       </Form.Text>
@@ -89,7 +91,7 @@ class Login extends Component {
                 </Row>
                 <Row className="Btns">
                   <Col md></Col>
-                  <Col md><Button className="Btn" onClick={this._fazLogin.bind(this)}>Entrar</Button></Col>
+                  <Col md><Button className="Btn" type="submit">Entrar</Button></Col>
                   <Col md><Button className="Btn" variant="warning" onClick={this._reset.bind(this)}>Limpar</Button></Col>
                   <Col md></Col>
                 </Row>

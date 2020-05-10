@@ -38,7 +38,7 @@ const destinatarios = {
         const id = destinatario.id;
         let resp;
 
-        if (id == null || id == 0) {
+        if (id === null || id === 0) {
             resp = _post(`destinatarios`, destinatario);
         } else {
             resp = _put(`destinatarios/${id}`, destinatario);
@@ -115,7 +115,7 @@ async function _get(url, paginacao = { habilitada: false, pagina: 0 }) {
     } else {
         operationResponse = { sucesso: false };
 
-        if (response.status == 404) {
+        if (response.status === 404) {
             operationResponse['status'] = 404;
         } else {
             await _trataErroPadrao(response);
@@ -142,7 +142,7 @@ async function _getBlob(url, tipo) {
     } else {
         operationResponse = { sucesso: false };
 
-        if (response.status == 404) {
+        if (response.status === 404) {
             operationResponse['status'] = 404;
         } else {
             await _trataErroPadrao(response);

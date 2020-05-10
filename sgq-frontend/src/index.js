@@ -1,18 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
-import './index.css';
-
-import NavbarSGQ from './Componentes/Navbar';
-import * as Abertas from './Paginas/Abertas/';
-import * as Protegidas from './Paginas/Protegidas/';
+import { RotasAbertas } from './Paginas/Abertas/';
+import { RotasProtegidas } from './Paginas/Protegidas/';
 import Footer from './Footer';
 
 import { ToastContainer } from 'react-toastify';
 
 import * as serviceWorker from './serviceWorker';
 
+import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,45 +18,13 @@ import 'react-toastify/dist/ReactToastify.css';
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Switch>
-        <Route exact path="/">
-          <Abertas.Abertura />
-        </Route>
-        <Route path="/login">
-          <Abertas.Login />
-        </Route>
-        <Route path="/eventos">
-          <Abertas.Eventos />
-        </Route>
+      
+      <RotasAbertas />
 
+      <RotasProtegidas path="/dashboard" />
 
-        <Protegidas.RotaProtegida exact path="/dashboard">
-          <Protegidas.Dashboard />
-        </Protegidas.RotaProtegida>
-
-        <Protegidas.RotaProtegida path="/dashboard/artefato">
-          <Protegidas.ArtefatoNovo />
-        </Protegidas.RotaProtegida>
-
-        <Protegidas.RotaProtegida path="/dashboard/artefatos">
-          <Protegidas.ArtefatosLista />
-        </Protegidas.RotaProtegida>
-
-        <Protegidas.RotaProtegida path="/dashboard/normas">
-          <Protegidas.ConsultaNormas />
-        </Protegidas.RotaProtegida>
-
-        <Protegidas.RotaProtegida papel="GESTOR" path="/dashboard/destinatarios">
-          <Protegidas.Destinatario />
-        </Protegidas.RotaProtegida>
-
-        <Protegidas.RotaProtegida papel="GESTOR" path="/dashboard/relatorios/incidentes">
-          <Protegidas.RelIncidente />
-        </Protegidas.RotaProtegida>
-
-      </Switch>
     </BrowserRouter>
-    <ToastContainer/>
+    <ToastContainer />
     <Footer />
   </React.StrictMode>,
   document.getElementById('root')

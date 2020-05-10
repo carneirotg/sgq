@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormControl, Nav, NavDropdown, Navbar } from 'react-bootstrap';
+import { Button, Nav, NavDropdown, Navbar } from 'react-bootstrap';
 
 import { Link, Redirect } from 'react-router-dom';
 

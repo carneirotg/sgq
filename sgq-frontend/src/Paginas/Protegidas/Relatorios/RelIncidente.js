@@ -58,7 +58,7 @@ class RelIncidente extends Component {
 
     _botaoHabilitado() {
 
-        const emGeracao = Object.values(this.state.carregando).some(c => c == true);
+        const emGeracao = Object.values(this.state.carregando).some(c => c === true);
         return emGeracao;
     }
 
