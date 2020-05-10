@@ -5,7 +5,8 @@ public enum TipoNaoConformidade {
 	AUSENCIA_MEDIDA("Ausência/Incorreção de Medição"),
 	ESPECIFICACAO_DIVERGENTE("Especificação Divergente"),
 	QUANTIDADE_DIVERGENTE("Quantidade Divergente"),
-	INSTRUCAOO_DIVERGENTE("Instrução Divergente");
+	INSTRUCAO_DIVERGENTE("Instrução Divergente"),
+	ANOMALIA("Anomalia Diversa");
 
 	private String tipo;
 
