@@ -1,5 +1,4 @@
-import ArtefatoNovo from './ArtefatoNovo';
-import ArtefatosLista from './ArtefatosLista';
-import ConsultaNormas from './ConsultaNormas';
+import { ArtefatoNovo, ArtefatosLista } from './Artefatos/';
+import ConsultaNormas from './Normas/ConsultaNormas';
 
 export { ArtefatoNovo, ArtefatosLista, ConsultaNormas }

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Button, Container, Form, Row, Col, Jumbotron } from 'react-bootstrap';
 import './Artefato.css';
 
-import { cliente } from '../../../Componentes/SGQClient';
-import ToastManager from '../../../Componentes/ToastManager';
+import { cliente } from '../../../../Componentes/SGQClient';
+import ToastManager from '../../../../Componentes/ToastManager';
 
 class ArtefatoNovo extends Component {
 

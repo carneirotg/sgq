@@ -4,8 +4,8 @@ import './ConsultaNormas.css';
 
 import { FaArrowAltCircleDown, FaTasks } from 'react-icons/fa';
 
-import { cliente } from '../../../Componentes/SGQClient';
-import ToastManager from '../../../Componentes/ToastManager';
+import { cliente } from '../../../../Componentes/SGQClient';
+import ToastManager from '../../../../Componentes/ToastManager';
 
 class ConsultaNorma extends Component {
 

@@ -3,8 +3,8 @@ import { Button, Container, Form, Pagination, Table, Row, Col } from 'react-boot
 
 import './Artefato.css';
 
-import { cliente } from '../../../Componentes/SGQClient';
-import ToastManager from '../../../Componentes/ToastManager';
+import { cliente } from '../../../../Componentes/SGQClient';
+import ToastManager from '../../../../Componentes/ToastManager';
 
 class ArtefatosLista extends Component {
 
