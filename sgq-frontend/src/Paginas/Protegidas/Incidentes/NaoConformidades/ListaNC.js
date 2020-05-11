@@ -11,6 +11,14 @@ import NOMES from './nomes.json';
 
 class ListaNC extends Component {
 
+    PAGINA_INICIAL = {
+        habilitada: true,
+        pagina: 0,
+        paginas: 0,
+        total: 0,
+        registros: 10
+    }
+
     state = {
         tipo: 'abertas',
         buscaNC: '',
@@ -27,39 +35,47 @@ class ListaNC extends Component {
             estado: null,
             visivel: false
         }
-
     }
+
+    timer = null;
 
     async componentDidMount() {
         this._carregaNCEscopo(this.state.tipo);
     }
 
-    _valoresNC() {
+    _valoresNC(evt) {
+        const { name, value } = evt.target;
 
+        this.setState({ ...this.state, [name]: value });
+
+        clearTimeout(this.timer);
+        if (value.length >= 3) {
+            this.timer = setTimeout(() => this._carregaNCEscopo(this.state.tipo, null), 300);
+        } else if (value === '' || value.length === 0) {
+            this.timer = setTimeout(() => this._carregaNCEscopo(this.state.tipo, this.PAGINA_INICIAL), 300);
+        }
     }
 
     async _carregaNCEscopo(tipo, params = null) {
-
-        console.log(`${tipo} :: ${params}`);
-
         if (this.state.tipo !== tipo) {
             this.setState({
                 ...this.setState,
                 tipo,
-                pagina: {
-                    habilitada: true,
-                    pagina: 0,
-                    paginas: 0,
-                    total: 0,
-                    registros: 10
-                }
+                pagina: this.PAGINA_INICIAL
             })
         }
 
         const paramsPaginacao = params != null ? params : this.state.pagina;
+        const { buscaNC } = this.state;
 
         const ncCli = cliente().naoConformidades;
-        const resp = await ncCli.consultaEstado(tipo, params);
+        let resp = null;
+        console.log(buscaNC);
+        if (buscaNC !== '') {
+            resp = await ncCli.consultaEstadoTitulo(tipo, buscaNC, params);
+        } else {
+            resp = await ncCli.consultaEstado(tipo, params);
+        }
 
         if (resp.sucesso) {
             const { pagina } = paramsPaginacao;
@@ -93,7 +109,6 @@ class ListaNC extends Component {
     }
 
     _atualizarPaginas(pagina, paramsPaginacao, hPagina) {
-        console.log(`_atualizarPaginas(${pagina}, ${JSON.stringify(paramsPaginacao)}, ${hPagina})`)
         return parseInt(pagina) === 0 || parseInt(paramsPaginacao.pagina) === parseInt(hPagina)
     }
 
@@ -185,9 +200,9 @@ class ListaNC extends Component {
                                 <Col>{this.state.ncs.length > 0 ? (this._paginador()) : (<></>)}</Col>
                             </Form.Group>
                         </Col>
-                        <Col md="3">
+                        <Col md="2">
                             <Form.Group controlId="buscaNC">
-                                <Form.Control placeholder="DETRAN" type="text" name="buscaNC" value={this.state.buscaNC} onChange={this._valoresNC.bind(this)} />
+                                <Form.Control placeholder="Não conformidade x" type="text" name="buscaNC" value={this.state.buscaNC} onChange={this._valoresNC.bind(this)} />
                             </Form.Group>
                         </Col>
 

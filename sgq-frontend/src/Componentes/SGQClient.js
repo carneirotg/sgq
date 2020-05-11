@@ -73,7 +73,10 @@ const naoConformidades = {
     consultaEstado: async (estado, pagina) => {
         return _get(`ncs/?estado=${estado}`, pagina);
     },
-    mudarEstado: async(id, estado) => {
+    consultaEstadoTitulo: async (estado, titulo) => {
+        return _get(`ncs/?estado=${estado}&titulo=${titulo}`);
+    },
+    mudarEstado: async (id, estado) => {
         return _patch(`ncs/${id}/estado/${estado}`);
     }
 }
@@ -240,7 +243,7 @@ async function _pxxt(metodo, url, objBody) {
         if (rJson != null) {
             let detalhe = rJson.erroCompleto;
 
-            erro = rJson.erro || rJson.error;
+            let erro = rJson.erro || rJson.error;
 
             if (detalhe != null && detalhe.length <= 50) {
                 erro += ` - ${detalhe}`;
