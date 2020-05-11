@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +31,8 @@ public class NCNormasControllerImpl implements NCNormaController {
 	@Override
 	@PatchMapping("/norma/{normaId}")
 	@ResponseStatus(code = NO_CONTENT)
-	public void associarNorma(@PathVariable Long ncId, @PathVariable Long normaId) {
-		this.service.associaNCANorma(ncId, normaId);
+	public void associarNorma(@PathVariable Long ncId, @PathVariable Long normaId, @AuthenticationPrincipal OAuth2Authentication usuario) {
+		this.service.associaNCANorma(ncId, normaId, usuario);
 	}
 	
 	@Override

@@ -1,5 +1,6 @@
 package net.sgq.incidentes.conformidades.controller;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -43,13 +44,13 @@ public class NCNormasControllerTests {
 
 	@Test
 	public void associaNorma() throws Exception {
-		doNothing().when(service).associaNCANorma(anyLong(), anyLong());
+		doNothing().when(service).associaNCANorma(anyLong(), anyLong(), any());
 		mock.perform(setJwt(patch("/ncs/1/norma/1"))).andExpect(status().isNoContent());
 	}
 
 	@Test
 	public void associaNormaInexistente() throws Exception {
-		doThrow(EntityNotFoundException.class).when(service).associaNCANorma(anyLong(), anyLong());
+		doThrow(EntityNotFoundException.class).when(service).associaNCANorma(anyLong(), anyLong(), any());
 
 		mock.perform(setJwt(patch("/ncs/1/norma/1"))).andExpect(status().isBadRequest());
 	}

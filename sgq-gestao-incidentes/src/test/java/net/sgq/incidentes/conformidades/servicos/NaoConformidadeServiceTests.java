@@ -23,6 +23,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.artefatos.servicos.ArtefatoService;
@@ -66,7 +68,7 @@ public class NaoConformidadeServiceTests {
 	public void consultaNCsPorEstado() {
 		List<NaoConformidade> ncs = new ArrayList<>();
 		Artefato art = new Artefato();
-		
+
 		NaoConformidade nc = new NaoConformidade();
 
 		art.setId(1L);
@@ -74,7 +76,7 @@ public class NaoConformidadeServiceTests {
 		ncs.add(nc);
 
 		Page<NaoConformidade> pageNC = new PageImpl<>(ncs);
-		
+
 		when(repository.findByEstado(any(), any())).thenReturn(pageNC);
 
 		assertThat(service.listaNCs(Estado.ABERTA, null, Pageable.unpaged())).isNotNull().size().isEqualTo(1);
@@ -89,7 +91,7 @@ public class NaoConformidadeServiceTests {
 		art.setId(1L);
 		nc.setArtefato(art);
 		ncs.add(nc);
-		
+
 		Page<NaoConformidade> pageNC = new PageImpl<>(ncs);
 
 		when(repository.findByEstadoNot(any(), any())).thenReturn(pageNC);
@@ -167,12 +169,35 @@ public class NaoConformidadeServiceTests {
 
 	@Test
 	public void associaNormaANC() {
+		OAuth2AuthenticationDetails details = Mockito.mock(OAuth2AuthenticationDetails.class);
+		OAuth2Authentication usuario = Mockito.mock(OAuth2Authentication.class);
+
+		when(usuario.getDetails()).thenReturn(details);
 		when(repository.findById(Mockito.anyLong())).thenReturn(Optional.of(new NaoConformidade()));
-		assertDoesNotThrow(() -> service.associaNCANorma(1L, 1L));
+		assertDoesNotThrow(() -> service.associaNCANorma(1L, 1L, usuario));
 	}
 
 	@Test
 	public void atualizaCheckList() {
+		NaoConformidade nc = new NaoConformidade();
+		Norma norma = new Norma();
+		Map<String, Boolean> checklist = new HashMap<>();
+
+		nc.setId(1L);
+		nc.setEstado(Estado.EM_ANALISE);
+		norma.setNormaId(1L);
+		nc.setNormaNaoConformidade(norma);
+
+		checklist.put("1=1", Boolean.TRUE);
+
+		when(repository.findById(anyLong())).thenReturn(Optional.of(nc));
+		service.atualizaChecklist(1L, checklist);
+
+		assertThat(nc.getNormaNaoConformidade().getCheckList()).isEqualTo(checklist);
+	}
+
+	@Test
+	public void atualizaCheckListAbertaNaoPermitida() {
 		NaoConformidade nc = new NaoConformidade();
 		Norma norma = new Norma();
 		Map<String, Boolean> checklist = new HashMap<>();
@@ -185,9 +210,10 @@ public class NaoConformidadeServiceTests {
 		checklist.put("1=1", Boolean.TRUE);
 
 		when(repository.findById(anyLong())).thenReturn(Optional.of(nc));
-		service.atualizaChecklist(1L, checklist);
 
-		assertThat(nc.getNormaNaoConformidade().getCheckList()).isEqualTo(checklist);
+		assertThrows(IllegalStateException.class, () -> {
+			service.atualizaChecklist(1L, checklist);
+		});
 	}
 
 	@Test

@@ -12,6 +12,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,9 +141,9 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "nc", key = "#id")
-	public void associaNCANorma(Long id, Long normaId) {
+	public void associaNCANorma(Long id, Long normaId, OAuth2Authentication usuario) {
 
-		Norma norma = this.normaService.consultaNorma(normaId);
+		Norma norma = this.normaService.consultaNorma(normaId, extraiTokenUsuario(usuario));
 		Optional<NaoConformidade> oNC = this.repository.findById(id);
 
 		NaoConformidade nc = validator.validaNCRetornada(id, oNC);
@@ -160,6 +162,10 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 
 		if (nc.getNormaNaoConformidade().getNormaId() == null) {
 			throw new IllegalStateException("NC não possui norma associada");
+		}
+		
+		if(nc.getEstado() != Estado.EM_ANALISE) {
+			throw new IllegalStateException("Somente NCs em análise podem ser ter seu checklist respondido");
 		}
 
 		nc.getNormaNaoConformidade().setCheckList(checklist);
@@ -188,6 +194,11 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		}
 
 		return this.repository.save(ncAtualizada);
+	}
+	
+	private String extraiTokenUsuario(OAuth2Authentication usuario) {
+		OAuth2AuthenticationDetails oDetails = (OAuth2AuthenticationDetails) usuario.getDetails();
+		return String.format("Bearer %s", oDetails.getTokenValue());
 	}
 
 }
