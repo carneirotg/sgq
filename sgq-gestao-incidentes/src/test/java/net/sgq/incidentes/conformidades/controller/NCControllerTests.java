@@ -104,7 +104,7 @@ public class NCControllerTests {
 
 	@Test
 	public void consultaNCQualquerEstadoNaoEncontrada() throws Exception {
-		when(service.listaNCs(any(Estado.class), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+		when(service.listaNCs(any(Estado.class), anyString(), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/ncs?estado=nao_concluidas"))).andExpect(status().isNotFound());
 	}
 
@@ -129,7 +129,7 @@ public class NCControllerTests {
 		Page<NaoConformidade> pageNC = new PageImpl(list);
 		
 		when(service.listaNCs(anyString(), any())).thenReturn(pageNC);
-		when(service.listaNCs(any(Estado.class), any())).thenReturn(pageNC);
+		when(service.listaNCs(any(Estado.class), anyString(), any())).thenReturn(pageNC);
 	}
 
 	private NaoConformidade criaNC() {

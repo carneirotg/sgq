@@ -75,33 +75,37 @@ public class NCControllerImpl implements NCController {
 	@Override
 	@GetMapping(params = "estado=abertas")
 	public ResponseEntity<List<NaoConformidade>> nCsAbertas(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.ABERTA, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.ABERTA, titulo, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
 	@GetMapping(params = "estado=em_analise")
 	public ResponseEntity<List<NaoConformidade>> nCsEmAnalise(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.EM_ANALISE, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.EM_ANALISE, titulo, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
 	@GetMapping(params = "estado=concluidas")
 	public ResponseEntity<List<NaoConformidade>> nCsConcluidas(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.CONCLUIDA, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.CONCLUIDA, titulo, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
 	@GetMapping(params = "estado=nao_concluidas")
 	public ResponseEntity<List<NaoConformidade>> nCsNaoConcluidas(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.NAO_CONCLUIDA, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.NAO_CONCLUIDA, titulo, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -119,8 +123,8 @@ public class NCControllerImpl implements NCController {
 		this.service.salvarNC(naoConformidadeTo, id);
 	}
 
-	private ResponseEntity<List<NaoConformidade>> listaPorEstado(Estado estado, Pageable page) {
-		Page<NaoConformidade> ncs = this.service.listaNCs(estado, page);
+	private ResponseEntity<List<NaoConformidade>> listaPorEstado(Estado estado, String titulo, Pageable page) {
+		Page<NaoConformidade> ncs = this.service.listaNCs(estado, titulo, page);
 
 		if (ncs.getContent().isEmpty()) {
 			return new ResponseEntity<>(NOT_FOUND);

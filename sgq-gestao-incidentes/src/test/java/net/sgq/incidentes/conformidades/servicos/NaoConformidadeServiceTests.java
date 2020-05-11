@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class NaoConformidadeServiceTests {
 		
 		when(repository.findByEstado(any(), any())).thenReturn(pageNC);
 
-		assertThat(service.listaNCs(Estado.ABERTA, Pageable.unpaged())).isNotNull().size().isEqualTo(1);
+		assertThat(service.listaNCs(Estado.ABERTA, anyString(), Pageable.unpaged())).isNotNull().size().isEqualTo(1);
 	}
 
 	@Test
@@ -94,7 +95,7 @@ public class NaoConformidadeServiceTests {
 
 		when(repository.findByEstadoNot(any(), any())).thenReturn(pageNC);
 
-		assertThat(service.listaNCs(Estado.NAO_CONCLUIDA, Pageable.unpaged())).isNotNull().size().isEqualTo(1);
+		assertThat(service.listaNCs(Estado.NAO_CONCLUIDA, anyString(), Pageable.unpaged())).isNotNull().size().isEqualTo(1);
 	}
 
 	@Test

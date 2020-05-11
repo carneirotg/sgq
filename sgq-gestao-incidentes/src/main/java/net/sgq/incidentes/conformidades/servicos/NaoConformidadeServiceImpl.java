@@ -93,14 +93,22 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 	}
 
 	@Override
-	public Page<NaoConformidade> listaNCs(Estado estado, Pageable pageable) {
+	public Page<NaoConformidade> listaNCs(Estado estado, String termo, Pageable pageable) {
 
 		Page<NaoConformidade> resultado = null;
 
 		if (estado == Estado.NAO_CONCLUIDA) {
-			resultado = this.repository.findByEstadoNot(Estado.CONCLUIDA, pageable);
+			if (termo == null) {
+				resultado = this.repository.findByEstadoNot(Estado.CONCLUIDA, pageable);
+			} else {
+				resultado = this.repository.findByEstadoNotAndTermo(Estado.CONCLUIDA, termo, pageable);
+			}
 		} else {
-			resultado = this.repository.findByEstado(estado, pageable);
+			if (termo == null) {
+				resultado = this.repository.findByEstado(estado, pageable);
+			} else {
+				resultado = this.repository.findByEstadoAndTermo(estado, "%" + termo + "%", pageable);
+			}
 		}
 
 		if (resultado == null) {

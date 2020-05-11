@@ -36,21 +36,21 @@ public interface NCController {
 	@ApiOperation(value = "Lista NCs com situação 'Aberta'")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
 			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
-	ResponseEntity<List<NaoConformidade>> nCsAbertas(Integer paginas, Integer registros);
+	ResponseEntity<List<NaoConformidade>> nCsAbertas(String titulo, Integer paginas, Integer registros);
 
 	@ApiOperation(value = "Lista NCs com situação 'Em Análise'")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
 			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
-	ResponseEntity<List<NaoConformidade>> nCsEmAnalise(Integer paginas, Integer registros);
+	ResponseEntity<List<NaoConformidade>> nCsEmAnalise(String titulo, Integer paginas, Integer registros);
 
 	@ApiOperation(value = "Lista NCs com situação 'Concluída'")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
 			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
-	ResponseEntity<List<NaoConformidade>> nCsConcluidas(Integer paginas, Integer registros);
+	ResponseEntity<List<NaoConformidade>> nCsConcluidas(String titulo, Integer paginas, Integer registros);
 
 	@ApiOperation(value = "Lista NCs não concluídas")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
 			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
-	ResponseEntity<List<NaoConformidade>> nCsNaoConcluidas(Integer paginas, Integer registros);
+	ResponseEntity<List<NaoConformidade>> nCsNaoConcluidas(String titulo, Integer paginas, Integer registros);
 
 }

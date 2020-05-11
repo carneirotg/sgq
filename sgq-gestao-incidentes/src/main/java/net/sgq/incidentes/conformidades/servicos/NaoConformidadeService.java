@@ -18,7 +18,7 @@ public interface NaoConformidadeService {
 	
 	Long salvarNC(NaoConformidade naoConformidadeTo, Long l);
 
-	Page<NaoConformidade> listaNCs(Estado aberta, Pageable pageable);
+	Page<NaoConformidade> listaNCs(Estado aberta, String titulo, Pageable pageable);
 
 	void naoConformidadeMudaEstado(Long id, Estado estado);
 
