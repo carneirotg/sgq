@@ -2,6 +2,7 @@ package net.sgq.incidentes.conformidades.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -104,7 +105,7 @@ public class NCControllerTests {
 
 	@Test
 	public void consultaNCQualquerEstadoNaoEncontrada() throws Exception {
-		when(service.listaNCs(any(Estado.class), anyString(), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+		when(service.listaNCs(any(Estado.class), isNull(), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/ncs?estado=nao_concluidas"))).andExpect(status().isNotFound());
 	}
 
@@ -127,9 +128,8 @@ public class NCControllerTests {
 		
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		Page<NaoConformidade> pageNC = new PageImpl(list);
-		
-		when(service.listaNCs(anyString(), any())).thenReturn(pageNC);
-		when(service.listaNCs(any(Estado.class), anyString(), any())).thenReturn(pageNC);
+		when(service.listaNCs(any(), any())).thenReturn(pageNC);
+		when(service.listaNCs(any(Estado.class), isNull(), any())).thenReturn(pageNC);
 	}
 
 	private NaoConformidade criaNC() {
