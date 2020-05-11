@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaEdit, FaAngleRight, FaAngleLeft, FaAngleDoubleRight, FaEye } from 'react-icons/fa';
+import { FaEdit, FaAngleRight, FaAngleLeft, FaAngleDoubleRight, FaEye, FaTasks } from 'react-icons/fa';
 import { Row, Col, Container, Form, Button, Tabs, Tab, Table, Alert, Modal, Pagination } from 'react-bootstrap';
 
 import ToastManager from '../../../../Componentes/ToastManager';
@@ -33,6 +33,10 @@ class ListaNC extends Component {
         modalEstado: {
             nc: null,
             estado: null,
+            visivel: false
+        },
+        modalVisualizar: {
+            nc: null,
             visivel: false
         }
     }
@@ -141,6 +145,25 @@ class ListaNC extends Component {
         }
     }
 
+    _visualizaNC(nc) {
+
+        if (nc !== null) {
+            this.setState({
+                modalVisualizar: {
+                    nc,
+                    visivel: true
+                }
+            });
+        } else {
+            this.setState({
+                modalVisualizar: {
+                    nc: null,
+                    visivel: false
+                }
+            });
+        }
+    }
+
     async _mudarEstadoNC(nc, estado, nomeEstado) {
         const ncCli = cliente().naoConformidades;
         const resp = await ncCli.mudarEstado(nc.id, estado);
@@ -221,6 +244,7 @@ class ListaNC extends Component {
                     </Row>
                 </Container>
                 {this._ModalEstado()}
+                {this._ModalVisualizar()}
             </div>
         );
     }
@@ -251,7 +275,7 @@ class ListaNC extends Component {
                                     <td>{NOMES[n.setor]}</td>
                                     <td>{NOMES[n.tipoNaoConformidade]}</td>
                                     <td>
-                                        <Button variant="success" onClick={() => false}><FaEye /></Button>{' '}
+                                        <Button variant="success" onClick={this._visualizaNC.bind(this, n)}><FaEye /></Button>{' '}
                                         {
                                             tipo !== 'concluidas' ?
                                                 (
@@ -259,6 +283,13 @@ class ListaNC extends Component {
                                                         <Button variant="primary" onClick={() => false}><FaEdit /></Button>{' '}
                                                     </>
                                                 ) : (<></>)
+                                        }
+                                        {
+                                            n.normaNaoConformidade.normaId !== null && tipo === 'em_analise' ? (
+                                                <>
+                                                    <Button variant="primary" onClick={() => false}><FaTasks /></Button>{' '}
+                                                </>
+                                            ) : (<></>)
                                         }
                                         {
                                             tipo === 'abertas' ?
@@ -277,7 +308,6 @@ class ListaNC extends Component {
                                                         <></>
                                                     )
                                         }
-
                                     </td>
                                 </tr>
                             )
@@ -332,6 +362,83 @@ class ListaNC extends Component {
                                     </Button>
                                     <Button variant="danger" onClick={this._mudarEstadoNC.bind(this, nc, novoEstado, nomeEstado)}>
                                         Sim
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        )
+                        :
+                        (<></>)
+                }
+            </div>
+        )
+    }
+
+    _ModalVisualizar() {
+        const { nc, visivel } = this.state.modalVisualizar;
+
+        return (
+            <div>
+                {
+                    nc ?
+                        (
+                            <Modal show={visivel} onHide={this._visualizaNC.bind(this, null)} animation={false} size="lg" >
+                                <Modal.Header closeButton>
+                                    <Modal.Title>{nc.titulo}</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Container>
+
+                                        <Row>
+                                            <Col md></Col>
+                                            <Col md="4">
+                                                <p><b>Título da NC</b><br />{nc.titulo}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <p><b>Tipo da Não Conformidade</b><br />{NOMES[nc.tipoNaoConformidade]}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <p><b>Setor</b><br />{NOMES[nc.setor]}</p>
+                                            </Col>
+                                            <Col md></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md="8">
+                                                <p><b>Resumo</b><br />{nc.resumo}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <Row>
+                                                    <Col md>&nbsp;</Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col>
+                                                        <p><b>Prejuízo Apurado: </b><br />{nc.prejuizoApurado ? 'Sim' : 'Não'}</p>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md="8">
+                                                <p><b>Detalhamento da NC: </b><br />{nc.detalhamentoNaoConformidade}</p>
+                                            </Col>
+                                            <Col md></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md="4">
+                                                <p><b>Artefato Envolvido da NC: </b><br />{nc.artefato.id + ' - ' + nc.artefato.nome}</p>
+                                            </Col>
+                                            <Col md="6">
+                                                <p><b>Detalhamento do Artefato: </b><br />{nc.detalhamentoArtefato}</p>
+                                            </Col>
+                                        </Row>
+
+                                    </Container>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={this._visualizaNC.bind(this, null)}>
+                                        Fechar
                                     </Button>
                                 </Modal.Footer>
                             </Modal>
