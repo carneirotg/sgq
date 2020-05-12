@@ -43,6 +43,10 @@ class RelIncidente extends Component {
 
         if (resp.sucesso) {
             ToastManager.sucesso("Relatório gerado com sucesso.");
+        } else if(resp.status === 404){
+            ToastManager.atencao(resp.erroDetalhado);
+        } else {
+            ToastManager.erro(resp.erroDetalhado);
         }
 
         this.setState({

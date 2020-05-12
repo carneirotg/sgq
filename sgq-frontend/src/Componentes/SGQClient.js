@@ -107,7 +107,7 @@ async function _patch(url) {
         operationResponse = { sucesso: true };
     } else {
         operationResponse = { sucesso: false };
-        await _trataErroPadrao(response);
+        await _trataErroPadrao(response, operationResponse);
     }
 
     return operationResponse;
@@ -121,7 +121,7 @@ async function _delete(url) {
         operationResponse = { sucesso: true };
     } else {
         operationResponse = { sucesso: false };
-        await _trataErroPadrao(response);
+        await _trataErroPadrao(response, operationResponse);
     }
 
     return operationResponse;
@@ -142,7 +142,7 @@ async function _get(url, paginacao = { habilitada: false, pagina: 0 }) {
         if (response.status === 404) {
             operationResponse['status'] = 404;
         } else {
-            await _trataErroPadrao(response);
+            await _trataErroPadrao(response, operationResponse);
         }
     }
 
@@ -168,9 +168,10 @@ async function _getBlob(url, tipo) {
 
         if (response.status === 404) {
             operationResponse['status'] = 404;
-        } else {
-            await _trataErroPadrao(response);
         }
+
+        await _trataErroPadrao(response, operationResponse);
+
     }
 
     return operationResponse;
@@ -263,7 +264,7 @@ function _authHeader(headers) {
     return headers
 }
 
-async function _trataErroPadrao(response) {
+async function _trataErroPadrao(response, operationResponse = {}) {
     let erro = `Erro no servidor: ${response.status}`;
 
     try {
@@ -274,13 +275,15 @@ async function _trataErroPadrao(response) {
 
             erro = rJson.erro || rJson.error;
 
-            if (detalhe != null && detalhe.length <= 50) {
-                erro += ` - ${detalhe}`;
+            if (detalhe != null && detalhe.length <= 150) {
+                erro = detalhe;
             }
         }
     } catch (ex) {
         console.error(`Erro tratando retorno de exceção: ${ex}`);
     }
+
+    operationResponse['erroDetalhado'] = erro;
 
 }
 
