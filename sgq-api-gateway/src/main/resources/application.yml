@@ -35,6 +35,9 @@ sgq:
       destinatarios:
         v1: /v1/destinatarios
 
+ribbon:
+  ReadTimeout: ${ZUUL_SOCKET_TO:30000}
+
 zuul:
   host:
     connect-timeout-millis: ${ZUUL_CONNECT_TO:5000}
