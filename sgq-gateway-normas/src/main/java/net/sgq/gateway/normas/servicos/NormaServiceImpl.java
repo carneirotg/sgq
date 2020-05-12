@@ -20,7 +20,7 @@ public class NormaServiceImpl implements NormaService {
 	private GestaoNormaClient client;
 	
 	@Override
-	@Cacheable(value = "normasCache")
+	@Cacheable(value = "normasCache", unless = "#result == null")
 	public List<Norma> listaNormas() {
 		
 		try {
@@ -33,7 +33,7 @@ public class NormaServiceImpl implements NormaService {
 	}
 
 	@Override
-	@Cacheable(value = "normasPorIDCache")
+	@Cacheable(value = "normasPorIDCache", unless = "#result == null")
 	public Norma consultaNorma(Long id) {
 
 		try {
