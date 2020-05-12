@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+  service-discovery:
+    image: sgq-service-discovery
+    environment:
+      - EUREKA_HOST:service-discovery
+  auth-server:
+    image: sgq-auth-server
+    environment:
+      - EUREKA_HOST=service-discovery
+    depends_on:
+      - service-discovery
+  api-gateway:
+    image: sgq-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_HOST=service-discovery
+      - ZUUL_CONNECT_TO=5000
+      - ZUUL_SOCKET_TO=30000
+    depends_on:
+      - service-discovery
+  gateway-normas:
+    image: sgq-gateway-normas
+    environment:
+      - EUREKA_HOST=service-discovery
+      - MOCK_GESTAO_HOST=mock-normas
+    depends_on:
+      - service-discovery
+  gestao-incidentes:
+    image: sgq-gestao-incidentes
+    environment:
+      - EUREKA_HOST=service-discovery
+    depends_on:
+      - service-discovery
+  transparencia:
+    image: sgq-transparencia
+    environment:
+      - EUREKA_HOST=service-discovery
+    depends_on:
+      - service-discovery
+      - auth-server
+  relatorios:
+    image: sgq-relatorios
+    environment:
+      - EUREKA_HOST=service-discovery
+    depends_on:
+      - service-discovery
+  mock-normas:
+    image: sgq-mock-gestao-normas
+    environment:
+      - EUREKA_HOST=service-discovery
+    depends_on:
+      - service-discovery
