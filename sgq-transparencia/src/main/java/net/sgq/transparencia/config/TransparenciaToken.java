@@ -31,7 +31,7 @@ public class TransparenciaToken {
 	private Logger logger = org.slf4j.LoggerFactory.getLogger(TransparenciaToken.class);
 	
 	@PostConstruct
-	@Scheduled(fixedDelay = 600000)
+	@Scheduled(fixedDelay = 15000)
 	public void initToken()  {
 		try {
 			logger.info("Atualizando token JWT Interno");
