@@ -13,8 +13,6 @@ services:
       - service-discovery
   api-gateway:
     image: sgq-api-gateway
-    ports:
-      - "8080:8080"
     environment:
       - EUREKA_HOST=service-discovery
       - ZUUL_CONNECT_TO=5000
@@ -47,6 +45,13 @@ services:
       - EUREKA_HOST=service-discovery
     depends_on:
       - service-discovery
+  frontend:
+    image: sgq-frontend
+    ports: 
+      - "80:80"
+    depends_on:
+      - service-discovery
+      - api-gateway
   mock-normas:
     image: sgq-mock-gestao-normas
     environment:
