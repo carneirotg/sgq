@@ -265,19 +265,23 @@ function _authHeader(headers) {
 
 async function _trataErroPadrao(response) {
     let erro = `Erro no servidor: ${response.status}`;
-    const rJson = await response.json();
 
-    if (rJson != null) {
-        let detalhe = rJson.erroCompleto;
+    try {
+        const rJson = await response.json();
 
-        erro = rJson.erro || rJson.error;
+        if (rJson != null) {
+            let detalhe = rJson.erroCompleto;
 
-        if (detalhe != null && detalhe.length <= 50) {
-            erro += ` - ${detalhe}`;
+            erro = rJson.erro || rJson.error;
+
+            if (detalhe != null && detalhe.length <= 50) {
+                erro += ` - ${detalhe}`;
+            }
         }
+    } catch (ex) {
+        console.error(`Erro tratando retorno de exceção: ${ex}`);
     }
 
-    Toast.erro(`${erro}`);
 }
 
 export function cliente() {
