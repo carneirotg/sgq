@@ -27,11 +27,6 @@ function RotaProtegida({ component: Componente, ...params }) {
 
     return (
         <>
-            {
-                expirado ?
-                    <Redirect to="/login" /> : !autorizado ?
-                        <Redirect to="/dashboard" /> : <></>
-            }
             <Route {...params} render={(props) => {
 
                 if (expirado) {
@@ -68,7 +63,7 @@ function RotasProtegidas(props) {
 
                 <RotaProtegida exact path={`${path}/normas`} component={ConsultaNormas} />
 
-                <RotaProtegida exact path={`${path}/nc/nova`} component={NovaNC} />
+                <RotaProtegida exact path={`${path}/nc`} component={NovaNC} />
 
                 <RotaProtegida exact path={`${path}/nc/:id`} component={NovaNC} />
 

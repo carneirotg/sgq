@@ -36,7 +36,8 @@ class NovaNC extends Component {
     }
 
     async _carregaNC() {
-        if (this.props.match !== undefined) {
+        if (this.props.match !== undefined && this.props.match.params['id'] !== undefined) {
+            
             const id = parseInt(this.props.match.params['id']);
             const ncCli = cliente().naoConformidades;
 

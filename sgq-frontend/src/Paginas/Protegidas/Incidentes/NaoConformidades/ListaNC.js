@@ -504,7 +504,29 @@ class ListaNC extends Component {
                                                 <p><b>Detalhamento do Artefato: </b><br />{nc.detalhamentoArtefato}</p>
                                             </Col>
                                         </Row>
-
+                                        {
+                                            nc.normaNaoConformidade.normaId !== null ? (
+                                                <>
+                                                    <Row>
+                                                        <Col md="1"></Col>
+                                                        <Col md><div style={{ textAlign: 'center' }}><b>Checklist {nc.normaNaoConformidade.norma}</b></div></Col>
+                                                        <Col md="1"></Col>
+                                                    </Row>
+                                                    <Row>
+                                                        <Col md="1"></Col>
+                                                        <Col md>
+                                                            <ul>
+                                                                {
+                                                                    Object.entries(nc.normaNaoConformidade.checkList).map(e =>
+                                                                    (<><li>{e[0]} - {e[1] ? 'Verificado' : 'Não Verificado'}</li></>))
+                                                                }
+                                                            </ul>
+                                                        </Col>
+                                                        <Col md="1"></Col>
+                                                    </Row>
+                                                </>
+                                            ) : (<></>)
+                                        }
                                     </Container>
                                 </Modal.Body>
                                 <Modal.Footer>

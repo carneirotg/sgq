@@ -76,6 +76,9 @@ const naoConformidades = {
     consultaEstadoTitulo: async (estado, titulo) => {
         return _get(`ncs/?estado=${estado}&titulo=${titulo}`);
     },
+    consultaId: async(id) => {
+        return _get(`ncs/${id}`);
+    },
     mudarEstado: async (id, estado) => {
         return _patch(`ncs/${id}/estado/${estado}`);
     },
