@@ -7,6 +7,7 @@ import ToastManager from '../../../../Componentes/ToastManager';
 import { cliente } from '../../../../Componentes/SGQClient';
 
 class NovaNC extends Component {
+
     state = {
         nc: {
             id: null,
@@ -20,6 +21,7 @@ class NovaNC extends Component {
             prejuizoApurado: false,
             normaNaoConformidade: {}
         },
+        update: false,
         normaBusca: null,
         artefatos: [],
         normas: [],
@@ -29,6 +31,24 @@ class NovaNC extends Component {
     async componentDidMount() {
         this._carregaArtefatos();
         this._carregaNormas();
+
+        this._carregaNC();
+    }
+
+    async _carregaNC() {
+        if (this.props.match !== undefined) {
+            const id = parseInt(this.props.match.params['id']);
+            const ncCli = cliente().naoConformidades;
+
+            const resp = await ncCli.consultaId(id);
+
+            if (resp.sucesso) {
+                const nc = resp.retorno;
+                this.setState({ ...this.state, nc, normaBusca: nc.normaNaoConformidade.normaId, update: true });
+            } else {
+                ToastManager.erro("Erro ao carregar não conformidade. Tente mais tarde.");
+            }
+        }
     }
 
     async _carregaArtefatos() {
@@ -83,7 +103,8 @@ class NovaNC extends Component {
         const resp = await ncCli.salvar(this.state.nc);
 
         if (resp.sucesso) {
-            ToastManager.sucesso("Não conformidade registrada com sucesso!");
+            const estado = this.state.update ? 'atualizada' : 'registrada';
+            ToastManager.sucesso(`Não conformidade ${estado} com sucesso!`);
             this._reset();
         } else {
             ToastManager.erro(`Erro ao cadastrar NC: ${resp.erro}`);
@@ -92,6 +113,8 @@ class NovaNC extends Component {
 
     _reset() {
         this.setState({
+            ...this.state,
+            normaBusca: '',
             nc: {
                 id: null,
                 titulo: '',

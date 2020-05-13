@@ -7,6 +7,7 @@ import ToastManager from '../../../../Componentes/ToastManager';
 import { cliente } from '../../../../Componentes/SGQClient';
 
 import NOMES from './nomes.json';
+import { Link } from 'react-router-dom';
 
 
 class ListaNC extends Component {
@@ -347,7 +348,7 @@ class ListaNC extends Component {
                                             tipo !== 'concluidas' ?
                                                 (
                                                     <>
-                                                        <Button variant="primary" onClick={() => false}><FaEdit /></Button>{' '}
+                                                        <Button variant="primary" as={Link} to={`/dashboard/nc/${n.id}`}><FaEdit /></Button>{' '}
                                                     </>
                                                 ) : (<></>)
                                         }
