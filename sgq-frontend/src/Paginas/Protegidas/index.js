@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
 import NavbarSGQ from '../../Componentes/Navbar';
@@ -13,8 +13,7 @@ import LoginManager from '../../Componentes/LoginManager';
 
 let _lm = new LoginManager();
 
-function RotaProtegida({ children, ...params }) {
-
+function RotaProtegida({ component: Componente, ...params }) {
     const papel = params.papel;
     const autorizado = _lm.possuiPapel(papel) || papel === undefined;
 
@@ -29,13 +28,27 @@ function RotaProtegida({ children, ...params }) {
     return (
         <>
             {
-                expirado ? <Redirect to="/login" /> : <></>
+                expirado ?
+                    <Redirect to="/login" /> : !autorizado ?
+                        <Redirect to="/dashboard" /> : <></>
             }
-            <NavbarSGQ />
-            <Route {...params} render={({ location }) =>
-                autorizado ?
-                    children :
-                    <Redirect to="/dashboard" />
+            <Route {...params} render={(props) => {
+
+                if (expirado) {
+                    return <Redirect to="/login" />;
+                } else if (!autorizado) {
+                    return <Redirect to="/dashboard" />
+                } else {
+
+                    return <>
+                        <NavbarSGQ />
+                        <Componente {...props} />
+                    </>
+
+                }
+
+            }
+
             } />
         </>
     );
@@ -47,37 +60,24 @@ function RotasProtegidas(props) {
     return (
         <>
             <Switch>
-                <RotaProtegida exact path={path}>
-                    <Dashboard />
-                </RotaProtegida>
+                <RotaProtegida exact path={path} component={Dashboard} />
 
-                <RotaProtegida exact path={`${path}/artefato`}>
-                    <ArtefatoNovo />
-                </RotaProtegida>
+                <RotaProtegida exact path={`${path}/artefato`} component={ArtefatoNovo} />
 
-                <RotaProtegida exact path={`${path}/artefatos`}>
-                    <ArtefatosLista />
-                </RotaProtegida>
+                <RotaProtegida exact path={`${path}/artefatos`} component={ArtefatosLista} />
 
-                <RotaProtegida exact path={`${path}/normas`}>
-                    <ConsultaNormas />
-                </RotaProtegida>
+                <RotaProtegida exact path={`${path}/normas`} component={ConsultaNormas} />
 
-                <RotaProtegida exact path={`${path}/nc/nova`}>
-                    <NovaNC />
-                </RotaProtegida>
+                <RotaProtegida exact path={`${path}/nc/nova`} component={NovaNC} />
 
-                <RotaProtegida exact path={`${path}/ncs`}>
-                    <ListaNC />
-                </RotaProtegida>
+                <RotaProtegida exact path={`${path}/nc/:id`} component={NovaNC} />
 
-                <RotaProtegida papel="GESTOR" exact path={`${path}/destinatarios`}>
-                    <Destinatario />
-                </RotaProtegida>
+                <RotaProtegida exact path={`${path}/ncs`} component={ListaNC} />
 
-                <RotaProtegida papel="GESTOR" exact path={`${path}/relatorios/incidentes`}>
-                    <RelIncidente />
-                </RotaProtegida>
+                <RotaProtegida papel="GESTOR" exact path={`${path}/destinatarios`} component={Destinatario} />
+
+                <RotaProtegida papel="GESTOR" exact path={`${path}/relatorios/incidentes`} component={RelIncidente} />
+
             </Switch>
         </>
     )
