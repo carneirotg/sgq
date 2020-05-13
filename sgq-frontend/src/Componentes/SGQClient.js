@@ -78,6 +78,9 @@ const naoConformidades = {
     },
     mudarEstado: async (id, estado) => {
         return _patch(`ncs/${id}/estado/${estado}`);
+    },
+    atualizarChecklist: async (id, cl) => {
+        return _patchBody(`/ncs/${id}/norma/checklist`, cl);
     }
 }
 
@@ -111,6 +114,10 @@ async function _patch(url) {
     }
 
     return operationResponse;
+}
+
+async function _patchBody(url, corpo) {
+    return _pxxt('PATCH', url, corpo);
 }
 
 async function _delete(url) {

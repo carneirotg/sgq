@@ -17,13 +17,21 @@ class NovaNC extends Component {
             detalhamentoNaoConformidade: '',
             artefato: { id: null },
             detalhamentoArtefato: '',
-            prejuizoApurado: false
+            prejuizoApurado: false,
+            normaNaoConformidade: {}
         },
+        normaBusca: null,
         artefatos: [],
+        normas: [],
         modalTipos: false
     }
 
     async componentDidMount() {
+        this._carregaArtefatos();
+        this._carregaNormas();
+    }
+
+    async _carregaArtefatos() {
         const artefatosCli = cliente().artefatos;
 
         const resp = await artefatosCli.listar({ habilitada: true, pagina: 0, registros: 100000 });
@@ -37,6 +45,20 @@ class NovaNC extends Component {
         }
     }
 
+    async _carregaNormas() {
+        const normasCli = cliente().normas;
+
+        const resp = await normasCli.listar({ habilitada: true, pagina: 0, registros: 100000 });
+
+        if (resp.sucesso) {
+            const normas = resp.retorno;
+
+            this.setState({ normas });
+        } else {
+            ToastManager.erro("Erro ao carregar lista de normas. Tente mais tarde.");
+        }
+    }
+
     _valoresNC(event) {
         let { name, value, checked } = event.target;
 
@@ -46,6 +68,9 @@ class NovaNC extends Component {
         } else if (name.includes('artefatoId')) {
             name = "artefato";
             value = { id: value };
+        } else if (name.includes('normaNaoConformidade')) {
+            this.setState({ normaBusca: value })
+            value = this.state.normas.find(n => n.normaId === parseInt(value));
         }
 
         this.setState({ nc: { ...this.state.nc, [name]: value } });
@@ -155,13 +180,26 @@ class NovaNC extends Component {
                             </Row>
                             <Row>
                                 <Col md="1"></Col>
-                                <Col md="8">
+                                <Col md="7">
                                     <Form.Group controlId="gDetalheNC">
                                         <Form.Label>Detalhamento</Form.Label>
                                         <Form.Control as="textarea" name="detalhamentoNaoConformidade" value={this.state.nc.detalhamentoNaoConformidade} onChange={this._valoresNC.bind(this)} size="500" minLength="10" required />
                                         <Form.Control.Feedback type="invalid">
                                             Forneça o detalhamento da NC
                                             </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                                <Col md="3">
+                                    <Form.Group controlId="gNormaApoio">
+                                        <Form.Label>Norma de Apoio</Form.Label>
+                                        <Form.Control as="select" name="normaNaoConformidade" value={this.state.normaBusca} onChange={this._valoresNC.bind(this)}>
+                                            <option placeholder="Selecione"></option>
+                                            {
+                                                this.state.normas.map(n => (
+                                                    <option key={n.normaId} value={n.normaId}>{n.norma}</option>
+                                                ))
+                                            }
+                                        </Form.Control>
                                     </Form.Group>
                                 </Col>
                                 <Col md></Col>

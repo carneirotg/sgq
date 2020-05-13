@@ -38,6 +38,11 @@ class ListaNC extends Component {
         modalVisualizar: {
             nc: null,
             visivel: false
+        },
+        modalCheckList: {
+            nc: null,
+            visivel: false,
+            novaCheckList: {}
         }
     }
 
@@ -58,6 +63,22 @@ class ListaNC extends Component {
         } else if (value === '' || value.length === 0) {
             this.timer = setTimeout(() => this._carregaNCEscopo(this.state.tipo, this.PAGINA_INICIAL), 300);
         }
+    }
+
+    _valoresCheckList(evt) {
+        const { name, checked } = evt.target;
+        const { modalCheckList } = this.state;
+
+        this.setState({
+            modalCheckList: {
+                ...modalCheckList,
+                novaCheckList: {
+                    ...modalCheckList.novaCheckList,
+                    [name]: checked
+                }
+            }
+        });
+
     }
 
     async _carregaNCEscopo(tipo, params = null) {
@@ -164,6 +185,51 @@ class ListaNC extends Component {
         }
     }
 
+    _visualizaChecklist(nc) {
+
+        if (nc !== null) {
+            this.setState({
+                modalCheckList: {
+                    nc,
+                    visivel: true,
+                    novaCheckList: nc.normaNaoConformidade.checkList
+                }
+            });
+        } else {
+            this.setState({
+                modalCheckList: {
+                    nc: null,
+                    visivel: false,
+                    novaCheckList: {}
+                }
+            });
+        }
+    }
+
+    async _atualizarChecklist() {
+
+        const { nc, novaCheckList } = this.state.modalCheckList;
+
+        const ncCli = cliente().naoConformidades;
+        const resp = await ncCli.atualizarChecklist(nc.id, novaCheckList);
+
+        if (resp.sucesso) {
+            ToastManager.sucesso("Checklist atualizada");
+            nc.normaNaoConformidade.checkList = novaCheckList;
+            this.setState({
+                modalCheckList: {
+                    ...this.state.modalCheckList,
+                    nc
+                }
+            })
+        } else {
+            ToastManager.erro(resp.erro);
+            console.log(resp);
+        }
+
+        this._visualizaChecklist(null);
+    }
+
     async _mudarEstadoNC(nc, estado, nomeEstado) {
         const ncCli = cliente().naoConformidades;
         const resp = await ncCli.mudarEstado(nc.id, estado);
@@ -245,6 +311,7 @@ class ListaNC extends Component {
                 </Container>
                 {this._ModalEstado()}
                 {this._ModalVisualizar()}
+                {this._ModalChecklist()}
             </div>
         );
     }
@@ -287,7 +354,7 @@ class ListaNC extends Component {
                                         {
                                             n.normaNaoConformidade.normaId !== null && tipo === 'em_analise' ? (
                                                 <>
-                                                    <Button variant="primary" onClick={() => false}><FaTasks /></Button>{' '}
+                                                    <Button variant="primary" onClick={this._visualizaChecklist.bind(this, n)}><FaTasks /></Button>{' '}
                                                 </>
                                             ) : (<></>)
                                         }
@@ -419,8 +486,11 @@ class ListaNC extends Component {
                                         </Row>
                                         <Row>
                                             <Col md="1"></Col>
-                                            <Col md="8">
+                                            <Col md="7">
                                                 <p><b>Detalhamento da NC: </b><br />{nc.detalhamentoNaoConformidade}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <p><b>Norma Associada: </b><br />{nc.normaNaoConformidade.norma}</p>
                                             </Col>
                                             <Col md></Col>
                                         </Row>
@@ -438,6 +508,83 @@ class ListaNC extends Component {
                                 </Modal.Body>
                                 <Modal.Footer>
                                     <Button variant="secondary" onClick={this._visualizaNC.bind(this, null)}>
+                                        Fechar
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        )
+                        :
+                        (<></>)
+                }
+            </div>
+        )
+    }
+
+    _ModalChecklist() {
+        const { nc, visivel, novaCheckList } = this.state.modalCheckList;
+
+        let checkListEntries = null;
+
+        if (nc !== null) {
+            checkListEntries = Object.entries(novaCheckList);
+        }
+
+        return (
+            <div>
+                {
+                    nc ?
+                        (
+                            <Modal show={visivel} onHide={this._visualizaChecklist.bind(this, null)} animation={false} size="lg" >
+                                <Modal.Header closeButton>
+                                    <Modal.Title>{nc.titulo}</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    <Container>
+
+                                        <Row>
+                                            <Col md></Col>
+                                            <Col md="4">
+                                                <p><b>Título da NC</b><br />{nc.titulo}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <p><b>Tipo da Não Conformidade</b><br />{NOMES[nc.tipoNaoConformidade]}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <p><b>Setor</b><br />{NOMES[nc.setor]}</p>
+                                            </Col>
+                                            <Col md></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md="8">
+                                                <p><b>Resumo</b><br />{nc.resumo}</p>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md><div style={{ textAlign: 'center' }}><b>Checklist {nc.normaNaoConformidade.norma}</b></div></Col>
+                                            <Col md="1"></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md>
+                                                <ul>
+                                                    {
+                                                        checkListEntries.map(e =>
+                                                            (<><li>{e[0]} - <input type="checkbox" key={e[0]} name={e[0]} checked={e[1]} onChange={this._valoresCheckList.bind(this)} /></li></>))
+                                                    }
+                                                </ul>
+                                            </Col>
+                                            <Col md="1"></Col>
+                                        </Row>
+
+                                    </Container>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="primary" onClick={this._atualizarChecklist.bind(this, null)}>
+                                        Atualizar Checklist
+                                    </Button>
+                                    <Button variant="secondary" onClick={this._visualizaChecklist.bind(this, null)}>
                                         Fechar
                                     </Button>
                                 </Modal.Footer>
