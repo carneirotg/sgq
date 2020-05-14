@@ -1,19 +1,39 @@
 version: "3.7"
 
 services:
+  postgres-sgq:
+    image: postgres:12-alpine
+    restart: unless-stopped
+    ports: 
+      - 5432:5432
+    environment: 
+      - SPRING_PROFILES_ACTIVE=staging
+      - POSTGRES_USER=sgq
+      - POSTGRES_PASSWORD=sgq_pgsql
+    volumes: 
+      - ./sgq_db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
   service-discovery:
     image: sgq-service-discovery
+    restart: unless-stopped
     environment:
-      - EUREKA_HOST:service-discovery
+      - SPRING_PROFILES_ACTIVE=staging
+      - EUREKA_HOST=service-discovery
   auth-server:
     image: sgq-auth-server
+    restart: unless-stopped
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
     depends_on:
       - service-discovery
+      - postgres-sgq
   api-gateway:
     image: sgq-api-gateway
+    restart: unless-stopped
+    ports: 
+      - "8080:8080"
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
       - ZUUL_CONNECT_TO=5000
       - ZUUL_SOCKET_TO=30000
@@ -21,32 +41,47 @@ services:
       - service-discovery
   gateway-normas:
     image: sgq-gateway-normas
+    restart: unless-stopped
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
       - MOCK_GESTAO_HOST=mock-normas
     depends_on:
       - service-discovery
+      - postgres-sgq
   gestao-incidentes:
     image: sgq-gestao-incidentes
+    restart: unless-stopped
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
     depends_on:
       - service-discovery
+      - postgres-sgq
   transparencia:
     image: sgq-transparencia
+    restart: unless-stopped
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
     depends_on:
       - service-discovery
       - auth-server
+      - postgres-sgq
   relatorios:
     image: sgq-relatorios
+    restart: unless-stopped
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
     depends_on:
       - service-discovery
+      - postgres-sgq
   frontend:
     image: sgq-frontend
+    restart: unless-stopped
+    environment: 
+      - SPRING_PROFILES_ACTIVE=staging
     ports: 
       - "80:80"
     depends_on:
@@ -54,7 +89,9 @@ services:
       - api-gateway
   mock-normas:
     image: sgq-mock-gestao-normas
+    restart: unless-stopped
     environment:
+      - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
     depends_on:
       - service-discovery

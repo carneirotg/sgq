@@ -33,7 +33,22 @@ security:
 sgq:
   authorizationServer:
     credential:
-      username: sgq
+      username: ${PGS_USER:sgq}
       password: qgs
     username: ${AUTH_USER:interno}
     password: ${AUTH_PASS:i123}
+    
+---
+spring:
+  profiles:
+  - staging
+  datasource:
+    url: jdbc:postgresql://${PGS_HOST_PORT:postgres-sgq:5432/sgq-transparencia}
+    username: ${PGS_USER:sgq}
+    password: ${PGS_PWD:sgq_pgsql}
+  h2:
+    console:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: update
