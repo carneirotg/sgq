@@ -237,7 +237,7 @@ class ListaNC extends Component {
 
         if (resp.sucesso) {
             ToastManager.informativo(`Não conformidade movida para fase de ${nomeEstado}`);
-            this.setState({ ...this.state, ncs: this.state.ncs.filter(n => n.id != nc.id) });
+            this.setState({ ...this.state, ncs: this.state.ncs.filter(n => n.id !== nc.id) });
         }
 
         this._confirmaMudancaEstado(null);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
 import NavbarSGQ from '../../Componentes/Navbar';
