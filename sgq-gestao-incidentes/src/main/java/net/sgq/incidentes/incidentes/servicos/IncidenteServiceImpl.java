@@ -56,11 +56,11 @@ public class IncidenteServiceImpl implements IncidenteService {
 	@Override
 	public Page<Incidente> listaIncidentes(Pageable pageable) {
 		Page<Incidente> incidentes = this.repository.findAll(pageable);
-		
-		if(incidentes == null) {
+
+		if (incidentes == null) {
 			incidentes = new PageImpl<>(new ArrayList<>());
 		}
-		
+
 		return incidentes;
 	}
 
@@ -85,7 +85,7 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 		return incidentes;
 	}
-	
+
 	@Override
 	public List<Incidente> listaIncidentesPorPeriodo(Date inicio, Date fim) {
 		return this.repository.findByCriadoEmBetween(inicio, fim);
@@ -95,10 +95,15 @@ public class IncidenteServiceImpl implements IncidenteService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@CacheEvict(value = "incidente", key = "#id")
 	public Long salvarIncidente(Incidente incidente, Long id) {
-		Incidente ic = null;
+		final Incidente ic;
 
 		if (id == null || id == 0) {
 			ic = novoIncidente(incidente);
+			
+			if(ic.getNcEnvolvidas() != null && !ic.getNcEnvolvidas().isEmpty()) {
+				ic.getNcEnvolvidas().forEach(nc -> this.adicionaNaoConformidade(ic.getId(), nc.getId()));
+			}
+			
 		} else {
 			ic = atualizaIncidente(incidente, id);
 		}

@@ -56,7 +56,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 
 	@Override
 	public Page<NaoConformidade> listaNCs(String titulo, Pageable pageable) {
-		Page<NaoConformidade> ncs = this.repository.findByTituloContaining(titulo, pageable);
+		Page<NaoConformidade> ncs = this.repository.findByTituloContainingIgnoreCase(titulo, pageable);
 
 		if (ncs == null) {
 			ncs = new PageImpl<>(new ArrayList<>());

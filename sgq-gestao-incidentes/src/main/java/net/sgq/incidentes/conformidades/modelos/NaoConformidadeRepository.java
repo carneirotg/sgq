@@ -12,7 +12,7 @@ import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 @Repository
 public interface NaoConformidadeRepository extends JpaRepository<NaoConformidade, Long> {
 
-	Page<NaoConformidade> findByTituloContaining(String titulo, Pageable pageable);
+	Page<NaoConformidade> findByTituloContainingIgnoreCase(String titulo, Pageable pageable);
 
 	Page<NaoConformidade> findByEstado(Estado estado, Pageable pageable);
 
