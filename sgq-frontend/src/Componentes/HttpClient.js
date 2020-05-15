@@ -122,7 +122,7 @@ class HttpClient {
 
                 let erro = rJson.erro || rJson.error;
 
-                if (detalhe != null && detalhe.length <= 50) {
+                if (detalhe != null && detalhe.length <= 150) {
                     erro += ` - ${detalhe}`;
                 }
 

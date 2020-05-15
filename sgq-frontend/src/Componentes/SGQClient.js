@@ -51,8 +51,17 @@ const destinatarios = {
 }
 
 const incidentes = {
-    novo: (incidente) => {
+    salvar: (incidente) => {
+        const id = incidente.id;
+        let resp;
 
+        if (id === null || id === 0) {
+            resp = http.post(`incidentes`, incidente);
+        } else {
+            resp = http.put(`incidentes/${id}`, incidente);
+        }
+
+        return resp;
     }
 }
 
@@ -75,7 +84,13 @@ const naoConformidades = {
     consultaEstadoTitulo: async (estado, titulo) => {
         return http.get(`ncs/?estado=${estado}&titulo=${titulo}`);
     },
-    consultaId: async(id) => {
+    consultaConcluidaTitulo: async (titulo) => {
+        return http.get(`ncs/?estado=concluidas&titulo=${titulo}`);
+    },
+    consultaTitulo: async (titulo) => {
+        return http.get(`ncs/?titulo=${titulo}`);
+    },
+    consultaId: async (id) => {
         return http.get(`ncs/${id}`);
     },
     mudarEstado: async (id, estado) => {
@@ -106,6 +121,6 @@ const relatorios = {
 
 export function cliente() {
     return {
-        artefatos, normas, destinatarios, relatorios, naoConformidades
+        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes
     }
 }
