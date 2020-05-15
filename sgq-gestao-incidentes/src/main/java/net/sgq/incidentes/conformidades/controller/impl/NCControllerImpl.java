@@ -38,7 +38,7 @@ public class NCControllerImpl implements NCController {
 	private NaoConformidadeService service;
 
 	@Override
-	@GetMapping(params = { "!nome", "!estado" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(params = { "!titulo", "!estado" }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<NaoConformidade>> listaNCs(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
@@ -47,11 +47,11 @@ public class NCControllerImpl implements NCController {
 	}
 
 	@Override
-	@GetMapping(params = { "nome" }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<NaoConformidade>> consultaNC(@RequestParam String nome,
+	@GetMapping(params = { "titulo" }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<NaoConformidade>> consultaNC(@RequestParam String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		Page<NaoConformidade> nc = this.service.listaNCs(nome, PageRequest.of(pagina - 1, registros));
+		Page<NaoConformidade> nc = this.service.listaNCs(titulo, PageRequest.of(pagina - 1, registros));
 
 		if (nc.getContent().isEmpty()) {
 			return new ResponseEntity<>(NOT_FOUND);

@@ -52,7 +52,7 @@ public class NCNormasControllerTests {
 	public void associaNormaInexistente() throws Exception {
 		doThrow(EntityNotFoundException.class).when(service).associaNCANorma(anyLong(), anyLong(), any());
 
-		mock.perform(setJwt(patch("/ncs/1/norma/1"))).andExpect(status().isBadRequest());
+		mock.perform(setJwt(patch("/ncs/1/norma/1"))).andExpect(status().isNotFound());
 	}
 
 	@Test

@@ -58,13 +58,13 @@ public class NCControllerTests {
 	public void listaNCSNome() throws Exception {
 		preencheListaDeNCS();
 
-		mock.perform(setJwt(get("/ncs?nome=a"))).andExpect(status().isOk());
+		mock.perform(setJwt(get("/ncs?titulo=a"))).andExpect(status().isOk());
 	}
 
 	@Test
 	public void listaNCSNomeNaoEncontrado() throws Exception {
 		when(service.listaNCs(anyString(), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
-		mock.perform(setJwt(get("/ncs?nome=a"))).andExpect(status().isNotFound());
+		mock.perform(setJwt(get("/ncs?titulo=a"))).andExpect(status().isNotFound());
 	}
 
 	@Test

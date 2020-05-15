@@ -62,7 +62,7 @@ public class NCEstadoControllerTests {
 	@Test
 	public void mudaEstadoConcluidaInexistente() throws Exception {
 		ncInexistente();
-		mock.perform(setJwt(patch("/ncs/1/estado/concluida"))).andExpect(status().isBadRequest());
+		mock.perform(setJwt(patch("/ncs/1/estado/concluida"))).andExpect(status().isNotFound());
 	}
 	
 	private void doNothing() {

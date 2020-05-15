@@ -35,9 +35,14 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 		return new ResponseEntity<>(mensagemErro(ex, "Tipo de dados incorreto na requisição"), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler({ EntityNotFoundException.class, IllegalStateException.class })
-	protected ResponseEntity<Object> entidadeNaoEncontrada(HttpServletRequest reques, Exception ex) {
+	@ExceptionHandler({ IllegalStateException.class })
+	protected ResponseEntity<Object> requisicaoInvalida(HttpServletRequest reques, Exception ex) {
 		return new ResponseEntity<>(mensagemErro(ex, "Estado inválido"), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler({ EntityNotFoundException.class })
+	protected ResponseEntity<Object> entidadeNaoEncontrada(HttpServletRequest reques, Exception ex) {
+		return new ResponseEntity<>(mensagemErro(ex, "Não encontrado"), HttpStatus.NOT_FOUND);
 	}
 
 	@Override
