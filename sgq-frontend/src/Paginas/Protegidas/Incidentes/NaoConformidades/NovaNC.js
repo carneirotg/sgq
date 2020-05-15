@@ -37,7 +37,7 @@ class NovaNC extends Component {
 
     async _carregaNC() {
         if (this.props.match !== undefined && this.props.match.params['id'] !== undefined) {
-            
+
             const id = parseInt(this.props.match.params['id']);
             const ncCli = cliente().naoConformidades;
 
@@ -58,7 +58,11 @@ class NovaNC extends Component {
         const resp = await artefatosCli.listar({ habilitada: true, pagina: 0, registros: 100000 });
 
         if (resp.sucesso) {
-            const arts = resp.retorno;
+            let arts = resp.retorno;
+
+            if (arts !== null) {
+                arts.sort((a, b) => a.nome.localeCompare(b.nome));
+            }
 
             this.setState({ artefatos: arts.filter(a => !a.depreciado) });
         } else {
