@@ -37,7 +37,7 @@ sgq:
       password: qgs
     username: ${AUTH_USER:interno}
     password: ${AUTH_PASS:i123}
-    
+
 ---
 spring:
   profiles:

@@ -6,7 +6,7 @@
 	<persistence directory="/tmp/ehcache" />
 	<cache-template name="default">
 		<expiry>
-			<ttl unit="hours">6</ttl>
+			<ttl unit="hours">1</ttl>
 		</expiry>
 		<resources>
 			<heap>100</heap>
@@ -23,6 +23,6 @@
 	
 	<cache alias="nc" uses-template="default"/>
 	
-	<cache alias="incidente" uses-template="default"/>
+	<cache alias="incidente" uses-template="default"></cache>
 	
 </config>
