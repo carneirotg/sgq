@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -91,8 +93,16 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesAbertos(
 			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
-			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.ABERTA, titulo, null, PageRequest.of(pagina - 1, registros));
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+		
+		Sort sort = Sort.by(Direction.ASC, "id");
+		
+		if(descSort) {
+			sort = sort.descending();
+		}
+		
+		return listaPorEstado(Estado.ABERTA, titulo, null, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
@@ -100,8 +110,16 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesEmAnalise(
 			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
-			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.EM_ANALISE, titulo, null, PageRequest.of(pagina - 1, registros));
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+		
+		Sort sort = Sort.by(Direction.ASC, "id");
+		
+		if(descSort) {
+			sort = sort.descending();
+		}
+		
+		return listaPorEstado(Estado.EM_ANALISE, titulo, null, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
@@ -109,8 +127,16 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesConcluidos(
 			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
-			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.CONCLUIDA, titulo, null, PageRequest.of(pagina - 1, registros));
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+		
+		Sort sort = Sort.by(Direction.ASC, "id");
+		
+		if(descSort) {
+			sort = sort.descending();
+		}
+		
+		return listaPorEstado(Estado.CONCLUIDA, titulo, null, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
@@ -126,8 +152,16 @@ public class IncidenteControllerImpl implements IncidenteController {
 	@GetMapping(params = "estado=nao_concluidos")
 	public ResponseEntity<List<Incidente>> incidentesNaoConcluidos(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
-			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.NAO_CONCLUIDA, null, null, PageRequest.of(pagina - 1, registros));
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+		
+		Sort sort = Sort.by(Direction.ASC, "id");
+		
+		if(descSort) {
+			sort = sort.descending();
+		}
+		
+		return listaPorEstado(Estado.NAO_CONCLUIDA, null, null, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override

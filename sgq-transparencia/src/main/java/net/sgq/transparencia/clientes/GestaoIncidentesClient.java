@@ -16,7 +16,7 @@ public interface GestaoIncidentesClient {
 	@GetMapping(path = "/v1/incidentes/?estado=concluidos&janelaMinutos")
 	List<IncidenteTO> consultaIncidentesConcluidosJanela();
 
-	@GetMapping(path = "/v1/incidentes/?estado=concluidos")
+	@GetMapping(path = "/v1/incidentes/?estado=concluidos&descSort=true")
 	@Cacheable(value = "incidentes")
 	ResponseEntity<List<IncidenteTO>> consultaIncidentesConcluidos(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
