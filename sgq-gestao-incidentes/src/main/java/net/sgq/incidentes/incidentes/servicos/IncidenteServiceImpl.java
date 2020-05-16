@@ -70,14 +70,22 @@ public class IncidenteServiceImpl implements IncidenteService {
 	}
 
 	@Override
-	public Page<Incidente> listaIncidentes(Estado estado, Integer janelaMinutos, Pageable pageable) {
+	public Page<Incidente> listaIncidentes(Estado estado, String termo, Integer janelaMinutos, Pageable pageable) {
 		Page<Incidente> incidentes;
 
 		if (janelaMinutos == null) {
 			if (estado == Estado.NAO_CONCLUIDA) {
-				incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA, pageable);
+				if(termo == null) {
+					incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA, pageable);
+				} else {
+					incidentes = this.repository.findBySituacaoNotAndTermo(Estado.CONCLUIDA, termo, pageable);
+				}
 			} else {
-				incidentes = this.repository.findBySituacao(estado, pageable);
+				if(termo == null) {
+					incidentes = this.repository.findBySituacao(estado, pageable);
+				} else {
+					incidentes = this.repository.findBySituacaoAndTermo(estado, termo, pageable);
+				}
 			}
 		} else {
 			incidentes = this.repository.findBySituacaoAndConcluidoEmAfter(estado, trataData(janelaMinutos), pageable);

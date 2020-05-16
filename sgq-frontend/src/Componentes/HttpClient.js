@@ -169,6 +169,10 @@ class HttpClient {
 
         operationResponse['status'] = response.status;
 
+        if (response.body === null) {
+            return;
+        }
+
         try {
             const rJson = await response.json();
 

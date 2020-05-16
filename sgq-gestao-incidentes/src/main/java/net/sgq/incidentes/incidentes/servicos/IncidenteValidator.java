@@ -15,7 +15,7 @@ public class IncidenteValidator {
 
 	public void validaNC(NaoConformidade nc, Long ncId) {
 		if (nc == null) {
-			throw new EntityNotFoundException(String.format("Entidade do tipo 'Incidente' não encontrada para Id %d", ncId));
+			throw new EntityNotFoundException(String.format("Entidade do tipo 'Não Conformidade' não encontrada para Id %d", ncId));
 		}
 
 		if (nc.getEstado() != Estado.CONCLUIDA) {

@@ -1,6 +1,7 @@
 package net.sgq.incidentes.incidentes.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
@@ -65,9 +66,9 @@ public class IncidenteControllerTests {
 
 		when(service.listaIncidentes(eq("Incidente 123"), any())).thenReturn(pageIC);
 		when(service.listaIncidentes(eq("Incidente 456"), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
-		when(service.listaIncidentes(any(Estado.class), isNull(), any())).thenReturn(pageIC);
-		when(service.listaIncidentes(any(Estado.class), eq(100), any())).thenReturn(pageIC);
-		when(service.listaIncidentes(any(Estado.class), eq(1000), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
+		when(service.listaIncidentes(any(Estado.class), any(), isNull(), any())).thenReturn(pageIC);
+		when(service.listaIncidentes(any(Estado.class), any(), eq(100), any())).thenReturn(pageIC);
+		when(service.listaIncidentes(any(Estado.class), any(), eq(1000), any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 		when(service.consultaIncidente(eq(1L))).thenReturn(ic);
 		when(service.consultaIncidente(eq(2L))).thenReturn(null);
 		when(service.salvarIncidente(any(), any())).thenReturn(1L);

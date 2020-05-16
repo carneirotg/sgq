@@ -36,17 +36,17 @@ public interface IncidenteController {
 	@ApiOperation(value = "Consulta incidentes com estado 'Aberto'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<Incidente>> incidentesAbertos(Integer pagina, Integer registros);
+	ResponseEntity<List<Incidente>> incidentesAbertos(String titulo, Integer pagina, Integer registros);
 
 	@ApiOperation(value = "Consulta incidentes com estado 'Em Análise'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<Incidente>> incidentesEmAnalise(Integer pagina, Integer registros);
+	ResponseEntity<List<Incidente>> incidentesEmAnalise(String titulo, Integer pagina, Integer registros);
 
 	@ApiOperation(value = "Consulta incidentes com estado 'Concluído'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),
 			@ApiResponse(code = 404, message = "Nenhum incidente encontrado") })
-	ResponseEntity<List<Incidente>> incidentesConcluidos(Integer pagina, Integer registros);
+	ResponseEntity<List<Incidente>> incidentesConcluidos(String titulo, Integer pagina, Integer registros);
 
 	@ApiOperation(value = "Consulta incidentes com estado 'Concluído'", response = Incidente.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Incidentes retornados com sucesso"),

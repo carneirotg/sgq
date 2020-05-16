@@ -67,19 +67,19 @@ public class IncidenteServiceTests {
 	@Test
 	public void listaIncidentesEstadoJanela() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes(Estado.ABERTA, 1, Pageable.unpaged())).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Estado.ABERTA, null, 1, Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test
 	public void listaIncidentesEstado() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes(Estado.ABERTA, null, Pageable.unpaged())).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Estado.ABERTA, null, null, Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test
 	public void listaIncidentesEstadoNaoConcluido() {
 		preencheRepositorio();
-		assertThat(service.listaIncidentes(Estado.NAO_CONCLUIDA, null, Pageable.unpaged())).isNotNull().isNotEmpty();
+		assertThat(service.listaIncidentes(Estado.NAO_CONCLUIDA, null, null, Pageable.unpaged())).isNotNull().isNotEmpty();
 	}
 	
 	@Test

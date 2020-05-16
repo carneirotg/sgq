@@ -117,31 +117,47 @@ class NovaNC extends Component {
     }
 
     _reset() {
-        this.setState({
-            ...this.state,
-            normaBusca: '',
-            nc: {
-                id: null,
-                titulo: '',
-                setor: '',
-                resumo: '',
-                tipoNaoConformidade: '',
-                detalhamentoNaoConformidade: '',
-                artefato: { id: '' },
-                detalhamentoArtefato: '',
-                prejuizoApurado: false
-            }
-        })
+
+        if (this.state.update) {
+            this.props.history.push('/dashboard/ncs')
+        } else {
+            this.setState({
+                ...this.state,
+                normaBusca: '',
+                nc: {
+                    id: null,
+                    titulo: '',
+                    setor: '',
+                    resumo: '',
+                    tipoNaoConformidade: '',
+                    detalhamentoNaoConformidade: '',
+                    artefato: { id: '' },
+                    detalhamentoArtefato: '',
+                    prejuizoApurado: false
+                }
+            })
+        }
     }
 
     render() {
+
+        const tipo = this.state.update ? 'Atualização de' : 'Nova';
+
+        let btAcao = "Cadastrar";
+        let btCancela = "Limpar";
+
+        if (this.state.update) {
+            btAcao = "Atualizar";
+            btCancela = "Retornar";
+        }
+
         return (
 
             <div className="App">
                 <Container>
                     <div className="App-jumbo">
                         <Row>
-                            <Col md><h1>Nova Não Conformidade</h1></Col>
+                            <Col md><h1>{tipo} Conformidade</h1></Col>
                         </Row>
                         <Form onSubmit={this._cadastrarNC.bind(this)}>
                             <Row>
@@ -256,8 +272,8 @@ class NovaNC extends Component {
                             </Row>
                             <Row className="Btns">
                                 <Col md></Col>
-                                <Col md><Button className="Btn" type="submit">Cadastrar</Button></Col>
-                                <Col md><Button className="Btn" variant="warning" onClick={this._reset.bind(this)}>Limpar</Button></Col>
+                                <Col md><Button className="Btn" type="submit">{btAcao}</Button></Col>
+                                <Col md><Button className="Btn" variant="warning" onClick={this._reset.bind(this)}>{btCancela}</Button></Col>
                                 <Col md></Col>
                             </Row>
                         </Form>

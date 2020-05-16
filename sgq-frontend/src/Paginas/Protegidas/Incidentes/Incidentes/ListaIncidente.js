@@ -94,7 +94,7 @@ class ListaIncidente extends Component {
         } else {
             if (resp.status === 404) {
                 ToastManager.atencao("Não existem não incidentes no estado desejado");
-                this.setState({ ...this.state, ncs: [] });
+                this.setState({ ...this.state, incidentes: [] });
             }
         }
     }
@@ -152,9 +152,9 @@ class ListaIncidente extends Component {
 
         clearTimeout(this.timer);
         if (value.length >= 3) {
-            this.timer = setTimeout(() => this._carregaNCEscopo(this.state.tipo, null), 300);
+            this.timer = setTimeout(() => this._carregaIncidenteEscopo(this.state.tipo, null), 300);
         } else if (value === '' || value.length === 0) {
-            this.timer = setTimeout(() => this._carregaNCEscopo(this.state.tipo, this.PAGINA_INICIAL), 300);
+            this.timer = setTimeout(() => this._carregaIncidenteEscopo(this.state.tipo, this.PAGINA_INICIAL), 300);
         }
     }
 
@@ -340,7 +340,7 @@ class ListaIncidente extends Component {
                 {
                     incidente ?
                         (
-                            <Modal show={visivel} onHide={this._confirmaMudancaEstado.bind(this, null)} animation={false}>
+                            <Modal show={visivel} onHide={this._confirmaMudancaEstado.bind(this, null)} animation={false} size="lg">
                                 <Modal.Header closeButton>
                                     <Modal.Title>Mudar Estado de Incidente?</Modal.Title>
                                 </Modal.Header>
@@ -381,7 +381,7 @@ class ListaIncidente extends Component {
                 {
                     incidente ?
                         (
-                            <Modal show={visivel} onHide={this._visualizaIncidente.bind(this, null)} animation={false}>
+                            <Modal show={visivel} onHide={this._visualizaIncidente.bind(this, null)} animation={false} size="lg">
                                 <Modal.Header closeButton>
                                     <Modal.Title>{incidente.titulo}</Modal.Title>
                                 </Modal.Header>

@@ -89,25 +89,28 @@ public class IncidenteControllerImpl implements IncidenteController {
 	@Override
 	@GetMapping(params = "estado=abertos")
 	public ResponseEntity<List<Incidente>> incidentesAbertos(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.ABERTA, null, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.ABERTA, titulo, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
 	@GetMapping(params = "estado=em_analise")
 	public ResponseEntity<List<Incidente>> incidentesEmAnalise(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.EM_ANALISE, null, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.EM_ANALISE, titulo, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
 	@GetMapping(params = "estado=concluidos")
 	public ResponseEntity<List<Incidente>> incidentesConcluidos(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.CONCLUIDA, null, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.CONCLUIDA, titulo, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -116,7 +119,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 			@RequestParam(defaultValue = "30") Integer janelaMinutos,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.CONCLUIDA, janelaMinutos, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.CONCLUIDA, null, janelaMinutos, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -124,7 +127,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	public ResponseEntity<List<Incidente>> incidentesNaoConcluidos(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros) {
-		return listaPorEstado(Estado.NAO_CONCLUIDA, null, PageRequest.of(pagina - 1, registros));
+		return listaPorEstado(Estado.NAO_CONCLUIDA, null, null, PageRequest.of(pagina - 1, registros));
 	}
 
 	@Override
@@ -141,8 +144,8 @@ public class IncidenteControllerImpl implements IncidenteController {
 		this.service.salvarIncidente(incidente, id);
 	}
 
-	private ResponseEntity<List<Incidente>> listaPorEstado(Estado estado, Integer janelaMinutos, Pageable pageable) {
-		Page<Incidente> incidentes = this.service.listaIncidentes(estado, janelaMinutos, pageable);
+	private ResponseEntity<List<Incidente>> listaPorEstado(Estado estado, String titulo, Integer janelaMinutos, Pageable pageable) {
+		Page<Incidente> incidentes = this.service.listaIncidentes(estado, titulo, janelaMinutos, pageable);
 
 		if (incidentes.getContent().isEmpty()) {
 			return new ResponseEntity<>(NOT_FOUND);

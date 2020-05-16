@@ -70,6 +70,8 @@ function RotasProtegidas(props) {
                 <RotaProtegida exact path={`${path}/ncs`} component={ListaNC} />
 
                 <RotaProtegida exact path={`${path}/incidente`} component={NovoIncidente} />
+                
+                <RotaProtegida exact path={`${path}/incidente/:id`} component={NovoIncidente} />
 
                 <RotaProtegida exact path={`${path}/incidentes`} component={ListaIncidente} />
 

@@ -63,6 +63,9 @@ const incidentes = {
 
         return resp;
     },
+    consultaId: async (id) => {
+        return http.get(`incidentes/${id}`);
+    },
     consultaEstado: async (estado, pagina) => {
         return http.get(`incidentes/?estado=${estado}`, pagina);
     },

@@ -31,7 +31,24 @@ class NovoIncidente extends Component {
     _timerTermosNC = null;
 
     async componentDidMount() {
+        this._carregaIncidentes();
+    }
 
+    async _carregaIncidentes() {
+        if (this.props.match !== undefined && this.props.match.params['id'] !== undefined) {
+
+            const id = parseInt(this.props.match.params['id']);
+            const incCli = cliente().incidentes;
+
+            const resp = await incCli.consultaId(id);
+
+            if (resp.sucesso) {
+                const incidente = resp.retorno;
+                this.setState({ ...this.state, incidente, update: true });
+            } else {
+                ToastManager.erro("Erro ao carregar incidente. Tente mais tarde.");
+            }
+        }
     }
 
     async _cadastrarIncidente(event) {
@@ -41,7 +58,9 @@ class NovoIncidente extends Component {
         const resp = await incCli.salvar(this.state.incidente);
 
         if (resp.sucesso) {
-            ToastManager.sucesso("Incidente registrado com sucesso.")
+            const estado = this.state.update ? 'atualizado' : 'registrado';
+            ToastManager.sucesso(`Incidente ${estado} com sucesso.`)
+            this._reset();
         } else {
             ToastManager.erro(`Erro: ${resp.erro}`);
         }
@@ -111,25 +130,25 @@ class NovoIncidente extends Component {
         this.setState({ incidente: { ...incidente, ncEnvolvidas } })
     }
 
-    _resetFormNovo() {
+    _reset() {
 
-        if (this.state.incidente.id !== null) {
-            return;
+        if (this.state.update) {
+            this.props.history.push('/dashboard/ncs')
+        } else {
+            this.setState({
+                incidente: {
+                    id: null,
+                    titulo: '',
+                    descricao: '',
+                    conclusao: '',
+                    classificacao: '',
+                    tipoIncidente: '',
+                    situacao: '',
+                    setor: '',
+                    ncEnvolvidas: []
+                }
+            });
         }
-
-        this.setState({
-            incidente: {
-                id: null,
-                titulo: '',
-                descricao: '',
-                conclusao: '',
-                classificacao: '',
-                tipoIncidente: '',
-                situacao: '',
-                setor: '',
-                ncEnvolvidas: []
-            }
-        })
     }
 
     _toggleModalNCS() {
@@ -137,12 +156,23 @@ class NovoIncidente extends Component {
     }
 
     render() {
+
+        const tipo = this.state.update ? 'Atualização de' : 'Novo';
+
+        let btAcao = "Cadastrar";
+        let btCancela = "Limpar";
+
+        if (this.state.update) {
+            btAcao = "Atualizar";
+            btCancela = "Retornar";
+        }
+
         return (
             <div className="App">
                 <Container>
                     <div className="App-jumbo">
                         <Row>
-                            <Col md><h1>Novo Incidente</h1></Col>
+                            <Col md><h1>{tipo} Incidente</h1></Col>
                         </Row>
                         <Form onSubmit={this._cadastrarIncidente.bind(this)}>
                             <Row>
@@ -210,7 +240,7 @@ class NovoIncidente extends Component {
                                         <Col md="10">
                                             <Form.Group controlId="gConclusao">
                                                 <Form.Label>Conclusão do Incidente</Form.Label>
-                                                <Form.Control as="textarea" name="conclusao" value={this.state.incidente.conclusao} onChange={this._valorIncidente.bind(this)} size="5000" minLength="10" required />
+                                                <Form.Control as="textarea" name="conclusao" value={this.state.incidente.conclusao} onChange={this._valorIncidente.bind(this)} size="5000" minLength="10" />
                                             </Form.Group>
                                         </Col>
                                         <Col md></Col>
@@ -244,8 +274,8 @@ class NovoIncidente extends Component {
                             </Row>
                             <Row className="Btns">
                                 <Col md></Col>
-                                <Col md><Button className="Btn" type="submit">Cadastrar</Button></Col>
-                                <Col md><Button className="Btn" variant="warning" onClick={this._resetFormNovo.bind(this)}>Limpar</Button></Col>
+                                <Col md><Button className="Btn" type="submit">{btAcao}</Button></Col>
+                                <Col md><Button className="Btn" variant="warning" onClick={this._reset.bind(this)}>{btCancela}</Button></Col>
                                 <Col md></Col>
                             </Row>
                         </Form>
@@ -303,7 +333,7 @@ class NovoIncidente extends Component {
                             Fechar
                         </Button>
                     </Modal.Footer>
-                </Modal >
+                </Modal>
             )
         );
     }

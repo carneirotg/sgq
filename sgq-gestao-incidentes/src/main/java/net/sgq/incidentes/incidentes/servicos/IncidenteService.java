@@ -17,7 +17,7 @@ public interface IncidenteService {
 
 	Page<Incidente> listaIncidentes(String nome, Pageable pageable);
 
-	Page<Incidente> listaIncidentes(Estado estado, Integer janelaMinutos, Pageable pageable);
+	Page<Incidente> listaIncidentes(Estado estado, String title, Integer janelaMinutos, Pageable pageable);
 
 	List<Incidente> listaIncidentesPorPeriodo(Date inicio, Date fim);
 
