@@ -228,7 +228,7 @@ class NovoIncidente extends Component {
                                         <br />
                                         <Row>
                                             {this.state.incidente.ncEnvolvidas.map(nc => (
-                                                <Col md="3" sm="2">
+                                                <Col md="4" sm="6">
                                                     <Card >
                                                         <Card.Body onClick={this._removeNC.bind(this, nc)}>
                                                             <Card.Title>{nc.titulo} <sup style={{ color: 'red' }}><FaTrash /></sup></Card.Title>

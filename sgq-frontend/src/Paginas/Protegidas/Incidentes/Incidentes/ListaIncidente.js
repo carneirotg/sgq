@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FaEdit, FaAngleRight, FaAngleLeft, FaAngleDoubleRight, FaEye, FaTasks } from 'react-icons/fa';
-import { Row, Col, Container, Form, Button, Tabs, Tab, Table, Alert, Modal, Pagination } from 'react-bootstrap';
+import { Row, Col, Container, Form, Button, Tabs, Tab, Table, Alert, Modal, Pagination, Card } from 'react-bootstrap';
 
 import ToastManager from '../../../../Componentes/ToastManager';
 
@@ -187,6 +187,8 @@ class ListaIncidente extends Component {
             this.setState({ ...this.state, incidentes: this.state.incidentes.filter(i => i.id !== incidente.id) });
         } else if (resp.status === 403) {
             ToastManager.atencao("Seu perfil não possui autorização para esta operação");
+        } else {
+            ToastManager.erro(resp.erroDetalhado);
         }
 
         this._confirmaMudancaEstado(null);
@@ -264,7 +266,7 @@ class ListaIncidente extends Component {
                         <th>Título</th>
                         <th>Setor Afetado</th>
                         <th>Tipo</th>
-                        <th>Tipo</th>
+                        <th>Classificação</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
@@ -278,6 +280,7 @@ class ListaIncidente extends Component {
                                     <td>{i.titulo}</td>
                                     <td>{NOMES[i.setor]}</td>
                                     <td>{NOMES[i.tipoIncidente]}</td>
+                                    <td>{NOMES[i.classificacao]}</td>
                                     <td>
                                         <Button variant="success" onClick={this._visualizaIncidente.bind(this, i)}><FaEye /></Button>{' '}
                                         {
@@ -321,7 +324,7 @@ class ListaIncidente extends Component {
         let novoEstado = null;
         let nomeEstado = '';
 
-        if (estado === 'abertas') {
+        if (estado === 'abertos') {
             novoEstado = 'aberto';
             nomeEstado = 'Aberto';
         } else if (estado === 'em_analise') {
@@ -378,7 +381,7 @@ class ListaIncidente extends Component {
                 {
                     incidente ?
                         (
-                            <Modal show={visivel} onHide={this._visualizaIncidente.bind(this, null)} animation={false} size="lg" >
+                            <Modal show={visivel} onHide={this._visualizaIncidente.bind(this, null)} animation={false}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>{incidente.titulo}</Modal.Title>
                                 </Modal.Header>
@@ -417,13 +420,18 @@ class ListaIncidente extends Component {
                                         <Row>
                                             <Col md></Col>
                                             <Col md="10">
+                                                <Row>
+                                                    <Col style={{ textAlign: 'center' }}>
+                                                        <b>Não Conformidade Envolvidas</b>
+                                                    </Col>
+                                                </Row>
                                                 <br />
                                                 <Row>
                                                     {incidente.ncEnvolvidas.map(nc => (
-                                                        <Col md="3" sm="2">
-                                                            <Card >
+                                                        <Col md="4" sm="6">
+                                                            <Card>
                                                                 <Card.Body>
-                                                                    <Card.Title>{nc.titulo} <sup style={{ color: 'red' }}><FaTrash /></sup></Card.Title>
+                                                                    <Card.Title>{nc.titulo} <sup style={{ color: 'red' }}></sup></Card.Title>
                                                                     <Card.Subtitle className="mb-2 text-muted">[{nc.id}] {nc.resumo}</Card.Subtitle>
                                                                 </Card.Body>
                                                             </Card>
