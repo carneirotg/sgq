@@ -62,6 +62,15 @@ const incidentes = {
         }
 
         return resp;
+    },
+    consultaEstado: async (estado, pagina) => {
+        return http.get(`incidentes/?estado=${estado}`, pagina);
+    },
+    consultaEstadoTitulo: async (estado, titulo) => {
+        return http.get(`incidentes/?estado=${estado}&titulo=${titulo}`);
+    },
+    mudarEstado: async (id, estado) => {
+        return http.patch(`incidentes/${id}/estado/${estado}`);
     }
 }
 

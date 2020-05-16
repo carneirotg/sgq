@@ -1,0 +1,19 @@
+{
+    "ALTO": "Alto",
+    "ANOMALIA": "Anomalia Diversa",
+    "AUSENCIA_MEDIDA": "Ausência de Medida",
+    "BAIXO": "Baixo",
+    "COMPRAS": "Compras",
+    "CRITICO": "Crítico",
+    "DANO_FINANCEIRO": "Dano Financeiro",
+    "DANO_PESSOA": "Dano a Pessoa Física",
+    "ESPECIFICACAO_DIVERGENTE": "Especificação Divergente",
+    "INSPECAO": "Inspeção de Produção",    
+    "INSTRUCAO_DIVERGENTE": "Instrução Divergente",
+    "LINHA": "Linha de Montagem",
+    "LOGISTICA": "Logística",
+    "MEDIO": "Médio",
+    "PARADA": "Parada de Produção",
+    "QUANTIDADE_DIVERGENTE": "Quantidade Divergente",
+    "SEM_DANO": "Sem Dano Aparente"
+}

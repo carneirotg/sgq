@@ -47,12 +47,7 @@ class HttpClient {
             operationResponse = { sucesso: true, retorno, headers };
         } else {
             operationResponse = { sucesso: false };
-
-            if (response.status === 404) {
-                operationResponse['status'] = 404;
-            } else {
-                await this._trataErroPadrao(response, operationResponse);
-            }
+            await this._trataErroPadrao(response, operationResponse);
         }
 
         return operationResponse;
@@ -74,10 +69,6 @@ class HttpClient {
             operationResponse = { sucesso: true };
         } else {
             operationResponse = { sucesso: false };
-
-            if (response.status === 404) {
-                operationResponse['status'] = 404;
-            }
 
             await this._trataErroPadrao(response, operationResponse);
 
@@ -175,6 +166,8 @@ class HttpClient {
 
     async _trataErroPadrao(response, operationResponse = {}) {
         let erro = `Erro no servidor: ${response.status}`;
+
+        operationResponse['status'] = response.status;
 
         try {
             const rJson = await response.json();

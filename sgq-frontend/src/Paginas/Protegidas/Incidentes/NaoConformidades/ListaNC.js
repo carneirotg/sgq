@@ -6,7 +6,7 @@ import ToastManager from '../../../../Componentes/ToastManager';
 
 import { cliente } from '../../../../Componentes/SGQClient';
 
-import NOMES from './nomes.json';
+import NOMES from '../../../../Componentes/nomes.json';
 import { Link } from 'react-router-dom';
 
 
