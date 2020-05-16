@@ -5,6 +5,7 @@ import { Row, Col, Container, Form, Button, Tabs, Tab, Table, Alert, Modal, Pagi
 import ToastManager from '../../../../Componentes/ToastManager';
 
 import { cliente } from '../../../../Componentes/SGQClient';
+import { parseDate } from '../../../../Componentes/ParseDate';
 
 import NOMES from '../../../../Componentes/nomes.json';
 import { Link } from 'react-router-dom';
@@ -408,6 +409,15 @@ class ListaIncidente extends Component {
                                             </Col>
                                             <Col md="3">
                                                 <p><b>Setor: </b><br />{NOMES[incidente.setor]}</p>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md="8">
+                                                <p><b>Criado em: </b><br />{parseDate(incidente.criadoEm)}</p>
+                                            </Col>
+                                            <Col md="3">
+                                                <p><b>Concluído em: </b><br />{parseDate(incidente.concluidoEm)}</p>
                                             </Col>
                                         </Row>
                                         <Row>

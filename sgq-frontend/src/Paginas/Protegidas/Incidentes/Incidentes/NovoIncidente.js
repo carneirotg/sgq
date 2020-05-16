@@ -133,7 +133,7 @@ class NovoIncidente extends Component {
     _reset() {
 
         if (this.state.update) {
-            this.props.history.push('/dashboard/ncs')
+            this.props.history.push('/dashboard/incidentes')
         } else {
             this.setState({
                 incidente: {
