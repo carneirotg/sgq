@@ -131,8 +131,14 @@ const relatorios = {
     }
 }
 
+const eventos = {
+    consultaUltimosIncidentes: async() => {
+        return http.get('/eventos')
+    }
+}
+
 export function cliente() {
     return {
-        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes
+        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes, eventos
     }
 }
