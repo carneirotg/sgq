@@ -6,6 +6,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,37 +22,72 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.sgq.transparencia.recall.modelos.enums.Estado;
 import net.sgq.transparencia.recall.modelos.to.CampanhaRecallTO;
 import net.sgq.transparencia.recall.servicos.CampanhaService;
+import net.sgq.transparencia.utils.handler.PageHeaders;
 
 @RestController
 @RequestMapping("/campanhas")
 public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 
 	private static final String ROLE_GESTOR = "ROLE_GESTOR";
+
 	@Autowired
 	private CampanhaService service;
 
 	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<CampanhaRecallTO>> todas() {
-		return new ResponseEntity<>(service.buscar(null), HttpStatus.OK);
+	public ResponseEntity<List<CampanhaRecallTO>> todas(
+			@RequestParam(defaultValue = "1", required = false) Integer pagina,
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+
+		Sort sort = Sort.by(Direction.ASC, "id");
+
+		if (descSort) {
+			sort = sort.descending();
+		}
+
+		Page<CampanhaRecallTO> campanhas = service.buscar(null, PageRequest.of(pagina - 1, registros, sort));
+		
+		return new ResponseEntity<>(campanhas.getContent(), PageHeaders.headers(campanhas), HttpStatus.OK);
 	}
 
 	@Override
 	@GetMapping(params = "estado=ativas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<CampanhaRecallTO>> todasEmAndamento() {
-		return trataRespostasBusca(Estado.ATIVA);
+	public ResponseEntity<List<CampanhaRecallTO>> todasEmAndamento(
+			@RequestParam(defaultValue = "1", required = false) Integer pagina,
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+
+		Sort sort = Sort.by(Direction.ASC, "id");
+
+		if (descSort) {
+			sort = sort.descending();
+		}
+
+		return trataRespostasBusca(Estado.ATIVA, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
 	@GetMapping(params = "estado=concluidas", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<CampanhaRecallTO>> todasConcluidas() {
-		return trataRespostasBusca(Estado.CONCLUIDA);
+	public ResponseEntity<List<CampanhaRecallTO>> todasConcluidas(
+			@RequestParam(defaultValue = "1", required = false) Integer pagina,
+			@RequestParam(defaultValue = "10", required = false) Integer registros,
+			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
+
+		Sort sort = Sort.by(Direction.ASC, "id");
+
+		if (descSort) {
+			sort = sort.descending();
+		}
+
+		return trataRespostasBusca(Estado.CONCLUIDA, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
@@ -82,14 +122,14 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 		this.service.concluiCampanha(id);
 	}
 
-	private ResponseEntity<List<CampanhaRecallTO>> trataRespostasBusca(Estado estado) {
-		List<CampanhaRecallTO> campanhasEstado = this.service.buscar(estado);
+	private ResponseEntity<List<CampanhaRecallTO>> trataRespostasBusca(Estado estado, Pageable page) {
+		Page<CampanhaRecallTO> campanhasEstado = this.service.buscar(estado, page);
 
-		if (campanhasEstado.isEmpty()) {
+		if (campanhasEstado.getContent().isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return new ResponseEntity<>(campanhasEstado, HttpStatus.OK);
+		return new ResponseEntity<>(campanhasEstado.getContent(), PageHeaders.headers(campanhasEstado), HttpStatus.OK);
 
 	}
 

@@ -13,6 +13,9 @@ import javax.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,17 +49,19 @@ public class CampanhaServiceImpl implements CampanhaService {
 	}
 
 	@Override
-	public List<CampanhaRecallTO> buscar(Estado estado) {
+	public Page<CampanhaRecallTO> buscar(Estado estado, Pageable page) {
 
-		List<CampanhaRecall> campanhas;
+		Page<CampanhaRecall> campanhas;
 
 		if (estado == null) {
-			campanhas = this.repository.findAll();
+			campanhas = this.repository.findAll(page);
 		} else {
-			campanhas = this.repository.findByEstadoCampanha(estado);
+			campanhas = this.repository.findByEstadoCampanha(estado, page);
 		}
 
-		return campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());
+		List<CampanhaRecallTO> pagina = campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());
+
+		return new PageImpl<CampanhaRecallTO>(pagina, page, campanhas.getTotalElements());
 	}
 	
 	@Override

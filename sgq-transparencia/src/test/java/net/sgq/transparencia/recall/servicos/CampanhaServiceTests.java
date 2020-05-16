@@ -17,6 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import net.sgq.transparencia.recall.modelos.CampanhaRecall;
 import net.sgq.transparencia.recall.modelos.CampanhaRecallRepository;
@@ -79,26 +82,30 @@ public class CampanhaServiceTests {
 		ativasJanela.add(e);
 		concluidasJanela.add(f);
 
+		Page<CampanhaRecall> pTodas = new PageImpl<>(todas);
+		Page<CampanhaRecall> pAtivas = new PageImpl<>(ativas);
+		Page<CampanhaRecall> pConcluidas = new PageImpl<>(concluidas);
+		
 		when(repository.findAll()).thenReturn(todas);
 		when(repository.findByEstadoCampanha(eq(Estado.ATIVA))).thenReturn(ativas);
 		when(repository.findByEstadoCampanha(eq(Estado.CONCLUIDA))).thenReturn(concluidas);
+		when(repository.findAll(any(Pageable.class))).thenReturn(pTodas);
+		when(repository.findByEstadoCampanha(eq(Estado.ATIVA), any(Pageable.class))).thenReturn(pAtivas);
+		when(repository.findByEstadoCampanha(eq(Estado.CONCLUIDA), any(Pageable.class))).thenReturn(pConcluidas);
 		when(repository.findByEstadoCampanhaAndInicioAfter(eq(Estado.ATIVA), any())).thenReturn(ativasJanela);
-		when(repository.findByEstadoCampanhaAndInicioAfter(eq(Estado.CONCLUIDA), any()))
-				.thenReturn(concluidasJanela);
+		when(repository.findByEstadoCampanhaAndInicioAfter(eq(Estado.CONCLUIDA), any())).thenReturn(concluidasJanela);
 	}
-
-	
 
 	@Test
 	public void buscarTodasCampanhas() {
-		List<CampanhaRecallTO> campanhas = service.buscar(null);
+		List<CampanhaRecallTO> campanhas = service.buscar(null, Pageable.unpaged()).getContent();
 
 		assertThat(campanhas.size()).isEqualTo(2);
 	}
 
 	@Test
 	public void buscarTodasCampanhasAtivas() {
-		List<CampanhaRecallTO> campanhas = service.buscar(Estado.ATIVA);
+		List<CampanhaRecallTO> campanhas = service.buscar(Estado.ATIVA, Pageable.unpaged()).getContent();
 
 		assertThat(campanhas.size()).isEqualTo(1);
 		assertThat(campanhas.get(0).getEstadoCampanha()).isEqualTo(Estado.ATIVA);
@@ -106,7 +113,7 @@ public class CampanhaServiceTests {
 
 	@Test
 	public void buscarTodasCampanhasConcluidas() {
-		List<CampanhaRecallTO> campanhas = service.buscar(Estado.CONCLUIDA);
+		List<CampanhaRecallTO> campanhas = service.buscar(Estado.CONCLUIDA, Pageable.unpaged()).getContent();
 
 		assertThat(campanhas.size()).isEqualTo(1);
 		assertThat(campanhas.get(0).getEstadoCampanha()).isEqualTo(Estado.CONCLUIDA);
@@ -134,13 +141,13 @@ public class CampanhaServiceTests {
 		assertThat(campanhas.size()).isEqualTo(1);
 		assertThat(campanhas.get(0).getEstadoCampanha()).isEqualTo(Estado.CONCLUIDA);
 	}
-	
+
 	private CampanhaRecall newCampanhaRecall() {
-		
+
 		CampanhaRecall c = new CampanhaRecall();
 		c.setInformacaoTecnica(new InformacaoTecnica());
 		c.setNcsEnvolvidas(new ArrayList<>());
-		
+
 		return c;
 	}
 
