@@ -34,6 +34,8 @@ sgq:
         v1: /v1/campanhas
       destinatarios:
         v1: /v1/destinatarios
+      eventos:
+        v1: /v1/eventos
 
 ribbon:
   ReadTimeout: ${ZUUL_SOCKET_TO:30000}
@@ -64,5 +66,8 @@ zuul:
       service-id: transparencia
     destinatarios-v1:
       path: /destinatarios/**
+      service-id: transparencia
+    eventos-v1:
+      path: /eventos/**
       service-id: transparencia
       

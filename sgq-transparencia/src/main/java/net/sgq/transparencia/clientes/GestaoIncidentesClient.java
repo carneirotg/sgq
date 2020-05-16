@@ -4,10 +4,9 @@ import java.util.List;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import net.sgq.transparencia.clientes.to.IncidenteTO;
 
@@ -15,9 +14,11 @@ import net.sgq.transparencia.clientes.to.IncidenteTO;
 public interface GestaoIncidentesClient {
 
 	@GetMapping(path = "/v1/incidentes/?estado=concluidos&janelaMinutos")
-	@JacksonXmlElementWrapper(useWrapping = true)
-	@JacksonXmlProperty(localName = "Incidente")
-	@Cacheable(value = "incidentes")
-	List<IncidenteTO> consultaIncidentesConcluidos();
+	List<IncidenteTO> consultaIncidentesConcluidosJanela();
 
+	@GetMapping(path = "/v1/incidentes/?estado=concluidos")
+	@Cacheable(value = "incidentes")
+	ResponseEntity<List<IncidenteTO>> consultaIncidentesConcluidos(
+			@RequestParam(defaultValue = "1", required = false) Integer pagina,
+			@RequestParam(defaultValue = "10", required = false) Integer registros);
 }

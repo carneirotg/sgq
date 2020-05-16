@@ -42,7 +42,7 @@ public class ComunicacaoScheduler {
 		List<IncidenteTO> incidentes = new ArrayList<>();
 
 		try {
-			incidentes = incidentesClient.consultaIncidentesConcluidos();
+			incidentes = incidentesClient.consultaIncidentesConcluidosJanela();
 		} catch (EntityNotFoundException e) {
 			logger.info("Sem informações de incidentes disponíveis");
 		}
