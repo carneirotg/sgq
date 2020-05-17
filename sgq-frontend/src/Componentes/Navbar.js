@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Nav, NavDropdown, Navbar } from 'react-bootstrap';
+import { FaUser } from 'react-icons/fa';
 
 import { Link, Redirect } from 'react-router-dom';
 
@@ -63,7 +64,7 @@ class NavbarSGQ extends Component {
                         </NavDropdown>
                         <NavDropdown title="Campanhas" id="basic-nav-dropdown">
                             <ComponenteProtegido papel="GESTOR">
-                                <NavDropdown.Item href="#action/3.1">Cadastrar</NavDropdown.Item>
+                                <NavDropdown.Item as={Link} to="/dashboard/campanha">Cadastrar</NavDropdown.Item>
                             </ComponenteProtegido>
                             <NavDropdown.Item href="#action/3.2">Buscar</NavDropdown.Item>
                             <ComponenteProtegido papel="GESTOR">
@@ -73,7 +74,7 @@ class NavbarSGQ extends Component {
                         </NavDropdown>
 
                     </Nav>
-                    <Button variant="danger" onClick={this.efetuarLogoff.bind(this)}>Logoff</Button>
+                    <span style={{paddingRight: '15px'}}><FaUser /> {this._lm.infos()}</span><Button variant="danger" onClick={this.efetuarLogoff.bind(this)}>Logoff</Button>
                 </Navbar.Collapse>
             </Navbar>
         )

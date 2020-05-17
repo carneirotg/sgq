@@ -31,6 +31,16 @@ class LoginManager {
         return u;
     }
 
+    infos() {
+        const u = this.user();
+
+        if(u === null){
+            return '';
+        }
+
+        return `${u.display_name} (${u.user_name})`;
+    }
+
     token() {
 
         let u = JSON.parse(localStorage.getItem('usuario'));
@@ -62,9 +72,7 @@ class LoginManager {
         if (u == null || u.exp <= (new Date().getTime()) / 1000) {
             localStorage.removeItem('token', null);
             localStorage.removeItem('usuario', null);
-
-            console.log('Token do usuario expirou ou foi realizado o logoff');
-
+            
             return true;
         }
 

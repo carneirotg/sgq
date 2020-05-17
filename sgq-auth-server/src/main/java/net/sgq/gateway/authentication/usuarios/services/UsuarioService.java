@@ -25,5 +25,9 @@ public class UsuarioService implements UserDetailsService {
 		
 		return u;
 	}
+	
+	public Usuario consultarUsuario(String username) {
+		return this.repository.findByUsername(username);
+	}
 
 }
