@@ -4,8 +4,8 @@ import './Destinatario.css';
 
 import { FaUserEdit, FaTrashAlt, FaUserPlus } from 'react-icons/fa';
 
-import { cliente } from '../../../Componentes/SGQClient';
-import ToastManager from '../../../Componentes/ToastManager';
+import { cliente } from '../../../../Componentes/SGQClient';
+import ToastManager from '../../../../Componentes/ToastManager';
 
 class Destinatario extends Component {
 

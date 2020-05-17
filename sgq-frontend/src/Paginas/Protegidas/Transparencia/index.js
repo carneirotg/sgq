@@ -1,3 +1,3 @@
-import Destinatario from './Destinatario';
+import Destinatario from './Destinatario/Destinatario';
 
 export { Destinatario }
