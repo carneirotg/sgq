@@ -7,6 +7,8 @@ import { FaArrowAltCircleDown, FaTasks } from 'react-icons/fa';
 import { cliente } from '../../../../Componentes/SGQClient';
 import ToastManager from '../../../../Componentes/ToastManager';
 
+import NOMES from "../../../../Componentes/nomes.json";
+
 class ConsultaNorma extends Component {
 
     state = {
@@ -186,7 +188,7 @@ class ConsultaNorma extends Component {
                                                 <tr key={n.normaId}>
                                                     <td>{n.normaId}</td>
                                                     <td>{n.norma}</td>
-                                                    <td style={{ wordWrap: 'break-word' }}>{n.area}</td>
+                                                    <td style={{ wordWrap: 'break-word' }}>{NOMES[n.area]}</td>
                                                     <td className="d-none d-lg-table-cell">{n.resumo}</td>
                                                     <td style={{ textAlign: 'center' }}>
                                                         <Button variant="success" onClick={this._avisoDownload.bind(this, n)}><FaArrowAltCircleDown /> </Button> {' '}
@@ -224,7 +226,7 @@ class ConsultaNorma extends Component {
                                     <Container>
                                         <Row>
                                             <Col md><p><b>Norma</b><br />{norma.norma}</p></Col>
-                                            <Col md><p><b>Área Industrial</b><br />{norma.area}</p></Col>
+                                            <Col md><p><b>Área Industrial</b><br />{NOMES[norma.area]}</p></Col>
                                         </Row>
                                         <br />
                                         <Row>

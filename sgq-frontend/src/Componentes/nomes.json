@@ -1,7 +1,9 @@
 {
     "ALTO": "Alto",
+    "AMBIENTE": "Meio Ambiente",
     "ANOMALIA": "Anomalia Diversa",
     "AUSENCIA_MEDIDA": "Ausência de Medida",
+    "AUTOMOVEL": "Automóvel",
     "BAIXO": "Baixo",
     "COMPRAS": "Compras",
     "CRITICO": "Crítico",
@@ -14,6 +16,10 @@
     "LOGISTICA": "Logística",
     "MEDIO": "Médio",
     "PARADA": "Parada de Produção",
+    "QUALIDADE": "Gestão da Qualidade",
     "QUANTIDADE_DIVERGENTE": "Quantidade Divergente",
-    "SEM_DANO": "Sem Dano Aparente"
+    "SEGURANCA_ALIMENTAR": "Segurança Alimentar",
+    "SEGURANCA_TRABALHO": "Segurança do Trabalho",
+    "SEM_DANO": "Sem Dano Aparente",
+    "TI": "Tecnologia da Informação"
 }
