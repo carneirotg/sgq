@@ -39,6 +39,18 @@ public class CampanhaServiceImpl implements CampanhaService {
 	private Logger logger = LoggerFactory.getLogger(CampanhaServiceImpl.class);
 
 	@Override
+	public CampanhaRecallTO consultaId(Long id) {
+		
+		Optional<CampanhaRecall> oCampanha = this.repository.findById(id);
+		
+		if(oCampanha.isEmpty()) {
+			return null;
+		}
+		
+		return oCampanha.get().toTO();
+	}
+	
+	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Long salvar(CampanhaRecallTO campanha) {
 
@@ -48,6 +60,22 @@ public class CampanhaServiceImpl implements CampanhaService {
 		return campanhaRecall.getId();
 	}
 
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
+	public void atualizaCampanha(Long id, CampanhaRecallTO campanhaTO) {
+		
+		Optional<CampanhaRecall> oCampanha = this.repository.findById(id);
+		
+		if(oCampanha.isEmpty()) {
+			throw new EntityNotFoundException("Entitdade 'Campanha' informada não encontrada.");
+		}
+
+		CampanhaRecall campanha = oCampanha.get();
+		campanha.setInformativoCampanha(campanhaTO.getInformativoCampanha());
+		campanha.setMedidasCorretivas(campanhaTO.getMedidasCorretivas());
+
+	}
+	
 	@Override
 	public Page<CampanhaRecallTO> buscar(Estado estado, Pageable page) {
 

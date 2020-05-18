@@ -10,16 +10,40 @@
     "DANO_FINANCEIRO": "Dano Financeiro",
     "DANO_PESSOA": "Dano a Pessoa Física",
     "ESPECIFICACAO_DIVERGENTE": "Especificação Divergente",
+    "FOGO": {
+        "valor": "Incêndio",
+        "tipo": "Fogo / Incêndio / Queimadura",
+        "descricao": "Incêndio provocado por faísca ou superaquecimento.",
+        "implicacoes": "Danos físicos ou materiais"
+    },
     "INSPECAO": "Inspeção de Produção",    
     "INSTRUCAO_DIVERGENTE": "Instrução Divergente",
+    "LESAO": {
+        "valor": "Lesão",
+        "tipo": "Lesão / Laceração",
+        "descricao": "Objeto indevidamente cortante, mal acabado ou passível de desprender e provocar ferimentos.",
+        "implicacoes": "Danos físicos"
+    },
     "LINHA": "Linha de Montagem",
     "LOGISTICA": "Logística",
     "MEDIO": "Médio",
     "PARADA": "Parada de Produção",
     "QUALIDADE": "Gestão da Qualidade",
     "QUANTIDADE_DIVERGENTE": "Quantidade Divergente",
+    "QUEDA": {
+        "valor": "Queda",
+        "tipo": "Queda",
+        "descricao": "Objeto mal afixado e/ou pouco resistente",
+        "implicacoes": "Danos físicos ou materiais"
+    },
     "SEGURANCA_ALIMENTAR": "Segurança Alimentar",
     "SEGURANCA_TRABALHO": "Segurança do Trabalho",
     "SEM_DANO": "Sem Dano Aparente",
-    "TI": "Tecnologia da Informação"
+    "TI": "Tecnologia da Informação",
+    "VARIOS": {
+        "valor": "Vários",
+        "tipo": "Vários",
+        "descricao": "Diversos tipos de riscos foram apontados",
+        "implicacoes": "Danos físicos e/ou materiais"
+    }
 }

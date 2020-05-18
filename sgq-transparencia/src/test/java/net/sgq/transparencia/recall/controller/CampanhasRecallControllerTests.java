@@ -50,7 +50,9 @@ public class CampanhasRecallControllerTests {
 	@Test
 	public void novaCampanhaComLocationOk() throws Exception {
 		when(service.salvar(any())).thenReturn(1L);
-		mock.perform(setJwt(post("/campanhas/").content("{}").contentType(MediaType.APPLICATION_JSON_VALUE)))
+		mock.perform(setJwt(post("/campanhas/").content(
+				"{\"titulo\":\"Máquina Y baixa produtividade\",\"inicio\":\"2020-05-17\",\"fim\":\"2020-05-20\",\"informativoCampanha\":\"Informativo da campanha de recall\",\"medidasCorretivas\":\"Medidas corretivas da campanha de recall\",\"incidentesConhecidos\":false,\"dataConstatacao\":\"2020-01-01\",\"defeito\":\"Defeito apontado na campanha\",\"tipoRisco\":\"VARIOS\",\"ncsEnvolvidas\":[{\"id\":1,\"titulo\":\"Titulo na NC envolvida na campanha\"}],\"estadoCampanha\":\"ATIVA\"}")
+				.contentType(MediaType.APPLICATION_JSON_VALUE))).andExpect(status().isCreated())
 				.andExpect(header().string("Location", "/campanhas/1"));
 	}
 
@@ -74,13 +76,15 @@ public class CampanhasRecallControllerTests {
 
 	@Test
 	public void listaTodasCampanhasAtivasNaoEncontrado() throws Exception {
-		when(service.buscar(Mockito.eq(Estado.ATIVA), any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		when(service.buscar(Mockito.eq(Estado.ATIVA), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/campanhas?estado=ativas"))).andExpect(status().isNotFound());
 	}
 
 	@Test
 	public void listaTodasCampanhasConcluidasNaoEncontrado() throws Exception {
-		when(service.buscar(Mockito.eq(Estado.CONCLUIDA), any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		when(service.buscar(Mockito.eq(Estado.CONCLUIDA), any(Pageable.class)))
+				.thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/campanhas?estado=concluidas"))).andExpect(status().isNotFound());
 	}
 
@@ -119,7 +123,7 @@ public class CampanhasRecallControllerTests {
 	private void preencheLista() {
 		ArrayList<CampanhaRecallTO> mCampanhas = new ArrayList<>();
 		mCampanhas.add(new CampanhaRecallTO());
-		
+
 		PageImpl<CampanhaRecallTO> pCampanhas = new PageImpl<>(mCampanhas);
 
 		when(service.buscar(any(), any(Pageable.class))).thenReturn(pCampanhas);

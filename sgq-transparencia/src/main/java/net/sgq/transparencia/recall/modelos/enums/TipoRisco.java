@@ -5,7 +5,7 @@ public enum TipoRisco {
 	FOGO("Fogo / Incêndio / Queimadura", "Incêndio provocado por faísca ou superaquecimento.", "Danos físicos ou materiais"),
 	LESAO("Lesão / Laceração", "Objeto indevidamente cortante, mal acabado ou passível de desprender e provocar ferimentos.", "Danos físicos"),
 	QUEDA("Queda", "Objeto mal afixado e/ou pouco resistente", "Danos físicos ou materiais"),
-	VARIOS("Vários", "Diversos tipos de riscos foram apontados.", "Danos fíciso e/ou materiais");
+	VARIOS("Vários", "Diversos tipos de riscos foram apontados.", "Danos físicos e/ou materiais");
 	
 
 	private String tipo;

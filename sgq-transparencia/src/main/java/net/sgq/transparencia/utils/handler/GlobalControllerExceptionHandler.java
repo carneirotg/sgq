@@ -3,14 +3,16 @@ package net.sgq.transparencia.utils.handler;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +35,7 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 		return new ResponseEntity<>(mensagemErro(ex, "Tipo de dados incorreto na requisição"), HttpStatus.BAD_REQUEST);
 	}
 
-	@ExceptionHandler({ IllegalStateException.class, ConstraintViolationException.class })
+	@ExceptionHandler({ IllegalStateException.class })
 	protected ResponseEntity<Object> entidadeInvalida(HttpServletRequest reques, Exception ex) {
 		return new ResponseEntity<>(mensagemErro(ex, "Estado inválido"), HttpStatus.BAD_REQUEST);
 	}
@@ -41,6 +43,19 @@ public class GlobalControllerExceptionHandler extends ResponseEntityExceptionHan
 	@ExceptionHandler(EntityNotFoundException.class)
 	protected ResponseEntity<Object> entidadeNaoEncontrada(HttpServletRequest reques, Exception ex) {
 		return new ResponseEntity<>(mensagemErro(ex, "Entidade não encontrada"), HttpStatus.NOT_FOUND);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		BindingResult result = ex.getBindingResult();
+		int errorCount = result.getErrorCount();
+		String errors = result.getFieldErrors().stream().map(e -> e.getField() + " - " + e.getDefaultMessage())
+				.collect(Collectors.joining("\r\n"));
+
+		return new ResponseEntity<>(mensagemErro(ex, "Erro(s) de validação (" + errorCount + "): " + errors),
+				HttpStatus.BAD_REQUEST);
 	}
 
 	private Map<String, Object> mensagemErro(Exception ex, String erro) {

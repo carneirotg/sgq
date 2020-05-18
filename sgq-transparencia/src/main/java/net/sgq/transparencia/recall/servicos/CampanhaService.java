@@ -11,11 +11,13 @@ import net.sgq.transparencia.recall.modelos.to.CampanhaRecallTO;
 
 public interface CampanhaService {
 
+	CampanhaRecallTO consultaId(Long id);
 	Long salvar(CampanhaRecallTO campanha);
 	
 	Page<CampanhaRecallTO> buscar(Estado estado, Pageable pageRequest);
 	List<CampanhaRecallTO> buscar(Estado estado, Integer janelaMinutos);
 	
+	void atualizaCampanha(Long id, CampanhaRecallTO campanha);
 	void atualizaDataTermino(Long id, Date novaDataTermino);
 	void concluiCampanha(Long id);
 	

@@ -131,6 +131,24 @@ const relatorios = {
     }
 }
 
+const campanhas = {
+    salvar: async (camp) => {
+        const id = camp.id;
+        let resp;
+
+        if (id === null || id === 0) {
+            resp = http.post(`campanhas`, camp);
+        } else {
+            resp = http.patchBody(`campanhas/${id}`, camp);
+        }
+
+        return resp;
+    },
+    consultaId: async(id) => {
+        return http.get(`campanhas/${id}`);
+    }
+}
+
 const eventos = {
     consultaUltimosIncidentes: async() => {
         return http.get('/eventos')
@@ -139,6 +157,6 @@ const eventos = {
 
 export function cliente() {
     return {
-        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes, eventos
+        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes, eventos, campanhas
     }
 }

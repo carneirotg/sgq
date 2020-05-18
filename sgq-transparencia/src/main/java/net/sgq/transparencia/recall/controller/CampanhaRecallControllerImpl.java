@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,19 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 	private CampanhaService service;
 
 	@Override
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<CampanhaRecallTO> consultaId(@PathVariable Long id) {
+
+		CampanhaRecallTO cTO = service.consultaId(id);
+
+		if (cTO == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<>(cTO, HttpStatus.OK);
+	}
+
+	@Override
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CampanhaRecallTO>> todas(
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
@@ -54,7 +68,7 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 		}
 
 		Page<CampanhaRecallTO> campanhas = service.buscar(null, PageRequest.of(pagina - 1, registros, sort));
-		
+
 		return new ResponseEntity<>(campanhas.getContent(), PageHeaders.headers(campanhas), HttpStatus.OK);
 	}
 
@@ -93,13 +107,21 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 	@Override
 	@Secured({ ROLE_GESTOR })
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> novaCampanha(@RequestBody CampanhaRecallTO campanha) throws URISyntaxException {
+	public ResponseEntity<Void> novaCampanha(@Validated @RequestBody CampanhaRecallTO campanha) throws URISyntaxException {
 
 		Long id = this.service.salvar(campanha);
 
 		return ResponseEntity.created(new URI("/campanhas/" + id)).build();
 	}
 
+	@Override
+	@Secured({ ROLE_GESTOR })
+	@PatchMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void atualizaCampanha(@PathVariable Long id, @RequestBody CampanhaRecallTO campanha) throws URISyntaxException {
+		this.service.atualizaCampanha(id, campanha);
+	}
+	
 	@Override
 	@Secured({ ROLE_GESTOR })
 	@PatchMapping("/{id}/fim/{novaDataTermino}")

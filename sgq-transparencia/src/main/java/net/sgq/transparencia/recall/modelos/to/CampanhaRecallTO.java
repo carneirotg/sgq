@@ -49,7 +49,7 @@ public class CampanhaRecallTO implements Comunicado {
 	@Size(min = 1)
 	private List<NaoConformidade> ncsEnvolvidas = new ArrayList<>();
 
-	private Estado estadoCampanha;
+	private Estado estadoCampanha = Estado.ATIVA;
 
 	public CampanhaRecallTO() {
 		super();
