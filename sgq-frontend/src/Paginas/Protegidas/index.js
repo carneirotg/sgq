@@ -7,7 +7,7 @@ import ToastManager from '../../Componentes/ToastManager';
 import Dashboard from './Dashboard';
 import { ArtefatoNovo, ArtefatosLista, ConsultaNormas, NovaNC, ListaNC, NovoIncidente, ListaIncidente } from './Incidentes';
 import { RelIncidente } from './Relatorios';
-import { Destinatario, NovaCampanha } from './Transparencia'
+import { Destinatario, NovaCampanha, ListaCampanha } from './Transparencia'
 
 import LoginManager from '../../Componentes/LoginManager';
 
@@ -82,6 +82,8 @@ function RotasProtegidas(props) {
                 <RotaProtegida papel="GESTOR" exact path={`${path}/campanha`} component={NovaCampanha} />
 
                 <RotaProtegida papel="GESTOR" exact path={`${path}/campanha/:id`} component={NovaCampanha} />
+
+                <RotaProtegida papel="GESTOR" exact path={`${path}/campanhas`} component={ListaCampanha} />
 
             </Switch>
         </>

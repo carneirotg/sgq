@@ -1,4 +1,4 @@
 import Destinatario from './Destinatario/Destinatario';
-import { NovaCampanha } from './Campanha';
+import { NovaCampanha, ListaCampanha } from './Campanha';
 
-export { Destinatario, NovaCampanha }
+export { Destinatario, NovaCampanha, ListaCampanha }

@@ -146,6 +146,15 @@ const campanhas = {
     },
     consultaId: async(id) => {
         return http.get(`campanhas/${id}`);
+    },
+    consultaEstado: async (estado, pagina) => {
+        return http.get(`campanhas/?estado=${estado}`, pagina);
+    },
+    consultaEstadoTitulo: async (estado, titulo) => {
+        return http.get(`campanhas/?estado=${estado}&titulo=${titulo}`);
+    },
+    concluir: async (id) => {
+        return http.patch(`campanhas/${id}/estado/concluida`)
     }
 }
 

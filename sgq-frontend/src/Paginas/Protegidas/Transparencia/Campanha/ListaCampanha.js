@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
-import { FaEdit, FaAngleRight, FaAngleLeft, FaAngleDoubleRight, FaEye } from 'react-icons/fa';
+import { FaEdit, FaAngleDoubleRight, FaEye } from 'react-icons/fa';
 import { Row, Col, Container, Form, Button, Tabs, Tab, Table, Alert, Modal, Pagination, Card } from 'react-bootstrap';
 
 import ToastManager from '../../../../Componentes/ToastManager';
 
 import { cliente } from '../../../../Componentes/SGQClient';
-import { parseDate } from '../../../../Componentes/ParseDate';
+import { parseDateOnly } from '../../../../Componentes/ParseDate';
 
 import NOMES from '../../../../Componentes/nomes.json';
 import { Link } from 'react-router-dom';
 
-class ListaIncidente extends Component {
+
+class ListaCampanha extends Component {
 
     PAGINA_INICIAL = {
         habilitada: true,
@@ -21,9 +22,9 @@ class ListaIncidente extends Component {
     }
 
     state = {
-        tipo: 'abertos',
-        buscaIncidente: '',
-        incidentes: [],
+        tipo: 'ativas',
+        buscaCampanha: '',
+        campanhas: [],
         pagina: {
             habilitada: true,
             pagina: 0,
@@ -32,23 +33,23 @@ class ListaIncidente extends Component {
             registros: 10
         },
         modalEstado: {
-            incidente: null,
+            campanha: null,
             estado: null,
             visivel: false
         },
         modalVisualizar: {
-            incidente: null,
+            campanha: null,
             visivel: false
         }
     }
 
-    timer = null;
+    timerBusca = null;
 
     async componentDidMount() {
-        this._carregaIncidenteEscopo(this.state.tipo);
+        this._carregaCampanhasEscopo(this.state.tipo);
     }
 
-    async _carregaIncidenteEscopo(tipo, params = null) {
+    async _carregaCampanhasEscopo(tipo, params = null) {
         if (this.state.tipo !== tipo) {
             this.setState({
                 ...this.setState,
@@ -58,21 +59,21 @@ class ListaIncidente extends Component {
         }
 
         const paramsPaginacao = params != null ? params : this.state.pagina;
-        const { buscaIncidente } = this.state;
+        const { buscaCampanha } = this.state;
 
-        const incCli = cliente().incidentes;
+        const camCli = cliente().campanhas;
         let resp = null;
 
-        if (buscaIncidente !== '') {
-            resp = await incCli.consultaEstadoTitulo(tipo, buscaIncidente, params);
+        if (buscaCampanha !== '') {
+            resp = await camCli.consultaEstadoTitulo(tipo, buscaCampanha, params);
         } else {
-            resp = await incCli.consultaEstado(tipo, params);
+            resp = await camCli.consultaEstado(tipo, params);
         }
 
         if (resp.sucesso) {
             const { pagina } = paramsPaginacao;
 
-            const incidentes = resp.retorno;
+            const campanhas = resp.retorno;
 
             const hPagina = parseInt(resp.headers['x-sgq-pagina']);
             const hPaginas = parseInt(resp.headers['x-sgq-paginas']);
@@ -81,7 +82,7 @@ class ListaIncidente extends Component {
             if (this._atualizarPaginas(pagina, paramsPaginacao, hPagina)) {
                 this.setState(
                     {
-                        incidentes,
+                        campanhas,
                         tipo,
                         pagina: {
                             ...this.state.pagina,
@@ -94,8 +95,8 @@ class ListaIncidente extends Component {
 
         } else {
             if (resp.status === 404) {
-                ToastManager.atencao("Não existem incidentes no estado desejado");
-                this.setState({ ...this.state, incidentes: [] });
+                ToastManager.atencao("Não existem campanhas no estado desejado");
+                this.setState({ ...this.state, campanhas: [] });
             }
         }
     }
@@ -109,7 +110,7 @@ class ListaIncidente extends Component {
             const paramsPaginacao = { ...this.state.pagina, pagina: pag };
             const { tipo } = this.state;
 
-            this._carregaIncidenteEscopo(tipo, paramsPaginacao);
+            this._carregaCampanhasEscopo(tipo, paramsPaginacao);
         }
     }
 
@@ -146,32 +147,32 @@ class ListaIncidente extends Component {
         }
     }
 
-    _valoresIncidente(evt) {
+    _valoresCampanha(evt) {
         const { name, value } = evt.target;
 
         this.setState({ ...this.state, [name]: value });
 
-        clearTimeout(this.timer);
+        clearTimeout(this.timerBusca);
         if (value.length >= 3) {
-            this.timer = setTimeout(() => this._carregaIncidenteEscopo(this.state.tipo, null), 300);
+            this.timerBusca = setTimeout(() => this._carregaCampanhasEscopo(this.state.tipo, null), 300);
         } else if (value === '' || value.length === 0) {
-            this.timer = setTimeout(() => this._carregaIncidenteEscopo(this.state.tipo, this.PAGINA_INICIAL), 300);
+            this.timerBusca = setTimeout(() => this._carregaCampanhasEscopo(this.state.tipo, this.PAGINA_INICIAL), 300);
         }
     }
 
-    _confirmaMudancaEstado(incidente, estado) {
+    _confirmaMudancaEstado(campanha, estado) {
 
-        if (incidente !== null) {
+        if (campanha !== null) {
             this.setState({
                 modalEstado: {
-                    incidente, estado,
+                    campanha, estado,
                     visivel: true
                 }
             });
         } else {
             this.setState({
                 modalEstado: {
-                    incidente: null,
+                    campanha: null,
                     estado: null,
                     visivel: false
                 }
@@ -179,13 +180,13 @@ class ListaIncidente extends Component {
         }
     }
 
-    async _mudarEstadoIncidente(incidente, estado, nomeEstado) {
-        const incCli = cliente().incidentes;
-        const resp = await incCli.mudarEstado(incidente.id, estado);
+    async _mudarEstadoCampanha(campanha, estado, nomeEstado) {
+        const camCli = cliente().campanhas;
+        const resp = await camCli.concluir(campanha.id);
 
         if (resp.sucesso) {
-            ToastManager.informativo(`Incidente movida para fase de ${nomeEstado}`);
-            this.setState({ ...this.state, incidentes: this.state.incidentes.filter(i => i.id !== incidente.id) });
+            ToastManager.informativo(`Campanha movida para fase de ${nomeEstado}`);
+            this.setState({ ...this.state, campanhas: this.state.campanhas.filter(i => i.id !== campanha.id) });
         } else if (resp.status === 403) {
             ToastManager.atencao("Seu perfil não possui autorização para esta operação");
         } else {
@@ -195,43 +196,42 @@ class ListaIncidente extends Component {
         this._confirmaMudancaEstado(null);
     }
 
-    _visualizaIncidente(incidente) {
+    _visualizaCampanha(campanha) {
 
-        if (incidente !== null) {
+        if (campanha !== null) {
             this.setState({
                 modalVisualizar: {
-                    incidente,
+                    campanha,
                     visivel: true
                 }
             });
         } else {
             this.setState({
                 modalVisualizar: {
-                    incidente: null,
+                    campanha: null,
                     visivel: false
                 }
             });
         }
     }
 
-
     render() {
         return (
             <div className="App">
                 <Container>
                     <Row>
-                        <Col md><h1 style={{ textAlign: 'center' }}>Incidentes</h1></Col>
+                        <Col md><h1 style={{ textAlign: 'center' }}>Campanhas</h1></Col>
                     </Row>
                     <Row>
                         <Col md="3"></Col>
                         <Col md="6">
                             <Form.Group controlId="paginador">
-                                <Col>{this.state.incidentes.length > 0 ? (this._paginador()) : (<></>)}</Col>
+                                <Col>{this.state.campanhas.length > 0 ? (this._paginador()) : (<></>)}</Col>
                             </Form.Group>
                         </Col>
                         <Col md="2">
-                            <Form.Group controlId="buscaNC">
-                                <Form.Control placeholder="Termos incidentes" type="text" name="buscaIncidente" value={this.state.buscaIncidente} onChange={this._valoresIncidente.bind(this)} />
+                            <Form.Group controlId="buscaCampanhas">
+                                <Form.Control placeholder="Termos campanhas" type="text" name="buscaCampanha" value={this.state.buscaCampanha} onChange={this._valoresCampanha.bind(this)} />
                             </Form.Group>
                         </Col>
 
@@ -239,10 +239,9 @@ class ListaIncidente extends Component {
                     <Row>
                         <Col md></Col>
                         <Col md="10">
-                            <Tabs defaultActiveKey="abertos" id="tabincidentes" onSelect={(tab) => this._carregaIncidenteEscopo(tab)}>
-                                <Tab eventKey="abertos" title="Abertos" />
-                                <Tab eventKey="em_analise" title="Em Análise" />
-                                <Tab eventKey="concluidos" title="Concluídos" />
+                            <Tabs defaultActiveKey="abertos" id="tabcampanhas" onSelect={(tab) => this._carregaCampanhasEscopo(tab)}>
+                                <Tab eventKey="ativas" title="Ativas" />
+                                <Tab eventKey="concluidas" title="Concluídas" />
                             </Tabs>
                             {this._SecaoEstados()}
                         </Col>
@@ -265,49 +264,40 @@ class ListaIncidente extends Component {
                     <tr>
                         <th>#</th>
                         <th>Título</th>
-                        <th>Setor Afetado</th>
-                        <th>Tipo</th>
-                        <th>Classificação</th>
+                        <th>Tipo de Risco</th>
+                        <th>Início Campanha</th>
+                        <th>Fim Campanha</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         this.state
-                            .incidentes
-                            .map(i => (
-                                <tr key={i.id}>
-                                    <td>{i.id}</td>
-                                    <td>{i.titulo}</td>
-                                    <td>{NOMES[i.setor]}</td>
-                                    <td>{NOMES[i.tipoIncidente]}</td>
-                                    <td>{NOMES[i.classificacao]}</td>
+                            .campanhas
+                            .map(c => (
+                                <tr key={c.id}>
+                                    <td>{c.id}</td>
+                                    <td>{c.titulo}</td>
+                                    <td>{NOMES[c.tipoRisco].tipo}</td>
+                                    <td>{parseDateOnly(c.inicio)}</td>
+                                    <td>{parseDateOnly(c.fim)}</td>
                                     <td>
-                                        <Button variant="success" onClick={this._visualizaIncidente.bind(this, i)}><FaEye /></Button>{' '}
+                                        <Button variant="success" onClick={this._visualizaCampanha.bind(this, c)}><FaEye /></Button>{' '}
                                         {
-                                            tipo !== 'concluidos' ?
+                                            tipo !== 'concluidas' ?
                                                 (
                                                     <>
-                                                        <Button variant="primary" as={Link} to={`/dashboard/incidente/${i.id}`}><FaEdit /></Button>{' '}
+                                                        <Button variant="primary" as={Link} to={`/dashboard/campanha/${c.id}`}><FaEdit /></Button>{' '}
                                                     </>
                                                 ) : (<></>)
                                         }
                                         {
-                                            tipo === 'abertos' ?
+                                            tipo === 'ativas' ?
                                                 (
                                                     <>
-                                                        <Button variant="info" onClick={this._confirmaMudancaEstado.bind(this, i, 'em_analise')}><FaAngleRight /></Button>{' '}
-                                                        <Button variant="warning" onClick={this._confirmaMudancaEstado.bind(this, i, 'concluidos')}><FaAngleDoubleRight /></Button>
+                                                        <Button variant="warning" onClick={this._confirmaMudancaEstado.bind(this, c, 'concluidas')}><FaAngleDoubleRight /></Button>
                                                     </>
-                                                ) : tipo === 'em_analise' ?
-                                                    (
-                                                        <>
-                                                            <Button variant="info" onClick={this._confirmaMudancaEstado.bind(this, i, 'abertos')}><FaAngleLeft /></Button>{' '}
-                                                            <Button variant="info" onClick={this._confirmaMudancaEstado.bind(this, i, 'concluidos')}><FaAngleRight /></Button>
-                                                        </>
-                                                    ) : (
-                                                        <></>
-                                                    )
+                                                ) : (<></>)
                                         }
                                     </td>
                                 </tr>
@@ -321,25 +311,22 @@ class ListaIncidente extends Component {
 
     _ModalEstado() {
 
-        const { incidente, estado, visivel } = this.state.modalEstado;
+        const { campanha, estado, visivel } = this.state.modalEstado;
         let novoEstado = null;
         let nomeEstado = '';
 
-        if (estado === 'abertos') {
-            novoEstado = 'aberto';
-            nomeEstado = 'Aberto';
-        } else if (estado === 'em_analise') {
-            novoEstado = estado;
-            nomeEstado = 'Análise';
-        } else if (estado === 'concluidos') {
-            novoEstado = 'concluido';
-            nomeEstado = 'Concluído';
+        if (estado === 'abertas') {
+            novoEstado = 'aberta';
+            nomeEstado = 'Abertas';
+        } else if (estado === 'concluidas') {
+            novoEstado = 'concluida';
+            nomeEstado = 'Concluída';
         }
 
         return (
             <div>
                 {
-                    incidente ?
+                    campanha ?
                         (
                             <Modal show={visivel} onHide={this._confirmaMudancaEstado.bind(this, null)} animation={false} size="lg">
                                 <Modal.Header closeButton>
@@ -348,9 +335,9 @@ class ListaIncidente extends Component {
                                 <Modal.Body>
                                     <Container>
                                         <Row>
-                                            <Col md><p>Deseja mover o Incidente abaixo para o estado de <b>{nomeEstado}</b>?<br /><br />{incidente.titulo} - {NOMES[incidente.tipoIncidente]}</p>{
-                                                novoEstado === 'concluido' ?
-                                                    (<Alert variant="danger">A conclusão de um Incidente não poderá ser desfeita.</Alert>) : (<></>)
+                                            <Col md><p>Deseja mover o Incidente abaixo para o estado de <b>{nomeEstado}</b>?<br /><br />{campanha.titulo} - {NOMES[campanha.tipoRisco].tipo}</p>{
+                                                novoEstado === 'concluida' ?
+                                                    (<Alert variant="danger">A conclusão de uma Campanha não poderá ser desfeita.</Alert>) : (<></>)
                                             }
                                             </Col>
 
@@ -361,7 +348,7 @@ class ListaIncidente extends Component {
                                     <Button variant="secondary" onClick={this._confirmaMudancaEstado.bind(this, null)}>
                                         Fechar
                                     </Button>
-                                    <Button variant="danger" onClick={this._mudarEstadoIncidente.bind(this, incidente, novoEstado, nomeEstado)}>
+                                    <Button variant="danger" onClick={this._mudarEstadoCampanha.bind(this, campanha, novoEstado, nomeEstado)}>
                                         Sim
                                     </Button>
                                 </Modal.Footer>
@@ -375,79 +362,78 @@ class ListaIncidente extends Component {
     }
 
     _ModalVisualizar() {
-        const { incidente, visivel } = this.state.modalVisualizar;
+        const { campanha, visivel } = this.state.modalVisualizar;
 
         return (
             <div>
                 {
-                    incidente ?
+                    campanha ?
                         (
-                            <Modal show={visivel} onHide={this._visualizaIncidente.bind(this, null)} animation={false} size="lg">
+                            <Modal show={visivel} onHide={this._visualizaCampanha.bind(this, null)} animation={false} size="lg">
                                 <Modal.Header closeButton>
-                                    <Modal.Title>{incidente.titulo}</Modal.Title>
+                                    <Modal.Title>{campanha.titulo}</Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                     <Container>
 
                                         <Row>
                                             <Col md></Col>
+                                            <Col md="6">
+                                                <p><b>Título: </b><br />{campanha.titulo}</p>
+                                            </Col>
                                             <Col md="4">
-                                                <p><b>Título: </b><br />{incidente.titulo}</p>
+                                                <p><b>Período da Campanha: </b><br />{parseDateOnly(campanha.inicio)} a {parseDateOnly(campanha.fim)}</p>
+                                            </Col>
+                                            <Col md></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md></Col>
+                                            <Col md="4">
+                                                <p><b>Defeito Apontado: </b><br />{campanha.defeito}</p>
                                             </Col>
                                             <Col md="3">
-                                                <p><b>Classif do Impacto: </b><br />{NOMES[incidente.classificacao]}</p>
+                                                <p><b>Constatado em: </b><br />{parseDateOnly(campanha.dataConstatacao)}</p>
                                             </Col>
                                             <Col md="3">
-                                                <p><b>Tipo de Incidente: </b><br />{NOMES[incidente.tipoIncidente]}</p>
+                                                <p><b>Tipo de Risco: </b><br />{NOMES[campanha.tipoRisco].tipo}</p>
                                             </Col>
                                             <Col md></Col>
                                         </Row>
                                         <Row>
                                             <Col md="1"></Col>
                                             <Col md="8">
-                                                <p><b>Descrição: </b><br />{incidente.descricao}</p>
+                                                <p><b>Texto Informativo: </b><br />{campanha.informativoCampanha}</p>
                                             </Col>
                                             <Col md="3">
-                                                <p><b>Setor: </b><br />{NOMES[incidente.setor]}</p>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="1"></Col>
-                                            <Col md="8">
-                                                <p><b>Criado em: </b><br />{parseDate(incidente.criadoEm)}</p>
-                                            </Col>
-                                            <Col md="3">
-                                                <p><b>Concluído em: </b><br />{parseDate(incidente.concluidoEm)}</p>
-                                            </Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md="1"></Col>
-                                            <Col md="10">
-                                                <p><b>Conclusão / Análise do Incidente: </b><br />{incidente.conclusao !== '' ? incidente.conclusao : (<i>Não fornecida.</i>)}</p>
-                                            </Col>
-                                            <Col md></Col>
-                                        </Row>
-                                        <Row>
-                                            <Col md></Col>
-                                            <Col md="10">
-                                                <Row>
-                                                    <Col style={{ textAlign: 'center' }}>
-                                                        <b>Não Conformidade Envolvidas</b>
-                                                    </Col>
-                                                </Row>
                                                 <br />
-                                                <Row>
-                                                    {incidente.ncEnvolvidas.map(nc => (
-                                                        <Col md="4" sm="6">
-                                                            <Card>
-                                                                <Card.Body>
-                                                                    <Card.Title>{nc.titulo} <sup style={{ color: 'red' }}></sup></Card.Title>
-                                                                    <Card.Subtitle className="mb-2 text-muted">[{nc.id}] {nc.resumo}</Card.Subtitle>
-                                                                </Card.Body>
-                                                            </Card>
-                                                        </Col>
-                                                    ))}
-                                                </Row>
+                                                <p><b>Incidentes Conhecidos? </b><br />{campanha.incidentesConhecidos ? 'Sim' : 'Não'}</p>
+                                            </Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md="1"></Col>
+                                            <Col md="8">
+                                                <p><b>Medidas Corretivas: </b><br />{campanha.medidasCoretivas}</p>
+                                            </Col>
+                                            <Col md></Col>
+                                        </Row>
+                                        <Row>
+                                            <Col md></Col>
+                                            <Col md="10">
+                                                <Form.Group controlId="gncsEnvolvidas">
+                                                    <br />
+                                                    <Row>
+                                                        {campanha.ncsEnvolvidas.map(nc => (
+                                                            <Col md="4" sm="6" key={nc.id}>
+                                                                <Card >
+                                                                    <Card.Body>
+                                                                        <Card.Title>{nc.titulo} <sup style={{ color: 'red' }}></sup></Card.Title>
+                                                                        <Card.Subtitle className="mb-2 text-muted">[{nc.id}] {nc.resumo}</Card.Subtitle>
+                                                                    </Card.Body>
+                                                                </Card>
+                                                            </Col>
+                                                        ))}
+                                                    </Row>
+                                                </Form.Group>
                                             </Col>
                                             <Col md></Col>
                                         </Row>
@@ -455,7 +441,7 @@ class ListaIncidente extends Component {
                                     </Container>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button variant="secondary" onClick={this._visualizaIncidente.bind(this, null)}>
+                                    <Button variant="secondary" onClick={this._visualizaCampanha.bind(this, null)}>
                                         Fechar
                                     </Button>
                                 </Modal.Footer>
@@ -468,6 +454,7 @@ class ListaIncidente extends Component {
         )
     }
 
+
 }
 
-export default ListaIncidente;
+export default ListaCampanha;

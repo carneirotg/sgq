@@ -91,7 +91,7 @@ class NovaCampanha extends Component {
     async _cadastrarCampanha(event) {
         event.preventDefault();
 
-        if(this.state.campanha.ncsEnvolvidas.length === 0){
+        if (this.state.campanha.ncsEnvolvidas.length === 0) {
             ToastManager.atencao("Ao menos uma não conformidade deve ser informada.");
             return;
         }
@@ -233,11 +233,13 @@ class NovaCampanha extends Component {
                                 </Col>
                                 <Col md="4">
                                     <Form.Group controlId="gInicio">
-                                        <Form.Label>Data de Início</Form.Label>
+                                        <Form.Label>Período da Campanha</Form.Label>
                                         <br />
                                         <DateRangePicker
+                                            startDatePlaceholderText="Início"
                                             startDate={this.state.campanha.inicio}
                                             startDateId="inicio"
+                                            endDatePlaceholderText="Fim"
                                             endDate={this.state.campanha.fim}
                                             endDateId="fim"
                                             onDatesChange={({ startDate: inicio, endDate: fim }) => this.setState({ campanha: { ...this.state.campanha, inicio, fim } })}

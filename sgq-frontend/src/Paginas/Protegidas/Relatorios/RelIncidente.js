@@ -166,8 +166,10 @@ class RelIncidente extends Component {
                                             <Col md="8" style={{ textAlign: 'center' }}>
                                                 <DateRangePicker
                                                     isOutsideRange={() => false}
+                                                    startDatePlaceholderText="Início"
                                                     startDate={this.state.periodo.inicio}
                                                     startDateId="inicio"
+                                                    endDatePlaceholderText="Fim"
                                                     endDate={this.state.periodo.fim}
                                                     endDateId="fim"
                                                     onDatesChange={({ startDate, endDate }) => this.setState({ periodo: { inicio: startDate, fim: endDate } })}
