@@ -46,7 +46,7 @@ class ArtefatoNovo extends Component {
                             <Row>
                                 <Col md><h1>Novo Artefato</h1></Col>
                             </Row>
-                            <Form validated onSubmit={this._cadastrarArtefato.bind(this)}>
+                            <Form onSubmit={this._cadastrarArtefato.bind(this)}>
                                 <Row>
                                     <Col md></Col>
                                     <Col md="4">

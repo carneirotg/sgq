@@ -123,7 +123,7 @@ class NovaCampanha extends Component {
 
         const { campanha } = this.state;
         let { ncsEnvolvidas } = campanha;
-        ncsEnvolvidas = ncsEnvolvidas.filter(n => n.id != nc.id);
+        ncsEnvolvidas = ncsEnvolvidas.filter(n => n.id !== nc.id);
 
         ToastManager.atencao("NC removida da campanha em edição.");
 
@@ -135,7 +135,7 @@ class NovaCampanha extends Component {
         const { ncsEnvolvidas } = campanha;
 
         ncsEnvolvidas.push(nc);
-        ncs = ncs.filter(n => n.id != nc.id);
+        ncs = ncs.filter(n => n.id !== nc.id);
 
         ToastManager.informativo("NC adicionada à campanha em edição.");
 
@@ -433,7 +433,7 @@ class NovaCampanha extends Component {
                                 <Row>
                                     <Col md></Col>
                                     <Col md="10">
-                                        <Form.Control type="text" name="termo" placeholder="Termos refente à uma NC..." name="termos" onChange={this._valorTermosNCS.bind(this)} />
+                                        <Form.Control type="text" name="termo" placeholder="Termos refente à uma NC..." onChange={this._valorTermosNCS.bind(this)} />
                                     </Col>
                                     <Col md></Col>
                                 </Row>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaEdit, FaAngleRight, FaAngleLeft, FaAngleDoubleRight, FaEye, FaTasks } from 'react-icons/fa';
+import { FaEdit, FaAngleRight, FaAngleLeft, FaAngleDoubleRight, FaEye } from 'react-icons/fa';
 import { Row, Col, Container, Form, Button, Tabs, Tab, Table, Alert, Modal, Pagination, Card } from 'react-bootstrap';
 
 import ToastManager from '../../../../Componentes/ToastManager';

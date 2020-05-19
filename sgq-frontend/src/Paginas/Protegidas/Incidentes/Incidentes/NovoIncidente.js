@@ -109,7 +109,7 @@ class NovoIncidente extends Component {
         const { ncEnvolvidas } = incidente;
 
         ncEnvolvidas.push(nc);
-        ncs = ncs.filter(n => n.id != nc.id);
+        ncs = ncs.filter(n => n.id !== nc.id);
 
         ToastManager.informativo("NC adicionada ao incidente em edição.");
 
@@ -123,7 +123,7 @@ class NovoIncidente extends Component {
     _removeNC(nc) {
         const { incidente } = this.state;
         let { ncEnvolvidas } = incidente;
-        ncEnvolvidas = ncEnvolvidas.filter(n => n.id != nc.id);
+        ncEnvolvidas = ncEnvolvidas.filter(n => n.id !== nc.id);
 
         ToastManager.atencao("NC removida do incidente em edição.");
 
@@ -303,7 +303,7 @@ class NovoIncidente extends Component {
                                 <Row>
                                     <Col md></Col>
                                     <Col md="10">
-                                        <Form.Control type="text" name="termo" placeholder="Termos refente à uma NC..." name="termos" onChange={this._valorTermosNCS.bind(this)} />
+                                        <Form.Control type="text" name="termo" placeholder="Termos refente à uma NC..." onChange={this._valorTermosNCS.bind(this)} />
                                     </Col>
                                     <Col md></Col>
                                 </Row>
