@@ -10,10 +10,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,19 +49,26 @@ public class CampanhasRecallControllerTests {
 
 	@Value("${sgq.test.token}")
 	private String jwtToken;
+	
+	private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Test
 	public void novaCampanhaComLocationOk() throws Exception {
 		when(service.salvar(any())).thenReturn(1L);
+		
+		Date dt = new Date();
+		String dtInicio = SDF.format(dt);
+		String dtFim = SDF.format(DateUtils.addDays(dt, 60));
+		
 		mock.perform(setJwt(post("/campanhas/").content(
-				"{\"titulo\":\"Máquina Y baixa produtividade\",\"inicio\":\"2020-05-17\",\"fim\":\"2020-05-20\",\"informativoCampanha\":\"Informativo da campanha de recall\",\"medidasCorretivas\":\"Medidas corretivas da campanha de recall\",\"incidentesConhecidos\":false,\"dataConstatacao\":\"2020-01-01\",\"defeito\":\"Defeito apontado na campanha\",\"tipoRisco\":\"VARIOS\",\"ncsEnvolvidas\":[{\"id\":1,\"titulo\":\"Titulo na NC envolvida na campanha\"}],\"estadoCampanha\":\"ATIVA\"}")
+				"{\"titulo\":\"Máquina Y baixa produtividade\",\"inicio\":\""+ dtInicio +"\",\"fim\":\"" + dtFim +"\",\"informativoCampanha\":\"Informativo da campanha de recall\",\"medidasCorretivas\":\"Medidas corretivas da campanha de recall\",\"incidentesConhecidos\":false,\"dataConstatacao\":\"2020-01-01\",\"defeito\":\"Defeito apontado na campanha\",\"tipoRisco\":\"VARIOS\",\"ncsEnvolvidas\":[{\"id\":1,\"titulo\":\"Titulo na NC envolvida na campanha\"}],\"estadoCampanha\":\"ATIVA\"}")
 				.contentType(MediaType.APPLICATION_JSON_VALUE))).andExpect(status().isCreated())
 				.andExpect(header().string("Location", "/campanhas/1"));
 	}
 
 	@Test
 	public void listaTodasCampanhasSucesso() throws Exception {
-		when(service.buscar(isNull(), any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
+		when(service.buscar(isNull(), isNull(), any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/campanhas"))).andExpect(status().isOk());
 	}
 
@@ -76,14 +86,14 @@ public class CampanhasRecallControllerTests {
 
 	@Test
 	public void listaTodasCampanhasAtivasNaoEncontrado() throws Exception {
-		when(service.buscar(Mockito.eq(Estado.ATIVA), any(Pageable.class)))
+		when(service.buscar(Mockito.eq(Estado.ATIVA), isNull(), any(Pageable.class)))
 				.thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/campanhas?estado=ativas"))).andExpect(status().isNotFound());
 	}
 
 	@Test
 	public void listaTodasCampanhasConcluidasNaoEncontrado() throws Exception {
-		when(service.buscar(Mockito.eq(Estado.CONCLUIDA), any(Pageable.class)))
+		when(service.buscar(Mockito.eq(Estado.CONCLUIDA), isNull(), any(Pageable.class)))
 				.thenReturn(new PageImpl<>(new ArrayList<>()));
 		mock.perform(setJwt(get("/campanhas?estado=concluidas"))).andExpect(status().isNotFound());
 	}
@@ -126,7 +136,7 @@ public class CampanhasRecallControllerTests {
 
 		PageImpl<CampanhaRecallTO> pCampanhas = new PageImpl<>(mCampanhas);
 
-		when(service.buscar(any(), any(Pageable.class))).thenReturn(pCampanhas);
+		when(service.buscar(any(), isNull(), any(Pageable.class))).thenReturn(pCampanhas);
 	}
 
 	private MockHttpServletRequestBuilder setJwt(MockHttpServletRequestBuilder builder) {

@@ -98,14 +98,14 @@ public class CampanhaServiceTests {
 
 	@Test
 	public void buscarTodasCampanhas() {
-		List<CampanhaRecallTO> campanhas = service.buscar(null, Pageable.unpaged()).getContent();
+		List<CampanhaRecallTO> campanhas = service.buscar(null, null, Pageable.unpaged()).getContent();
 
 		assertThat(campanhas.size()).isEqualTo(2);
 	}
 
 	@Test
 	public void buscarTodasCampanhasAtivas() {
-		List<CampanhaRecallTO> campanhas = service.buscar(Estado.ATIVA, Pageable.unpaged()).getContent();
+		List<CampanhaRecallTO> campanhas = service.buscar(Estado.ATIVA, null, Pageable.unpaged()).getContent();
 
 		assertThat(campanhas.size()).isEqualTo(1);
 		assertThat(campanhas.get(0).getEstadoCampanha()).isEqualTo(Estado.ATIVA);
@@ -113,7 +113,7 @@ public class CampanhaServiceTests {
 
 	@Test
 	public void buscarTodasCampanhasConcluidas() {
-		List<CampanhaRecallTO> campanhas = service.buscar(Estado.CONCLUIDA, Pageable.unpaged()).getContent();
+		List<CampanhaRecallTO> campanhas = service.buscar(Estado.CONCLUIDA, null, Pageable.unpaged()).getContent();
 
 		assertThat(campanhas.size()).isEqualTo(1);
 		assertThat(campanhas.get(0).getEstadoCampanha()).isEqualTo(Estado.CONCLUIDA);

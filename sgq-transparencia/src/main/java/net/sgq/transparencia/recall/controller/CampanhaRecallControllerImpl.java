@@ -67,7 +67,7 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 			sort = sort.descending();
 		}
 
-		Page<CampanhaRecallTO> campanhas = service.buscar(null, PageRequest.of(pagina - 1, registros, sort));
+		Page<CampanhaRecallTO> campanhas = service.buscar(null, null, PageRequest.of(pagina - 1, registros, sort));
 
 		return new ResponseEntity<>(campanhas.getContent(), PageHeaders.headers(campanhas), HttpStatus.OK);
 	}
@@ -75,6 +75,7 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 	@Override
 	@GetMapping(params = "estado=ativas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CampanhaRecallTO>> todasEmAndamento(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros,
 			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
@@ -85,12 +86,13 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 			sort = sort.descending();
 		}
 
-		return trataRespostasBusca(Estado.ATIVA, PageRequest.of(pagina - 1, registros, sort));
+		return trataRespostasBusca(Estado.ATIVA, titulo, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
 	@GetMapping(params = "estado=concluidas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<CampanhaRecallTO>> todasConcluidas(
+			@RequestParam(required = false) String titulo,
 			@RequestParam(defaultValue = "1", required = false) Integer pagina,
 			@RequestParam(defaultValue = "10", required = false) Integer registros,
 			@RequestParam(defaultValue = "false", required = false) Boolean descSort) {
@@ -101,7 +103,7 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 			sort = sort.descending();
 		}
 
-		return trataRespostasBusca(Estado.CONCLUIDA, PageRequest.of(pagina - 1, registros, sort));
+		return trataRespostasBusca(Estado.CONCLUIDA, titulo, PageRequest.of(pagina - 1, registros, sort));
 	}
 
 	@Override
@@ -144,8 +146,8 @@ public class CampanhaRecallControllerImpl implements CampanhaRecallController {
 		this.service.concluiCampanha(id);
 	}
 
-	private ResponseEntity<List<CampanhaRecallTO>> trataRespostasBusca(Estado estado, Pageable page) {
-		Page<CampanhaRecallTO> campanhasEstado = this.service.buscar(estado, page);
+	private ResponseEntity<List<CampanhaRecallTO>> trataRespostasBusca(Estado estado, String titulo, Pageable page) {
+		Page<CampanhaRecallTO> campanhasEstado = this.service.buscar(estado, titulo, page);
 
 		if (campanhasEstado.getContent().isEmpty()) {
 			return ResponseEntity.notFound().build();

@@ -412,7 +412,7 @@ class ListaCampanha extends Component {
                                         <Row>
                                             <Col md="1"></Col>
                                             <Col md="8">
-                                                <p><b>Medidas Corretivas: </b><br />{campanha.medidasCoretivas}</p>
+                                                <p><b>Medidas Corretivas: </b><br />{campanha.medidasCorretivas}</p>
                                             </Col>
                                             <Col md></Col>
                                         </Row>
@@ -420,6 +420,11 @@ class ListaCampanha extends Component {
                                             <Col md></Col>
                                             <Col md="10">
                                                 <Form.Group controlId="gncsEnvolvidas">
+                                                    <Row>
+                                                        <Col style={{ textAlign: 'center' }}>
+                                                            <b>Não Conformidade Envolvidas</b>
+                                                        </Col>
+                                                    </Row>
                                                     <br />
                                                     <Row>
                                                         {campanha.ncsEnvolvidas.map(nc => (

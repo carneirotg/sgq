@@ -23,11 +23,11 @@ public interface CampanhaRecallController {
 
 	@ApiOperation(value = "Lista as campanhas de recall presentes no sistema que se encontram em andamento", response = CampanhaRecallTO.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Campanhas listadas com sucesso") })
-	ResponseEntity<List<CampanhaRecallTO>> todasEmAndamento(Integer pagina, Integer registros, Boolean descSort);
+	ResponseEntity<List<CampanhaRecallTO>> todasEmAndamento(String titulo, Integer pagina, Integer registros, Boolean descSort);
 
 	@ApiOperation(value = "Lista as campanhas de recall presentes no sistema que já foram concluídas", response = CampanhaRecallTO.class, responseContainer = "List")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Campanhas listadas com sucesso") })
-	ResponseEntity<List<CampanhaRecallTO>> todasConcluidas(Integer pagina, Integer registros, Boolean descSort);
+	ResponseEntity<List<CampanhaRecallTO>> todasConcluidas(String titulo, Integer pagina, Integer registros, Boolean descSort);
 
 	@ApiOperation(value = "Cria uma nova campanha de recall")
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Campanha criada com sucesso") })

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import net.sgq.transparencia.comunicacao.modelos.Comunicado;
 import net.sgq.transparencia.recall.modelos.NaoConformidade;
 import net.sgq.transparencia.recall.modelos.enums.Estado;
@@ -24,9 +26,11 @@ public class CampanhaRecallTO implements Comunicado {
 	private String titulo;
 
 	@PastOrPresent
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date inicio;
 
 	@Future
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fim;
 
 	@NotBlank

@@ -4,7 +4,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import React, { Component } from 'react';
 import { FaTrash, FaLightbulb, FaPlusCircle } from 'react-icons/fa';
 import { Row, Col, Container, Form, Button, Card, Modal, Alert, Accordion } from 'react-bootstrap';
-import { DateRangePicker, SingleDatePicker } from 'react-dates';
+import { DateRangePicker, SingleDatePicker, isInclusivelyBeforeDay } from 'react-dates';
 
 import moment from 'moment';
 
@@ -97,7 +97,7 @@ class NovaCampanha extends Component {
         }
 
         const camCli = cliente().campanhas;
-        const resp = await camCli.salvar(this.state.campanha);
+        const resp = await camCli.salvar(this._trataDatas(this.state.campanha));
 
         if (resp.sucesso) {
             const estado = this.state.update ? 'atualizada' : 'registrada';
@@ -108,6 +108,12 @@ class NovaCampanha extends Component {
             console.log(resp)
         }
 
+    }
+
+    _trataDatas(campanha) {
+        campanha.inicio.set({h: 0, m: 0});
+        campanha.fim.set({h: 0, m: 0});
+        return campanha;
     }
 
     _toggleModalNCS() {
@@ -266,7 +272,7 @@ class NovaCampanha extends Component {
                                         <br />
                                         <SingleDatePicker
                                             id="constatado"
-                                            isOutsideRange={() => false}
+                                            isOutsideRange={day => !isInclusivelyBeforeDay(day, moment())}
                                             placeholder="Constatado"
                                             date={this.state.campanha.dataConstatacao}
                                             focused={fConstatado}

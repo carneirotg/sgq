@@ -14,7 +14,7 @@ public interface CampanhaService {
 	CampanhaRecallTO consultaId(Long id);
 	Long salvar(CampanhaRecallTO campanha);
 	
-	Page<CampanhaRecallTO> buscar(Estado estado, Pageable pageRequest);
+	Page<CampanhaRecallTO> buscar(Estado estado, String termo, Pageable pageRequest);
 	List<CampanhaRecallTO> buscar(Estado estado, Integer janelaMinutos);
 	
 	void atualizaCampanha(Long id, CampanhaRecallTO campanha);

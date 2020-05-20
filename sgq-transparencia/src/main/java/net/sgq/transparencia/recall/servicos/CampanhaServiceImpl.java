@@ -40,16 +40,16 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 	@Override
 	public CampanhaRecallTO consultaId(Long id) {
-		
+
 		Optional<CampanhaRecall> oCampanha = this.repository.findById(id);
-		
-		if(oCampanha.isEmpty()) {
+
+		if (oCampanha.isEmpty()) {
 			return null;
 		}
-		
+
 		return oCampanha.get().toTO();
 	}
-	
+
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public Long salvar(CampanhaRecallTO campanha) {
@@ -63,10 +63,10 @@ public class CampanhaServiceImpl implements CampanhaService {
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED)
 	public void atualizaCampanha(Long id, CampanhaRecallTO campanhaTO) {
-		
+
 		Optional<CampanhaRecall> oCampanha = this.repository.findById(id);
-		
-		if(oCampanha.isEmpty()) {
+
+		if (oCampanha.isEmpty()) {
 			throw new EntityNotFoundException("Entitdade 'Campanha' informada não encontrada.");
 		}
 
@@ -75,33 +75,42 @@ public class CampanhaServiceImpl implements CampanhaService {
 		campanha.setMedidasCorretivas(campanhaTO.getMedidasCorretivas());
 
 	}
-	
+
 	@Override
-	public Page<CampanhaRecallTO> buscar(Estado estado, Pageable page) {
+	public Page<CampanhaRecallTO> buscar(Estado estado, String termos, Pageable page) {
 
 		Page<CampanhaRecall> campanhas;
 
-		if (estado == null) {
-			campanhas = this.repository.findAll(page);
+		if(termos == null) {
+			campanhas = buscarPorEstado(estado, page);
 		} else {
-			campanhas = this.repository.findByEstadoCampanha(estado, page);
+			campanhas = this.repository.findByEstadoCampanhaAndTermos(estado, termos, page);
 		}
 
 		List<CampanhaRecallTO> pagina = campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());
 
 		return new PageImpl<CampanhaRecallTO>(pagina, page, campanhas.getTotalElements());
 	}
-	
+
+	private Page<CampanhaRecall> buscarPorEstado(Estado estado, Pageable page) {
+
+		if (estado == null) {
+			return this.repository.findAll(page);
+		}
+		
+		return this.repository.findByEstadoCampanha(estado, page);
+	}
+
 	@Override
 	public List<CampanhaRecallTO> buscar(Estado estado, Integer janelaMinutos) {
-		
+
 		List<CampanhaRecall> campanhas;
 
 		if (estado == null) {
 			campanhas = this.repository.findAll();
 		} else {
-			
-			if(janelaMinutos == null) {
+
+			if (janelaMinutos == null) {
 				campanhas = this.repository.findByEstadoCampanha(estado);
 			} else {
 				campanhas = this.repository.findByEstadoCampanhaAndInicioAfter(estado, trataData(janelaMinutos));
@@ -109,7 +118,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		}
 
 		return campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());
-		
+
 	}
 
 	@Override
@@ -118,11 +127,11 @@ public class CampanhaServiceImpl implements CampanhaService {
 		Optional<CampanhaRecall> oCampanha = buscaCampanhaValida(id);
 
 		CampanhaRecall campanha = oCampanha.get();
-		
-		if(campanha.getEstadoCampanha() == Estado.CONCLUIDA) {
+
+		if (campanha.getEstadoCampanha() == Estado.CONCLUIDA) {
 			throw new IllegalStateException("Campanha já foi concluída e não pode ter data de fim alterada.");
 		}
-		
+
 		campanha.setFim(novaDataTermino);
 
 		logger.info("Data de término da campanha {} foi atualizado para {}", id, novaDataTermino);
@@ -138,6 +147,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		validaEstadoCampanha(campanha);
 		campanha.setEstadoCampanha(Estado.CONCLUIDA);
+		campanha.setFim(new Date());
 
 		if (campanha.getFim().after(new Date())) {
 			logger.warn("Campanha {} foi concluída antes do período", id);
@@ -146,7 +156,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		}
 
 	}
-	
+
 	private Date trataData(Integer janelaMinutos) {
 		return Date.from(LocalDateTime.now().minusMinutes(janelaMinutos).atZone(ZoneId.systemDefault()).toInstant());
 	}
@@ -167,25 +177,25 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		return oCampanha;
 	}
-	
+
 	private void trataNCSCampanha(CampanhaRecallTO campanha) {
-		
+
 		List<NaoConformidade> ncs = new ArrayList<>();
-		
-		for(NaoConformidade nc : campanha.getNcsEnvolvidas()) {
-			
+
+		for (NaoConformidade nc : campanha.getNcsEnvolvidas()) {
+
 			Optional<NaoConformidade> oNC = this.ncRepository.findById(nc.getId());
-			
-			if(oNC.isPresent()) {
+
+			if (oNC.isPresent()) {
 				ncs.add(oNC.get());
 			} else {
 				ncs.add(this.ncRepository.save(nc));
 			}
-			
+
 		}
-		
+
 		campanha.setNcsEnvolvidas(ncs);
-		
+
 	}
 
 }
