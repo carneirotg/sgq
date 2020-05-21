@@ -13,11 +13,14 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import net.sgq.transparencia.comunicacao.modelos.Comunicado;
 import net.sgq.transparencia.recall.modelos.NaoConformidade;
 import net.sgq.transparencia.recall.modelos.enums.Estado;
 import net.sgq.transparencia.recall.modelos.enums.TipoRisco;
 
+@JacksonXmlRootElement(localName = "Campanha")
 public class CampanhaRecallTO implements Comunicado {
 
 	private Long id;

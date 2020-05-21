@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 
 import net.sgq.transparencia.clientes.GestaoIncidentesClient;
 import net.sgq.transparencia.clientes.to.IncidenteTO;
+import net.sgq.transparencia.recall.modelos.to.CampanhaRecallTO;
+import net.sgq.transparencia.recall.servicos.CampanhaService;
 
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -35,6 +38,9 @@ public class EventosControllerTests {
 
 	@MockBean
 	private GestaoIncidentesClient client;
+	
+	@MockBean
+	private CampanhaService campanhaService;
 
 	@Autowired
 	private MockMvc mock;
@@ -45,24 +51,42 @@ public class EventosControllerTests {
 	@BeforeEach
 	public void before() {
 		@SuppressWarnings("unchecked")
-		ResponseEntity<List<IncidenteTO>> mResponse = Mockito.mock(ResponseEntity.class);
+		ResponseEntity<List<IncidenteTO>> mResponseIncidentes = Mockito.mock(ResponseEntity.class);
 		
-		when(mResponse.getBody()).thenReturn(new ArrayList<>());
-		when(mResponse.getHeaders()).thenReturn(Mockito.mock(HttpHeaders.class));
-		when(mResponse.getStatusCodeValue()).thenReturn(200);
+		when(mResponseIncidentes.getBody()).thenReturn(new ArrayList<>());
+		when(mResponseIncidentes.getHeaders()).thenReturn(Mockito.mock(HttpHeaders.class));
+		when(mResponseIncidentes.getStatusCodeValue()).thenReturn(200);
 		
-		when(client.consultaIncidentesConcluidos(Mockito.anyInt(), anyInt())).thenReturn(mResponse);
+		List<CampanhaRecallTO> listaTO = new ArrayList<>();
+		listaTO.add(new CampanhaRecallTO());
+		
+		PageImpl<CampanhaRecallTO> pageCampanhas = new PageImpl<>(listaTO); 
+		
+		when(client.consultaIncidentesConcluidos(anyInt(), anyInt())).thenReturn(mResponseIncidentes);
+		when(campanhaService.buscar(Mockito.any(), Mockito.isNull(), Mockito.any())).thenReturn(pageCampanhas);
 	}
 
 	@Test
-	public void eventosEmJson() throws Exception {
-		mock.perform(setJwt(get("/eventos").accept(MediaType.APPLICATION_JSON_VALUE)))
+	public void eventosEmJsonIncidentes() throws Exception {
+		mock.perform(setJwt(get("/eventos/incidentes").accept(MediaType.APPLICATION_JSON_VALUE)))
 				.andExpect(header().string("Content-Type", "application/json")).andExpect(status().isOk());
 	}
 	
 	@Test
-	public void eventosEmXml() throws Exception {
-		mock.perform(setJwt(get("/eventos").accept(MediaType.APPLICATION_XML_VALUE)))
+	public void eventosEmXmlIncidentes() throws Exception {
+		mock.perform(setJwt(get("/eventos/incidentes").accept(MediaType.APPLICATION_XML_VALUE)))
+				.andExpect(header().string("Content-Type", "application/xml")).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void eventosEmJsonCampanhas() throws Exception {
+		mock.perform(setJwt(get("/eventos/campanhas").accept(MediaType.APPLICATION_JSON_VALUE)))
+				.andExpect(header().string("Content-Type", "application/json")).andExpect(status().isOk());
+	}
+	
+	@Test
+	public void eventosEmXmlCampanhas() throws Exception {
+		mock.perform(setJwt(get("/eventos/campanhas").accept(MediaType.APPLICATION_XML_VALUE)))
 				.andExpect(header().string("Content-Type", "application/xml")).andExpect(status().isOk());
 	}
 	

@@ -160,7 +160,10 @@ const campanhas = {
 
 const eventos = {
     consultaUltimosIncidentes: async() => {
-        return http.get('/eventos')
+        return http.get('/eventos/incidentes')
+    },
+    consultaUltimasCampanhas: async() => {
+        return http.get('/eventos/campanhas')
     }
 }
 

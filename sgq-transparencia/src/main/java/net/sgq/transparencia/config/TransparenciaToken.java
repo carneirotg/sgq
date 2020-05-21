@@ -34,7 +34,7 @@ public class TransparenciaToken {
 	@Scheduled(fixedDelay = 15000)
 	public void initToken()  {
 		try {
-			logger.info("Atualizando token JWT Interno");
+			logger.debug("Atualizando token JWT Interno");
 			recuperaToken();
 		} catch (Exception e) {
 			logger.error("Erro recuperando token: {}", e.getMessage(), e);

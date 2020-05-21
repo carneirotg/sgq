@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter /*ResourceServe
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.GET, "/eventos");
+		web.ignoring().antMatchers(HttpMethod.GET, "/eventos/**");
 	}
 
 
