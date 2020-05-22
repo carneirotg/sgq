@@ -34,6 +34,8 @@ sgq:
         v1: /v1/campanhas
       destinatarios:
         v1: /v1/destinatarios
+      comunicados:
+        v1: /v1/comunicados
       eventos:
         v1: /v1/eventos
 
@@ -66,6 +68,9 @@ zuul:
       service-id: transparencia
     destinatarios-v1:
       path: /destinatarios/**
+      service-id: transparencia
+    comunicados-v1:
+      path: /comunicados/**
       service-id: transparencia
     eventos-v1:
       path: /eventos/**
