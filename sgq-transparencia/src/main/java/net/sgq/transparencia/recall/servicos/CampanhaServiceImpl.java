@@ -84,7 +84,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		if(termos == null) {
 			campanhas = buscarPorEstado(estado, page);
 		} else {
-			campanhas = this.repository.findByEstadoCampanhaAndTermos(estado, termos, page);
+			campanhas = this.repository.findByEstadoCampanhaAndTermos(estado, "%" + termos + "%", page);
 		}
 
 		List<CampanhaRecallTO> pagina = campanhas.stream().map(CampanhaRecall::toTO).collect(Collectors.toList());

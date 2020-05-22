@@ -38,6 +38,10 @@ sgq:
     username: ${AUTH_USER:interno}
     password: ${AUTH_PASS:i123}
 
+logging:
+  level:
+    org.springframework.orm: DEBUG
+
 ---
 spring:
   profiles:

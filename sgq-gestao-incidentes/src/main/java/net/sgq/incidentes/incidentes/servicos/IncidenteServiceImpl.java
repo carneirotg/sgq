@@ -78,13 +78,13 @@ public class IncidenteServiceImpl implements IncidenteService {
 				if(termo == null) {
 					incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA, pageable);
 				} else {
-					incidentes = this.repository.findBySituacaoNotAndTermo(Estado.CONCLUIDA, termo, pageable);
+					incidentes = this.repository.findBySituacaoNotAndTermo(Estado.CONCLUIDA, "%" + termo + "%", pageable);
 				}
 			} else {
 				if(termo == null) {
 					incidentes = this.repository.findBySituacao(estado, pageable);
 				} else {
-					incidentes = this.repository.findBySituacaoAndTermo(estado, termo, pageable);
+					incidentes = this.repository.findBySituacaoAndTermo(estado, "%" + termo + "%", pageable);
 				}
 			}
 		} else {
