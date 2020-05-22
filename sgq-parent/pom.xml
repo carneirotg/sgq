@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.sgq</groupId>
   <artifactId>parent</artifactId>
-  <version>0.5.5-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>Sistema de Gestão de Qualidade</name>
   <description>Projeto de conclusão de curso do especialização em Arquitetura de Software Distribuídos @ PUC Minas.</description>
