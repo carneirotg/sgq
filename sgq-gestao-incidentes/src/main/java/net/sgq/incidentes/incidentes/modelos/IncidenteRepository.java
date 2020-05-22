@@ -27,6 +27,9 @@ public interface IncidenteRepository extends JpaRepository<Incidente, Long> {
 	Page<Incidente> findBySituacaoNotAndTermo(Estado estado, String termo, Pageable pageable);
 	
 	List<Incidente> findByCriadoEmBetween(Date inicio, Date fim);
+
+	@Query("select i.situacao, count(i) from Incidente i Group by i.situacao")
+	List<Object[]> estatisticas();
 	
 
 }

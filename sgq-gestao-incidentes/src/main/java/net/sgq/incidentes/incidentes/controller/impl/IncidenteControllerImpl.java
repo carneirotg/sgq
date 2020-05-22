@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +45,7 @@ public class IncidenteControllerImpl implements IncidenteController {
 	private IncidenteService service;
 
 	@Override
-	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{id:^[0-9]+}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Incidente> buscaPor(@PathVariable Long id) {
 		Incidente ic = this.service.consultaIncidente(id);
 
@@ -176,6 +177,12 @@ public class IncidenteControllerImpl implements IncidenteController {
 	@ResponseStatus(code = NO_CONTENT)
 	public void atualizaIncidente(@PathVariable Long id, @Validated @RequestBody Incidente incidente) {
 		this.service.salvarIncidente(incidente, id);
+	}
+
+	@Override
+	@GetMapping(path = "/estatisticas", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Long> estatisticas() {
+		return service.estatisticas();
 	}
 
 	private ResponseEntity<List<Incidente>> listaPorEstado(Estado estado, String titulo, Integer janelaMinutos, Pageable pageable) {

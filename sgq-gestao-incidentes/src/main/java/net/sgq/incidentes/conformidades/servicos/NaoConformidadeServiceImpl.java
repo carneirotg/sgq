@@ -1,6 +1,8 @@
 package net.sgq.incidentes.conformidades.servicos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,6 +27,7 @@ import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.NaoConformidadeRepository;
 import net.sgq.incidentes.conformidades.modelos.Norma;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
+import net.sgq.incidentes.conformidades.modelos.enums.TipoNaoConformidade;
 
 @Service
 public class NaoConformidadeServiceImpl implements NaoConformidadeService {
@@ -163,12 +166,24 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 		if (nc.getNormaNaoConformidade().getNormaId() == null) {
 			throw new IllegalStateException("NC não possui norma associada");
 		}
-		
-		if(nc.getEstado() != Estado.EM_ANALISE) {
+
+		if (nc.getEstado() != Estado.EM_ANALISE) {
 			throw new IllegalStateException("Somente NCs em análise podem ser ter seu checklist respondido");
 		}
 
 		nc.getNormaNaoConformidade().setCheckList(checklist);
+	}
+
+	@Override
+	@Cacheable(value = "ncsEstatisticas")
+	public Map<String, Long> estatisticas() {
+		
+		final Map<String, Long> stats = new HashMap<>();
+		List<Object[]> listaEstats = repository.estatisticas();
+
+		listaEstats.stream().forEach(c -> stats.put(((TipoNaoConformidade) c[0]).name(), (Long) c[1]));
+
+		return stats;
 	}
 
 	private NaoConformidade novaNaoConformidade(NaoConformidade naoConformidade) {
@@ -195,7 +210,7 @@ public class NaoConformidadeServiceImpl implements NaoConformidadeService {
 
 		return this.repository.save(ncAtualizada);
 	}
-	
+
 	private String extraiTokenUsuario(OAuth2Authentication usuario) {
 		OAuth2AuthenticationDetails oDetails = (OAuth2AuthenticationDetails) usuario.getDetails();
 		return String.format("Bearer %s", oDetails.getTokenValue());

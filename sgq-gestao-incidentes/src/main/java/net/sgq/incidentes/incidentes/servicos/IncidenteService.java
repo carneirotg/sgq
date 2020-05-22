@@ -2,6 +2,7 @@ package net.sgq.incidentes.incidentes.servicos;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +29,7 @@ public interface IncidenteService {
 	void removeTodasNaoConformidades(Long id);
 
 	void incidenteMudaEstado(Long iId, Estado aberta);
+
+	Map<String, Long> estatisticas();
 
 }

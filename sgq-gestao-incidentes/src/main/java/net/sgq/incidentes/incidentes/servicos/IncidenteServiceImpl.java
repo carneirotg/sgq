@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -75,13 +77,14 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 		if (janelaMinutos == null) {
 			if (estado == Estado.NAO_CONCLUIDA) {
-				if(termo == null) {
+				if (termo == null) {
 					incidentes = this.repository.findBySituacaoNot(Estado.CONCLUIDA, pageable);
 				} else {
-					incidentes = this.repository.findBySituacaoNotAndTermo(Estado.CONCLUIDA, "%" + termo + "%", pageable);
+					incidentes = this.repository.findBySituacaoNotAndTermo(Estado.CONCLUIDA, "%" + termo + "%",
+							pageable);
 				}
 			} else {
-				if(termo == null) {
+				if (termo == null) {
 					incidentes = this.repository.findBySituacao(estado, pageable);
 				} else {
 					incidentes = this.repository.findBySituacaoAndTermo(estado, "%" + termo + "%", pageable);
@@ -107,11 +110,11 @@ public class IncidenteServiceImpl implements IncidenteService {
 
 		if (id == null || id == 0) {
 			ic = novoIncidente(incidente);
-			
-			if(ic.getNcEnvolvidas() != null && !ic.getNcEnvolvidas().isEmpty()) {
+
+			if (ic.getNcEnvolvidas() != null && !ic.getNcEnvolvidas().isEmpty()) {
 				ic.getNcEnvolvidas().forEach(nc -> this.adicionaNaoConformidade(ic.getId(), nc.getId()));
 			}
-			
+
 		} else {
 			ic = atualizaIncidente(incidente, id);
 		}
@@ -185,6 +188,17 @@ public class IncidenteServiceImpl implements IncidenteService {
 					String.format("Transição de um Incidente de %s para %s não é permitida", nc.getSituacao(), estado));
 		}
 
+	}
+
+	@Override
+	@Cacheable(value = "incidentesEstatisticas")
+	public Map<String, Long> estatisticas() {
+		final Map<String, Long> stats = new HashMap<>();
+		List<Object[]> listaEstats = repository.estatisticas();
+
+		listaEstats.stream().forEach(c -> stats.put(((Estado) c[0]).name(), (Long) c[1]));
+
+		return stats;
 	}
 
 	private Date trataData(Integer janelaMinutos) {

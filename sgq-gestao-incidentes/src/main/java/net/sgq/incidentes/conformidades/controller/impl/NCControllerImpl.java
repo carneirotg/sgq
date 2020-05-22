@@ -7,6 +7,7 @@ import static org.springframework.http.HttpStatus.OK;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -121,6 +122,12 @@ public class NCControllerImpl implements NCController {
 	@ResponseStatus(code = NO_CONTENT)
 	public void atualizaNC(@PathVariable Long id, @RequestBody NaoConformidade naoConformidadeTo) {
 		this.service.salvarNC(naoConformidadeTo, id);
+	}
+	
+	@Override
+	@GetMapping(path = "/estatisticas", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Long> estatisticas() {
+		return service.estatisticas();
 	}
 
 	private ResponseEntity<List<NaoConformidade>> listaPorEstado(Estado estado, String titulo, Pageable page) {

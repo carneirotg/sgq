@@ -2,6 +2,7 @@ package net.sgq.incidentes.conformidades.controller;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
@@ -52,5 +53,7 @@ public interface NCController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Listadas NCs encontradas "),
 			@ApiResponse(code = 404, message = "Nenhuma NC nessa situação encontrada") })
 	ResponseEntity<List<NaoConformidade>> nCsNaoConcluidas(String titulo, Integer paginas, Integer registros);
+	
+	Map<String, Long> estatisticas();
 
 }

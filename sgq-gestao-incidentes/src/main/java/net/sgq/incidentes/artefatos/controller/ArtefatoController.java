@@ -2,6 +2,7 @@ package net.sgq.incidentes.artefatos.controller;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
@@ -42,5 +43,7 @@ public interface ArtefatoController {
 	@ApiResponses(value = {
 			@ApiResponse(code = 204, message = "Artefato depreciado com sucesso") })
 	void depreciaArtefato(Long id);
+	
+	Map<String, Long> estatisticas();
 	
 }

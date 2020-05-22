@@ -1,5 +1,7 @@
 package net.sgq.incidentes.conformidades.modelos;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,5 +25,8 @@ public interface NaoConformidadeRepository extends JpaRepository<NaoConformidade
 
 	@Query("select nc from NaoConformidade as nc where nc.estado =  :estado and (lower(nc.titulo) like lower(:termo) or lower(nc.resumo) like lower(:termo) or lower(nc.detalhamentoNaoConformidade) like lower(:termo))")
 	Page<NaoConformidade> findByEstadoAndTermo(@Param("estado") Estado estado, @Param("termo") String termo, Pageable pageable);
+
+	@Query("select n.tipoNaoConformidade, count(n) from NaoConformidade n Group by n.tipoNaoConformidade")
+	List<Object[]> estatisticas();
 
 }

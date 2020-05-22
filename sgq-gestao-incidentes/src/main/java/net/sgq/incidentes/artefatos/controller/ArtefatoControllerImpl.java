@@ -3,6 +3,7 @@ package net.sgq.incidentes.artefatos.controller;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,7 +48,7 @@ public class ArtefatoControllerImpl implements ArtefatoController {
 	}
 
 	@Override
-	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{id:^[0-9]+}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Artefato> buscaArtefatoPor(@PathVariable Long id) {
 		
 		Artefato artefatoIdTO = this.service.buscaArtefatoPor(id);
@@ -94,6 +95,12 @@ public class ArtefatoControllerImpl implements ArtefatoController {
 	@ResponseStatus(code=HttpStatus.NO_CONTENT)
 	public void depreciaArtefato(@PathVariable Long id) {
 		this.service.depreciaArtefato(id);
+	}
+	
+	@Override
+	@GetMapping(path = "/estatisticas", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Map<String, Long> estatisticas() {
+		return service.estatisticas();
 	}
 
 }

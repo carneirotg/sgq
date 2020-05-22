@@ -27,4 +27,6 @@ public interface NaoConformidadeService {
 
 	void atualizaChecklist(Long ncId, Map<String, Boolean> checklist);
 
+	Map<String, Long> estatisticas();
+
 }

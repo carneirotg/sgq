@@ -3,6 +3,7 @@ package net.sgq.incidentes.incidentes.controller;
 import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 
@@ -67,5 +68,7 @@ public interface IncidenteController {
 	@ApiResponses(value = { @ApiResponse(code = 201, message = "Incidente atualizado com sucesso"),
 			@ApiResponse(code = 201, message = "Incidente atualizado com sucesso") })
 	void atualizaIncidente(Long id, Incidente incidente);
+	
+	Map<String, Long> estatisticas();
 
 }

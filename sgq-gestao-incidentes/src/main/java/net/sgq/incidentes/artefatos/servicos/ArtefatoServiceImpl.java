@@ -1,5 +1,8 @@
 package net.sgq.incidentes.artefatos.servicos;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -78,11 +81,24 @@ public class ArtefatoServiceImpl implements ArtefatoService {
 
 	}
 
+	@Override
+	@Cacheable(value = "artefatosEstatisticas")
+	public Map<String, Long> estatisticas() {
+
+		final Map<String, Long> stats = new HashMap<>();
+		List<Object[]> listaEstats = repository.estatisticas();
+
+		listaEstats.stream().forEach(c -> stats.put((String) c[0], (Long) c[1]));
+
+		return stats;
+	}
+
 	private Artefato atualizarArtefato(Artefato artefato, Long id) {
 		Optional<Artefato> oArtefato = this.repository.findById(id);
 
 		if (oArtefato.isEmpty()) {
-			throw new EntityNotFoundException(String.format("Entidade do tipo 'Artefato' não encontrada para Id %d", id));
+			throw new EntityNotFoundException(
+					String.format("Entidade do tipo 'Artefato' não encontrada para Id %d", id));
 		}
 
 		Artefato dbArtefato = oArtefato.get();

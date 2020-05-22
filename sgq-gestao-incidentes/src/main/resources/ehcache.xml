@@ -4,6 +4,7 @@
             http://www.ehcache.org/v3 
             http://www.ehcache.org/schema/ehcache-core-3.8.xsd">
 	<persistence directory="/tmp/ehcache" />
+	
 	<cache-template name="default">
 		<expiry>
 			<ttl unit="hours">1</ttl>
@@ -20,9 +21,27 @@
 			<heap>500</heap>
 		</resources>
 	</cache>
+
+	<cache alias="artefatosEstatisticas" uses-template="default">
+		<expiry>
+			<ttl unit="minutes">5</ttl>
+		</expiry>
+	</cache>
 	
 	<cache alias="nc" uses-template="default"/>
 	
+	<cache alias="ncsEstatisticas" uses-template="default">
+		<expiry>
+			<ttl unit="minutes">5</ttl>
+		</expiry>
+	</cache>
+	
 	<cache alias="incidente" uses-template="default"></cache>
+	
+	<cache alias="incidentesEstatisticas" uses-template="default">
+		<expiry>
+			<ttl unit="minutes">5</ttl>
+		</expiry>
+	</cache>
 	
 </config>
