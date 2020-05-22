@@ -158,6 +158,12 @@ const campanhas = {
     }
 }
 
+const comunicados = {
+    listar: async(pagina) => {
+        return http.get('comunicados', pagina);
+    }
+}
+
 const eventos = {
     consultaUltimosIncidentes: async() => {
         return http.get('/eventos/incidentes')
@@ -169,6 +175,6 @@ const eventos = {
 
 export function cliente() {
     return {
-        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes, eventos, campanhas
+        artefatos, normas, destinatarios, relatorios, naoConformidades, incidentes, eventos, campanhas, comunicados
     }
 }

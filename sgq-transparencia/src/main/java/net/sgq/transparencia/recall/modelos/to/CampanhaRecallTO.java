@@ -79,6 +79,11 @@ public class CampanhaRecallTO implements Comunicado {
 		this.ncsEnvolvidas = ncsEnvolvidas;
 		this.estadoCampanha = estadoCampanha;
 	}
+	
+	@Override
+	public String getType() {
+		return "Campanha";
+	}
 
 	public Long getId() {
 		return id;

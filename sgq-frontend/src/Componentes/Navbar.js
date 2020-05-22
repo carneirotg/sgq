@@ -71,6 +71,10 @@ class NavbarSGQ extends Component {
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item as={Link} to="/dashboard/destinatarios">Destinatários</NavDropdown.Item>
                             </ComponenteProtegido>
+                            <ComponenteProtegido papel="GESTOR">
+                                <NavDropdown.Divider />
+                                <NavDropdown.Item as={Link} to="/dashboard/comunicados">Comunicados</NavDropdown.Item>
+                            </ComponenteProtegido>
                         </NavDropdown>
 
                     </Nav>

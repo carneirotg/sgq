@@ -79,8 +79,6 @@ class ArtefatosLista extends Component {
             if (resp.status === 404) {
                 ToastManager.atencao(`Sem resultados`);
                 this.setState({ artefatos: [], buscaArtefato: '' });
-
-                setTimeout(() => this._consultar(), 1000);
             }
         }
     }

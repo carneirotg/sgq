@@ -26,6 +26,11 @@ public class IncidenteTO implements Comunicado {
 	public IncidenteTO() {
 		super();
 	}
+	
+	@Override
+	public String getType() {
+		return "Incidente";
+	}
 
 	public Long getId() {
 		return id;

@@ -24,5 +24,11 @@
 			<ttl unit="minutes">30</ttl>
 		</expiry>
 	</cache>
+	
+	<cache alias="comunicadosEnviados" uses-template="default">
+		<expiry>
+			<ttl unit="minutes">10</ttl>
+		</expiry>
+	</cache>
 
 </config>
