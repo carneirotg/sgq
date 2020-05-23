@@ -16,7 +16,7 @@ public class SpringFoxConfig {
     public Docket api() { 
         return new Docket(DocumentationType.SWAGGER_2)  
           .select()                                  
-          .apis(RequestHandlerSelectors.basePackage("net.sgq.incidentes"))              
+          .apis(RequestHandlerSelectors.basePackage("net.sgq.relatorios"))              
           .paths(PathSelectors.any())                          
           .build();                                           
     }
