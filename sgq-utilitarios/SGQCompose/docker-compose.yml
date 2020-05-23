@@ -12,18 +12,23 @@ services:
       - POSTGRES_PASSWORD=sgq_pgsql
     volumes: 
       - ./sgq_db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - ./pg-data/:/var/lib/postgresql/data/
   service-discovery:
     image: sgq-service-discovery
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
+    volumes: 
+      - ./logs/:/tmp/logs/
   auth-server:
     image: sgq-auth-server
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery
       - postgres-sgq
@@ -37,6 +42,8 @@ services:
       - EUREKA_HOST=service-discovery
       - ZUUL_CONNECT_TO=5000
       - ZUUL_SOCKET_TO=30000
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery
   gateway-normas:
@@ -46,6 +53,8 @@ services:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
       - MOCK_GESTAO_HOST=mock-normas
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery
       - postgres-sgq
@@ -55,6 +64,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery
       - postgres-sgq
@@ -64,6 +75,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery
       - auth-server
@@ -74,6 +87,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery
       - postgres-sgq
@@ -93,5 +108,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=staging
       - EUREKA_HOST=service-discovery
+    volumes: 
+      - ./logs/:/tmp/logs/
     depends_on:
       - service-discovery

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<springProfile name="dev | default">
+
+		<appender name="Console"
+			class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<root level="info">
+			<appender-ref ref="Console" />
+		</root>
+	</springProfile>
+	<springProfile name="staging">
+
+		<property name="LOGS" value="/tmp/logs" />
+
+		<appender name="File"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${LOGS}/gestao-incidente.log</file>
+			<encoder>
+				<Pattern>%d %-5level [%thread] %logger{0}: %msg%n</Pattern>
+			</encoder>
+
+			<rollingPolicy
+				class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<fileNamePattern>${LOGS}/old/gestao-incidente-%d{yyyy-MM-dd}.log
+				</fileNamePattern>
+				<maxHistory>10</maxHistory>
+			</rollingPolicy>
+
+		</appender>
+
+		<appender name="Console"
+			class="ch.qos.logback.core.ConsoleAppender">
+			<encoder>
+				<pattern>%d %-5level [%thread] %logger{0}: %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<root level="info">
+			<appender-ref ref="File" />
+			<appender-ref ref="Console" />
+		</root>
+	</springProfile>
+
+</configuration>
