@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>net.sgq.incidentes</groupId>
 	<artifactId>sgq-gestao-incidentes</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<name>sgq-gestao-incidentes</name>
 	<description>SGQ Gestão de Incidentes</description>
 
