@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
 import net.sgq.incidentes.artefatos.modelos.Artefato;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
@@ -43,6 +45,7 @@ public class NaoConformidade {
 	@NotBlank
 	@Lob
 	@Column(nullable = false)
+	@Type(type = "org.hibernate.type.TextType") 
 	private String detalhamentoNaoConformidade;
 
 	@Enumerated(EnumType.STRING)

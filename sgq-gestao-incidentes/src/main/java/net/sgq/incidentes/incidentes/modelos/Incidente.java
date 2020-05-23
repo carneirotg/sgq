@@ -20,6 +20,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
 import net.sgq.incidentes.conformidades.modelos.NaoConformidade;
 import net.sgq.incidentes.conformidades.modelos.enums.Estado;
 import net.sgq.incidentes.conformidades.modelos.enums.Setor;
@@ -52,6 +54,7 @@ public class Incidente {
 
 	@Lob
 	@Column(nullable = false)
+	@Type(type = "org.hibernate.type.TextType") 
 	private String conclusao;
 
 	@NotNull

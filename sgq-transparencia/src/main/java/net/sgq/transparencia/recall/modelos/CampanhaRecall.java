@@ -22,6 +22,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.Type;
+
 import net.sgq.transparencia.recall.modelos.enums.Estado;
 import net.sgq.transparencia.recall.modelos.to.CampanhaRecallTO;
 
@@ -47,6 +49,7 @@ public class CampanhaRecall {
 
 	@NotBlank
 	@Lob
+	@Type(type = "org.hibernate.type.TextType") 
 	private String informativoCampanha;
 
 	@NotBlank
