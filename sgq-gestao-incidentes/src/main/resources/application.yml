@@ -38,9 +38,19 @@ spring:
     url: jdbc:postgresql://${PGS_HOST_PORT:postgres-sgq:5432/sgq-incidentes}
     username: ${PGS_USER:sgq}
     password: ${PGS_PWD:sgq_pgsql}
+    hikari:
+      auto-commit: false
+      idle-timeout: 300000 
+      max-lifetime: 600000
+      maximum-pool-size: 10
+      pool-name: relatorios-pool
   h2:
     console:
       enabled: false
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        connection:
+          provider_disables_autocommit: true
