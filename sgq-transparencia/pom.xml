@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>net.sgq.transparencia</groupId>
 	<artifactId>sgq-transparencia</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>sgq-transparencia</name>
 	<description>SGQ Divulgação e Transparência</description>
 
