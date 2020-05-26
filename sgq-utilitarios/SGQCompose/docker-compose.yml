@@ -3,6 +3,10 @@ version: "3.7"
 services:
   postgres-sgq:
     image: postgres:12-alpine
+    deploy:
+      resources:
+        limits:
+          memory: 800M
     restart: unless-stopped
     ports: 
       - 5432:5432
@@ -15,6 +19,10 @@ services:
       - ./pg-data/:/var/lib/postgresql/data/
   service-discovery:
     image: sgq-service-discovery
+    deploy:
+      resources:
+        limits:
+          memory: 500M
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
@@ -23,6 +31,10 @@ services:
       - ./logs/:/tmp/logs/
   auth-server:
     image: sgq-auth-server
+    deploy:
+      resources:
+        limits:
+          memory: 500M    
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
@@ -33,6 +45,10 @@ services:
       - service-discovery
       - postgres-sgq
   api-gateway:
+    deploy:
+      resources:
+        limits:
+          memory: 500M
     image: sgq-api-gateway
     restart: unless-stopped
     ports: 
@@ -48,6 +64,10 @@ services:
       - service-discovery
   gateway-normas:
     image: sgq-gateway-normas
+    deploy:
+      resources:
+        limits:
+          memory: 500M    
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
@@ -60,6 +80,10 @@ services:
       - postgres-sgq
   gestao-incidentes:
     image: sgq-gestao-incidentes
+    deploy:
+      resources:
+        limits:
+          memory: 500M    
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
@@ -71,6 +95,10 @@ services:
       - postgres-sgq
   transparencia:
     image: sgq-transparencia
+    deploy:
+      resources:
+        limits:
+          memory: 500M    
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
@@ -83,6 +111,10 @@ services:
       - postgres-sgq
   relatorios:
     image: sgq-relatorios
+    deploy:
+      resources:
+        limits:
+          memory: 500M    
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
@@ -94,6 +126,10 @@ services:
       - postgres-sgq
   frontend:
     image: sgq-frontend
+    deploy:
+      resources:
+        limits:
+          memory: 100M    
     restart: unless-stopped
     environment: 
       - SPRING_PROFILES_ACTIVE=staging
@@ -104,6 +140,10 @@ services:
       - api-gateway
   mock-normas:
     image: sgq-mock-gestao-normas
+    deploy:
+      resources:
+        limits:
+          memory: 500M    
     restart: unless-stopped
     environment:
       - SPRING_PROFILES_ACTIVE=staging
