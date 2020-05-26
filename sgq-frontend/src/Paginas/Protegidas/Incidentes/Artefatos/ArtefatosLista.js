@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Container, Form, Pagination, Table, Row, Col } from 'react-bootstrap';
+import { FaUnlink } from 'react-icons/fa';
 
 import './Artefato.css';
 
@@ -103,7 +104,7 @@ class ArtefatosLista extends Component {
         if (this.state.buscaArtefato.length > 3) {
             clearTimeout(this.timer);
             this.timer = setTimeout(() => this._consultar(), 300)
-        } else if(this.state.buscaArtefato.length === 0){
+        } else if (this.state.buscaArtefato.length === 0) {
             this._consultar();
         }
     }
@@ -140,7 +141,7 @@ class ArtefatosLista extends Component {
 
         if (direcao === 1 && pagina < paginas) {
             this._paginar(pagina + 1);
-        } else if(direcao === -1 && pagina > 1) {
+        } else if (direcao === -1 && pagina > 1) {
             this._paginar(pagina - 1);
         }
     }
@@ -169,15 +170,15 @@ class ArtefatosLista extends Component {
                         </Row>
                         <Row>
                             <Col md="2"></Col>
-                            <Col md>
+                            <Col md className="overflow-auto">
                                 <Table striped bordered hover>
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Nome</th>
-                                            <th>Descrição</th>
+                                            <th className="d-none d-lg-table-cell">Descrição</th>
                                             <th style={{ textAlign: 'center' }}>Depreciado</th>
-                                            <th style={{ textAlign: 'center' }}>Ação</th>
+                                            <th style={{ textAlign: 'center' }}>Depreciar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -186,11 +187,11 @@ class ArtefatosLista extends Component {
                                                 <tr key={a.id}>
                                                     <td>{a.id}</td>
                                                     <td>{a.nome}</td>
-                                                    <td>{a.descricao}</td>
+                                                    <td className="d-none d-lg-table-cell">{a.descricao}</td>
                                                     <td style={{ textAlign: 'center' }}>{this._simNao(a.depreciado)}</td>
                                                     <td style={{ textAlign: 'center' }}>{
                                                         !a.depreciado ?
-                                                            <Button variant="danger" onClick={this._depreciar.bind(this, a)}>Depreciar</Button>
+                                                            <Button variant="danger" onClick={this._depreciar.bind(this, a)}><FaUnlink /></Button>
                                                             :
                                                             ''
                                                     }</td>

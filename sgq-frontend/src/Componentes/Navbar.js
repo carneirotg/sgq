@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Nav, NavDropdown, Navbar } from 'react-bootstrap';
-import { FaUser } from 'react-icons/fa';
+import { FaSignOutAlt, FaUser } from 'react-icons/fa';
 
 import { Link, Redirect } from 'react-router-dom';
 
@@ -78,7 +78,7 @@ class NavbarSGQ extends Component {
                         </NavDropdown>
 
                     </Nav>
-                    <span style={{paddingRight: '15px'}}><FaUser /> {this._lm.infos()}</span><Button variant="danger" onClick={this.efetuarLogoff.bind(this)}>Logoff</Button>
+                    <span style={{paddingRight: '15px'}}><FaUser /> {this._lm.infos()}</span><Button variant="danger" onClick={this.efetuarLogoff.bind(this)}><FaSignOutAlt /></Button>
                 </Navbar.Collapse>
             </Navbar>
         )

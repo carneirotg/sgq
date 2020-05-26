@@ -279,7 +279,7 @@ class Destinatario extends Component {
 
                         </Row>
                         <Row>
-                            <Col md>
+                            <Col md className="overflow-auto">
                                 <Table striped bordered hover>
                                     <thead>
                                         <tr>
@@ -287,8 +287,8 @@ class Destinatario extends Component {
                                             <th style={{ width: '15%' }}>Descrição</th>
                                             <th style={{ width: '10%', wordWrap: 'break-word' }}>Tipo Endpoint</th>
                                             <th style={{ width: '30%' }} className="d-none d-lg-table-cell">Endpoint</th>
-                                            <th style={{ textAlign: 'center', width: '10%' }}>Recall</th>
-                                            <th style={{ textAlign: 'center', width: '10%' }}>Incidentes</th>
+                                            <th style={{ textAlign: 'center', width: '10%' }} className="d-none d-lg-table-cell">Recall</th>
+                                            <th style={{ textAlign: 'center', width: '10%' }} className="d-none d-lg-table-cell">Incidentes</th>
                                             <th style={{ textAlign: 'center', width: '15%' }}>Ações</th>
                                         </tr>
                                     </thead>
@@ -300,8 +300,8 @@ class Destinatario extends Component {
                                                     <td>{d.descricao}</td>
                                                     <td style={{ wordWrap: 'break-word' }}>{d.tipoDestinatario}</td>
                                                     <td className="d-none d-lg-table-cell">{d.endpoint}</td>
-                                                    <td style={{ textAlign: 'center' }}>{this._simNao(d.assinanteRecall)}</td>
-                                                    <td style={{ textAlign: 'center' }}>{this._simNao(d.assinanteEventos)}</td>
+                                                    <td style={{ textAlign: 'center' }} className="d-none d-lg-table-cell">{this._simNao(d.assinanteRecall)}</td>
+                                                    <td style={{ textAlign: 'center' }} className="d-none d-lg-table-cell">{this._simNao(d.assinanteEventos)}</td>
                                                     <td style={{ textAlign: 'center' }}>
                                                         <Button variant="info" onClick={this._modalDestinatario.bind(this, d, false)}><FaUserEdit /> </Button>{' '}
                                                         <Button variant="danger" onClick={this._modalRemoveDestinatario.bind(this, d)}><FaTrashAlt /> </Button>

@@ -118,7 +118,7 @@ class ListaComunicado extends Component {
                         </Row>
                         <Row>
                             <Col md="1"></Col>
-                            <Col md>
+                            <Col md className="overflow-auto">
                                 <Table striped bordered hover>
                                     <thead>
                                         <tr>
