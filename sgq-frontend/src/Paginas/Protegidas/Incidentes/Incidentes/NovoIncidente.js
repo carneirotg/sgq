@@ -143,7 +143,7 @@ class NovoIncidente extends Component {
                     conclusao: '',
                     classificacao: '',
                     tipoIncidente: '',
-                    situacao: '',
+                    situacao: 'ABERTA',
                     setor: '',
                     ncEnvolvidas: []
                 }
