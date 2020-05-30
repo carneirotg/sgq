@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>net.sgq.utils</groupId>
 	<artifactId>sgq-utils</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5</version>
 	<name>sgq-utils</name>
 	<description>Pacotes de utilitátios</description>
 
