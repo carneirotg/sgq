@@ -147,7 +147,6 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		validaEstadoCampanha(campanha);
 		campanha.setEstadoCampanha(Estado.CONCLUIDA);
-		campanha.setFim(new Date());
 
 		if (campanha.getFim().after(new Date())) {
 			logger.warn("Campanha {} foi concluída antes do período", id);
