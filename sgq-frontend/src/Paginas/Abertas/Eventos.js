@@ -139,8 +139,8 @@ class Eventos extends Component {
                                     <tr key={i.id}>
                                         <td>{i.id}</td>
                                         <td>{i.titulo}</td>
-                                        <td>{i.setor}</td>
-                                        <td>{i.classificacao}</td>
+                                        <td>{NOMES[i.setor]}</td>
+                                        <td>{NOMES[i.classificacao]}</td>
                                         <td><Button variant="info" onClick={this._modalIncidente.bind(this, i)}>Detalhes</Button></td>
                                     </tr>
 
@@ -225,8 +225,8 @@ class Eventos extends Component {
                                 <Modal.Body>
                                     <Container>
                                         <Row>
-                                            <Col md><p><b>Tipo</b><br />{incidente.tipoIncidente}</p></Col>
-                                            <Col md><p><b>Classificação</b><br />{incidente.classificacao}</p></Col>
+                                            <Col md><p><b>Tipo</b><br />{NOMES[incidente.tipoIncidente]}</p></Col>
+                                            <Col md><p><b>Classificação</b><br />{NOMES[incidente.classificacao]}</p></Col>
                                         </Row>
                                         <Row>
                                             <Col md><p><b>Criado em</b><br />{parseDate(incidente.criadoEm)}</p></Col>
