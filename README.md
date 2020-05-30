@@ -101,7 +101,9 @@ Creating service sgq_gateway-normas
 Creating service sgq_relatorios
 ```
 
-*É possível utilizar apenas o docker compose para subir o stack. Basta fornecer o parâmetro --compatibility para fazer uso das configurações adequadas de recursos.*
+*1 - Pode ser necessário criar a pasta de dados(pg-data) do PostgreSQL no diretório da implantação.*
+
+*2 - É possível utilizar apenas o docker compose para subir o stack. Basta fornecer o parâmetro --compatibility para fazer uso das configurações adequadas de recursos.*
 
 Crie um host local com o nome `sgq.pucminas.local` apontando para o próprio ip do Host em questão:
 
