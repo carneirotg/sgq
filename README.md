@@ -110,3 +110,19 @@ x.x.x.x        sgq.pucminas.local
 ```
 
 Acesse, via browser, o site em http://sgq.pucminas.local/
+
+#### Parâmetros de Memória
+
+Caso necessário, é possível reduzir ou aumentar a memória no docker-compose do stack:
+
+```yaml
+gateway-normas:
+  image: sgq-gateway-normas
+  deploy:
+    resources:
+      limits:
+        memory: 500M -> 800M   
+  restart: unless-stopped
+```
+
+Em seguida, basta atualizar o serviço ou container via modo de implantação selecionado.
